@@ -1,0 +1,61 @@
+{
+  "app": {
+    "title": "Tesla Dashcam Viewer",
+    "description": "Multi-camera dashcam video synchronisatie viewer"
+  },
+  "fileSelect": {
+    "title": "Selecteer Tesla Dashcam bestanden",
+    "description": "Kies uw Tesla dashcam videobestanden om te bekijken",
+    "dragDrop": "Sleep uw videobestanden hier naartoe",
+    "browse": "Bestanden bladeren",
+    "loadDemo": "Demo data laden",
+    "supportedFormats": "Ondersteunde formaten: MP4, MOV",
+    "multipleFiles": "U kunt meerdere bestanden selecteren"
+  },
+  "videoGrid": {
+    "front": "Voorkant",
+    "back": "Achterkant",
+    "leftRepeater": "Links",
+    "rightRepeater": "Rechts",
+    "clickToFullscreen": "Klik voor volledig scherm",
+    "noVideo": "Geen video beschikbaar"
+  },
+  "controlPanel": {
+    "timeline": "Tijdlijn",
+    "videos": "Video's",
+    "controls": "Besturing",
+    "expand": "Uitklappen",
+    "collapse": "Inklappen",
+    "home": "Home",
+    "play": "Afspelen",
+    "pause": "Pauzeren",
+    "playbackSpeed": "Snelheid",
+    "seekMode": "Zoek modus",
+    "timeMode": "Tijd",
+    "frameMode": "Frame"
+  },
+  "shortcuts": {
+    "title": "Toetsenbord snelkoppelingen",
+    "space": "Spatiebalk: Afspelen/Pauzeren",
+    "leftArrow": "← : Vorige 5 seconden / frame",
+    "rightArrow": "→ : Volgende 5 seconden / frame"
+  },
+  "time": {
+    "duration": "Duur",
+    "current": "Huidige",
+    "total": "Totaal"
+  },
+  "language": {
+    "select": "Taal",
+    "english": "English",
+    "korean": "한국어",
+    "chinese": "中文",
+    "german": "Deutsch",
+    "norwegian": "Norsk",
+    "dutch": "Nederlands",
+    "french": "Français",
+    "swedish": "Svenska",
+    "danish": "Dansk",
+    "spanish": "Español"
+  }
+}

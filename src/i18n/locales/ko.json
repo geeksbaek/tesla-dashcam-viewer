@@ -1,0 +1,61 @@
+{
+  "app": {
+    "title": "테슬라 블랙박스 뷰어",
+    "description": "다중 카메라 블랙박스 영상 동기화 뷰어"
+  },
+  "fileSelect": {
+    "title": "테슬라 블랙박스 파일 선택",
+    "description": "시청할 테슬라 블랙박스 영상 파일을 선택하세요",
+    "dragDrop": "영상 파일을 여기에 드래그 앤 드롭하세요",
+    "browse": "파일 찾기",
+    "loadDemo": "데모 데이터 로드",
+    "supportedFormats": "지원 형식: MP4, MOV",
+    "multipleFiles": "여러 파일을 선택할 수 있습니다"
+  },
+  "videoGrid": {
+    "front": "전면",
+    "back": "후면",
+    "leftRepeater": "좌측",
+    "rightRepeater": "우측",
+    "clickToFullscreen": "클릭하여 전체화면",
+    "noVideo": "영상이 없습니다"
+  },
+  "controlPanel": {
+    "timeline": "타임라인",
+    "videos": "영상",
+    "controls": "컨트롤",
+    "expand": "확장",
+    "collapse": "축소",
+    "home": "홈",
+    "play": "재생",
+    "pause": "일시정지",
+    "playbackSpeed": "재생 속도",
+    "seekMode": "이동 모드",
+    "timeMode": "시간",
+    "frameMode": "프레임"
+  },
+  "shortcuts": {
+    "title": "키보드 단축키",
+    "space": "스페이스: 재생/일시정지",
+    "leftArrow": "← : 이전 5초 / 프레임",
+    "rightArrow": "→ : 다음 5초 / 프레임"
+  },
+  "time": {
+    "duration": "재생 시간",
+    "current": "현재",
+    "total": "전체"
+  },
+  "language": {
+    "select": "언어",
+    "english": "English",
+    "korean": "한국어",
+    "chinese": "中文",
+    "german": "Deutsch",
+    "norwegian": "Norsk",
+    "dutch": "Nederlands",
+    "french": "Français",
+    "swedish": "Svenska",
+    "danish": "Dansk",
+    "spanish": "Español"
+  }
+}

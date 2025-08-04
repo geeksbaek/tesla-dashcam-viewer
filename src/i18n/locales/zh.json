@@ -1,0 +1,61 @@
+{
+  "app": {
+    "title": "特斯拉行车记录仪查看器",
+    "description": "多摄像头行车记录仪视频同步查看器"
+  },
+  "fileSelect": {
+    "title": "选择特斯拉行车记录仪文件",
+    "description": "选择您要查看的特斯拉行车记录仪视频文件",
+    "dragDrop": "将视频文件拖放到此处",
+    "browse": "浏览文件",
+    "loadDemo": "加载演示数据",
+    "supportedFormats": "支持格式：MP4, MOV",
+    "multipleFiles": "您可以选择多个文件"
+  },
+  "videoGrid": {
+    "front": "前方",
+    "back": "后方",
+    "leftRepeater": "左侧",
+    "rightRepeater": "右侧",
+    "clickToFullscreen": "点击全屏",
+    "noVideo": "无视频"
+  },
+  "controlPanel": {
+    "timeline": "时间轴",
+    "videos": "视频",
+    "controls": "控制",
+    "expand": "展开",
+    "collapse": "收起",
+    "home": "主页",
+    "play": "播放",
+    "pause": "暂停",
+    "playbackSpeed": "播放速度",
+    "seekMode": "跳转模式",
+    "timeMode": "时间",
+    "frameMode": "帧"
+  },
+  "shortcuts": {
+    "title": "键盘快捷键",
+    "space": "空格键：播放/暂停",
+    "leftArrow": "← ：后退5秒/帧",
+    "rightArrow": "→ ：前进5秒/帧"
+  },
+  "time": {
+    "duration": "时长",
+    "current": "当前",
+    "total": "总计"
+  },
+  "language": {
+    "select": "语言",
+    "english": "English",
+    "korean": "한국어",
+    "chinese": "中文",
+    "german": "Deutsch",
+    "norwegian": "Norsk",
+    "dutch": "Nederlands",
+    "french": "Français",
+    "swedish": "Svenska",
+    "danish": "Dansk",
+    "spanish": "Español"
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "app": {
+    "title": "Tesla Dashcam Viewer",
+    "description": "Visor de sincronización de video dashcam multi-cámara"
+  },
+  "fileSelect": {
+    "title": "Seleccionar archivos Tesla Dashcam",
+    "description": "Elige tus archivos de video Tesla dashcam para comenzar a ver",
+    "dragDrop": "Arrastra y suelta tus archivos de video aquí",
+    "browse": "Examinar archivos",
+    "loadDemo": "Cargar datos de demostración",
+    "supportedFormats": "Formatos soportados: MP4, MOV",
+    "multipleFiles": "Puedes seleccionar múltiples archivos"
+  },
+  "videoGrid": {
+    "front": "Frontal",
+    "back": "Trasera",
+    "leftRepeater": "Izquierda",
+    "rightRepeater": "Derecha",
+    "clickToFullscreen": "Clic para pantalla completa",
+    "noVideo": "No hay video disponible"
+  },
+  "controlPanel": {
+    "timeline": "Línea de tiempo",
+    "videos": "Videos",
+    "controls": "Controles",
+    "expand": "Expandir",
+    "collapse": "Colapsar",
+    "home": "Inicio",
+    "play": "Reproducir",
+    "pause": "Pausar",
+    "playbackSpeed": "Velocidad",
+    "seekMode": "Modo de búsqueda",
+    "timeMode": "Tiempo",
+    "frameMode": "Fotograma"
+  },
+  "shortcuts": {
+    "title": "Atajos de teclado",
+    "space": "Espacio: Reproducir/Pausar",
+    "leftArrow": "← : Anterior 5 segundos / fotograma",
+    "rightArrow": "→ : Siguiente 5 segundos / fotograma"
+  },
+  "time": {
+    "duration": "Duración",
+    "current": "Actual",
+    "total": "Total"
+  },
+  "language": {
+    "select": "Idioma",
+    "english": "English",
+    "korean": "한국어",
+    "chinese": "中文",
+    "german": "Deutsch",
+    "norwegian": "Norsk",
+    "dutch": "Nederlands",
+    "french": "Français",
+    "swedish": "Svenska",
+    "danish": "Dansk",
+    "spanish": "Español"
+  }
+}

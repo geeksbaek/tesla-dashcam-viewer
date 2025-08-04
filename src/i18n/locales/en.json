@@ -1,0 +1,61 @@
+{
+  "app": {
+    "title": "Tesla Dashcam Viewer",
+    "description": "Multi-camera dashcam video synchronization viewer"
+  },
+  "fileSelect": {
+    "title": "Select Tesla Dashcam Files",
+    "description": "Choose your Tesla dashcam video files to start viewing",
+    "dragDrop": "Drag and drop your video files here",
+    "browse": "Browse Files",
+    "loadDemo": "Load Demo Data",
+    "supportedFormats": "Supported formats: MP4, MOV",
+    "multipleFiles": "You can select multiple files"
+  },
+  "videoGrid": {
+    "front": "Front",
+    "back": "Back",
+    "leftRepeater": "Left",
+    "rightRepeater": "Right",
+    "clickToFullscreen": "Click to fullscreen",
+    "noVideo": "No video available"
+  },
+  "controlPanel": {
+    "timeline": "Timeline",
+    "videos": "Videos",
+    "controls": "Controls",
+    "expand": "Expand",
+    "collapse": "Collapse",
+    "home": "Home",
+    "play": "Play",
+    "pause": "Pause",
+    "playbackSpeed": "Speed",
+    "seekMode": "Seek Mode",
+    "timeMode": "Time",
+    "frameMode": "Frame"
+  },
+  "shortcuts": {
+    "title": "Keyboard Shortcuts",
+    "space": "Space: Play/Pause",
+    "leftArrow": "← : Previous 5 seconds / frame",
+    "rightArrow": "→ : Next 5 seconds / frame"
+  },
+  "time": {
+    "duration": "Duration",
+    "current": "Current",
+    "total": "Total"
+  },
+  "language": {
+    "select": "Language",
+    "english": "English",
+    "korean": "Korean",
+    "chinese": "Chinese",
+    "german": "German",
+    "norwegian": "Norwegian", 
+    "dutch": "Dutch",
+    "french": "French",
+    "swedish": "Swedish",
+    "danish": "Danish",
+    "spanish": "Spanish"
+  }
+}

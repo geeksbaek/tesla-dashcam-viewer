@@ -1,0 +1,61 @@
+{
+  "app": {
+    "title": "Tesla Dashcam Viewer",
+    "description": "Multi-kamera dashcam video synkronisering viewer"
+  },
+  "fileSelect": {
+    "title": "Välj Tesla Dashcam filer",
+    "description": "Välj dina Tesla dashcam videofiler för att börja titta",
+    "dragDrop": "Dra och släpp dina videofiler här",
+    "browse": "Bläddra bland filer",
+    "loadDemo": "Ladda demo data",
+    "supportedFormats": "Format som stöds: MP4, MOV",
+    "multipleFiles": "Du kan välja flera filer"
+  },
+  "videoGrid": {
+    "front": "Fram",
+    "back": "Bak",
+    "leftRepeater": "Vänster",
+    "rightRepeater": "Höger",
+    "clickToFullscreen": "Klicka för fullskärm",
+    "noVideo": "Ingen video tillgänglig"
+  },
+  "controlPanel": {
+    "timeline": "Tidslinje",
+    "videos": "Videor",
+    "controls": "Kontroller",
+    "expand": "Expandera",
+    "collapse": "Kollaps",
+    "home": "Hem",
+    "play": "Spela",
+    "pause": "Pausa",
+    "playbackSpeed": "Hastighet",
+    "seekMode": "Sök läge",
+    "timeMode": "Tid",
+    "frameMode": "Ram"
+  },
+  "shortcuts": {
+    "title": "Tangentbordsgenvägar",
+    "space": "Mellanslag: Spela/Pausa",
+    "leftArrow": "← : Föregående 5 sekunder / ram",
+    "rightArrow": "→ : Nästa 5 sekunder / ram"
+  },
+  "time": {
+    "duration": "Varaktighet",
+    "current": "Nuvarande",
+    "total": "Total"
+  },
+  "language": {
+    "select": "Språk",
+    "english": "English",
+    "korean": "한국어",
+    "chinese": "中文",
+    "german": "Deutsch",
+    "norwegian": "Norsk",
+    "dutch": "Nederlands",
+    "french": "Français",
+    "swedish": "Svenska",
+    "danish": "Dansk",
+    "spanish": "Español"
+  }
+}

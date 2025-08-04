@@ -1,0 +1,68 @@
+
+@import '@mantine/core/styles.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /* Default font stack */
+  html {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", 
+      "SF Pro Text", "SF Pro Icons", "Helvetica Neue", "Helvetica", 
+      "Arial", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", 
+      "Segoe UI Symbol";
+  }
+  
+  /* Korean specific fonts */
+  html[lang="ko"] {
+    font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", 
+      "SF Pro KR", "SF Pro Display", "SF Pro Text", "Malgun Gothic", 
+      "맑은 고딕", "Noto Sans KR", "Helvetica Neue", "Helvetica", 
+      "Arial", sans-serif, "Apple Color Emoji";
+  }
+  
+  /* Japanese specific fonts */
+  html[lang="ja"] {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro JP", "Hiragino Sans", 
+      "Hiragino Kaku Gothic ProN", "SF Pro Display", "SF Pro Text", 
+      "Yu Gothic UI", "Meiryo", "Noto Sans JP", "Helvetica Neue", 
+      "Helvetica", "Arial", sans-serif, "Apple Color Emoji";
+  }
+  
+  /* Chinese simplified specific fonts */
+  html[lang="zh-CN"] {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro SC", "PingFang SC", 
+      "SF Pro Display", "SF Pro Text", "Microsoft YaHei", "Noto Sans SC", 
+      "Helvetica Neue", "Helvetica", "Arial", sans-serif, "Apple Color Emoji";
+  }
+  
+  /* Chinese traditional specific fonts */
+  html[lang="zh-TW"] {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro TC", "PingFang TC", 
+      "SF Pro Display", "SF Pro Text", "Microsoft JhengHei", "Noto Sans TC", 
+      "Helvetica Neue", "Helvetica", "Arial", sans-serif, "Apple Color Emoji";
+  }
+  
+  body {
+    margin: 0;
+    padding: 0;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    font-feature-settings: "kern" 1;
+  }
+  
+  /* Apply Apple font to all elements */
+  * {
+    font-family: inherit;
+  }
+  
+  /* Monospace elements */
+  code, pre, kbd, samp {
+    font-family: ui-monospace, "SF Mono", "Monaco", "Cascadia Mono", 
+      "Segoe UI Mono", "Roboto Mono", "Oxygen Mono", "Ubuntu Monospace", 
+      "Source Code Pro", "Fira Mono", "Droid Sans Mono", "Courier New", 
+      monospace;
+  }
+}
