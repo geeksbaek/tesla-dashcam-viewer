@@ -423,7 +423,7 @@ export default function VideoGrid({
         justifyContent: 'center',
         color: 'white'
       }}>
-        비디오를 로드하는 중...
+        {t('videoGrid.loading')}
       </Box>
     )
   }
@@ -483,7 +483,7 @@ export default function VideoGrid({
                 color: 'white',
                 fontSize: '1.5rem'
               }}>
-{t('videoGrid.front')} (데모 모드)
+{t('videoGrid.front')} {t('videoGrid.demoMode')}
               </Box>
             )
           )}
@@ -516,7 +516,7 @@ export default function VideoGrid({
                 color: 'white',
                 fontSize: '1.5rem'
               }}>
-{t('videoGrid.back')} (데모 모드)
+{t('videoGrid.back')} {t('videoGrid.demoMode')}
               </Box>
             )
           )}
@@ -549,7 +549,7 @@ export default function VideoGrid({
                 color: 'white',
                 fontSize: '1.5rem'
               }}>
-{t('videoGrid.rightRepeater')} (데모 모드)
+{t('videoGrid.rightRepeater')} {t('videoGrid.demoMode')}
               </Box>
             )
           )}
@@ -582,7 +582,7 @@ export default function VideoGrid({
                 color: 'white',
                 fontSize: '1.5rem'
               }}>
-{t('videoGrid.leftRepeater')} (데모 모드)
+{t('videoGrid.leftRepeater')} {t('videoGrid.demoMode')}
               </Box>
             )
           )}
@@ -602,13 +602,13 @@ export default function VideoGrid({
               backgroundColor: 'black',
               position: 'relative',
               overflow: 'hidden',
-              cursor: 'pointer',
+              cursor: videoUrls.front ? 'pointer' : 'default',
               transition: 'all 200ms ease',
               borderRight: '1px solid rgba(255,255,255,0.1)'
             }}
-            onMouseEnter={() => setHoveredCamera('front')}
+            onMouseEnter={() => videoUrls.front && setHoveredCamera('front')}
             onMouseLeave={() => setHoveredCamera(null)}
-            onClick={() => toggleFullscreen('front')}
+            onClick={() => videoUrls.front && toggleFullscreen('front')}
           >
             {videoUrls.front ? (
               <video
@@ -649,7 +649,7 @@ export default function VideoGrid({
                 </Box>
                 {!videoUrls.front && (
                   <Box style={{ position: 'absolute', bottom: '8px', left: '8px', right: '8px', textAlign: 'center', color: 'white', fontSize: '12px', backgroundColor: 'rgba(0,0,0,0.7)', borderRadius: '4px', padding: '4px' }}>
-                    전체화면 기능 (데모)
+                    {t('videoGrid.fullscreenDemo')}
                   </Box>
                 )}
               </Box>
@@ -665,13 +665,13 @@ export default function VideoGrid({
               backgroundColor: 'black',
               position: 'relative',
               overflow: 'hidden',
-              cursor: 'pointer',
+              cursor: videoUrls.back ? 'pointer' : 'default',
               transition: 'all 200ms ease',
               borderLeft: '1px solid rgba(255,255,255,0.1)'
             }}
-            onMouseEnter={() => setHoveredCamera('back')}
+            onMouseEnter={() => videoUrls.back && setHoveredCamera('back')}
             onMouseLeave={() => setHoveredCamera(null)}
-            onClick={() => toggleFullscreen('back')}
+            onClick={() => videoUrls.back && toggleFullscreen('back')}
           >
             {videoUrls.back ? (
               <video
@@ -719,14 +719,14 @@ export default function VideoGrid({
               backgroundColor: 'black',
               position: 'relative',
               overflow: 'hidden',
-              cursor: 'pointer',
+              cursor: videoUrls.right_repeater ? 'pointer' : 'default',
               transition: 'all 200ms ease',
               borderRight: '1px solid rgba(255,255,255,0.1)',
               borderTop: '1px solid rgba(255,255,255,0.1)'
             }}
-            onMouseEnter={() => setHoveredCamera('right')}
+            onMouseEnter={() => videoUrls.right_repeater && setHoveredCamera('right')}
             onMouseLeave={() => setHoveredCamera(null)}
-            onClick={() => toggleFullscreen('right')}
+            onClick={() => videoUrls.right_repeater && toggleFullscreen('right')}
           >
             {videoUrls.right_repeater ? (
               <video
@@ -771,14 +771,14 @@ export default function VideoGrid({
               backgroundColor: 'black',
               position: 'relative',
               overflow: 'hidden',
-              cursor: 'pointer',
+              cursor: videoUrls.left_repeater ? 'pointer' : 'default',
               transition: 'all 200ms ease',
               borderLeft: '1px solid rgba(255,255,255,0.1)',
               borderTop: '1px solid rgba(255,255,255,0.1)'
             }}
-            onMouseEnter={() => setHoveredCamera('left')}
+            onMouseEnter={() => videoUrls.left_repeater && setHoveredCamera('left')}
             onMouseLeave={() => setHoveredCamera(null)}
-            onClick={() => toggleFullscreen('left')}
+            onClick={() => videoUrls.left_repeater && toggleFullscreen('left')}
           >
             {videoUrls.left_repeater ? (
               <video
