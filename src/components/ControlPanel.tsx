@@ -1,6 +1,6 @@
 import { Button, Paper, Text, Title, Badge, Group, Stack, Box, ActionIcon, SegmentedControl } from '@mantine/core'
-import { IconChevronLeft, IconChevronRight, IconVideo, IconClock, IconPlayerPlay, IconPlayerPause, IconSettings, IconHome, IconPlayerTrackNext } from '@tabler/icons-react'
-import { useState, useRef, useEffect } from 'react'
+import { IconChevronLeft, IconChevronRight, IconVideo, IconPlayerPlay, IconPlayerPause, IconSettings, IconHome, IconPlayerTrackNext } from '@tabler/icons-react'
+import { useRef, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import LanguageSelect from './LanguageSelect'
 import VideoFilterControls from './VideoFilterControls'
@@ -41,7 +41,6 @@ export default function ControlPanel({
   onPlayPause,
   onVideoSelect,
   globalTime,
-  totalDuration,
   isExpanded,
   onToggleExpanded,
   seekMode,
@@ -98,11 +97,6 @@ export default function ControlPanel({
     }
   }, [currentIndex]);
   
-  const formatTime = (seconds: number) => {
-    const mins = Math.floor(seconds / 60)
-    const secs = Math.floor(seconds % 60)
-    return `${mins}:${secs.toString().padStart(2, '0')}`
-  }
 
   // 현재 재생 중인 타임스탬프를 실시간으로 계산
   const getCurrentTimestamp = () => {

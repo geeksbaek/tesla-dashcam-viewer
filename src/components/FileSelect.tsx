@@ -1,6 +1,6 @@
-import { useCallback } from 'react'
-import { Paper, Title, Text, Button, Group, Stack, Badge, Container, Box } from '@mantine/core'
-import { IconVideo, IconFolder, IconMovie, IconDragDrop } from '@tabler/icons-react'
+import React, { useCallback } from 'react'
+import { Paper, Title, Text, Button, Group, Stack, Container, Box } from '@mantine/core'
+import { IconVideo, IconMovie, IconDragDrop } from '@tabler/icons-react'
 import { useTranslation } from 'react-i18next'
 import LanguageSelect from './LanguageSelect'
 
@@ -17,16 +17,6 @@ interface FileSelectProps {
   onLoadDummy?: () => void
 }
 
-// 더미 데이터 생성 함수
-const generateDummyFiles = () => {
-  const dummyFiles: VideoFile[] = [
-    { timestamp: '2024-01-15_14-30-25' },
-    { timestamp: '2024-01-15_14-31-25' },
-    { timestamp: '2024-01-15_14-32-25' },
-    { timestamp: '2024-01-15_14-33-25' }
-  ]
-  return dummyFiles
-}
 
 export default function FileSelect({ onFilesLoaded, onLoadDummy }: FileSelectProps) {
   const { t } = useTranslation();
@@ -90,18 +80,14 @@ export default function FileSelect({ onFilesLoaded, onLoadDummy }: FileSelectPro
           style={{
             border: '2px dashed var(--mantine-color-dark-4)',
             cursor: 'pointer',
-            transition: 'all 200ms ease'
-          }}
+            transition: 'all 200ms ease',
+            '--paper-hover-border-color': 'var(--mantine-color-blue-4)',
+            '--paper-hover-background-color': 'var(--mantine-color-dark-6)'
+          } as any}
           p="xl"
           onDrop={handleDrop}
           onDragOver={handleDragOver}
           onClick={() => document.getElementById('file-input')?.click()}
-          __vars={{
-            '--paper-hover': {
-              borderColor: 'var(--mantine-color-blue-4)',
-              backgroundColor: 'var(--mantine-color-dark-6)'
-            }
-          }}
         >
           <Stack align="center" gap="lg">
             <Box style={{ 

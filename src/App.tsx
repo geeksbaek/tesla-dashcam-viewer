@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { flushSync } from 'react-dom'
 import VideoGrid from './components/VideoGrid'
 import FileSelect from './components/FileSelect'
@@ -24,7 +24,6 @@ function App() {
   const [seekMode, setSeekMode] = useState<'frame' | 'time'>('time') // 이동 모드
   const [videoFrameRate, setVideoFrameRate] = useState(30) // 비디오 프레임레이트
   const [sidebarExpanded, setSidebarExpanded] = useState(true) // 사이드바 확장 상태
-  const isAutoMovingRef = useRef(false) // 자동 이동 중인지 체크
   const [videoDurations, setVideoDurations] = useState<number[]>([]) // 각 비디오의 실제 길이
   const [videoFilters, setVideoFilters] = useState<VideoFilters>({
     brightness: 100,
@@ -71,7 +70,7 @@ function App() {
     setCurrentTime(time)
     // 현재 비디오까지의 누적 시간 계산
     if (videoDurations.length > currentVideoIndex) {
-      const cumulativeTime = videoDurations.slice(0, currentVideoIndex).reduce((sum, dur) => sum + dur, 0)
+      const cumulativeTime = videoDurations.slice(0, currentVideoIndex).reduce((sum: number, dur: number) => sum + dur, 0)
       setGlobalTime(cumulativeTime + time)
     } else {
       // videoDurations가 아직 초기화되지 않은 경우 기본값 사용
@@ -80,7 +79,7 @@ function App() {
   }
 
   // 슬라이더로 시간 이동
-  const handleSeek = useCallback((newGlobalTime: number, fromArrowKey = false) => {
+  const handleSeek = useCallback((newGlobalTime: number) => {
     // 실제 비디오 길이를 사용하여 올바른 비디오 인덱스와 시간 찾기
     let remainingTime = newGlobalTime
     let videoIndex = 0
@@ -118,7 +117,7 @@ function App() {
     setCurrentTime(0)
     // 선택한 비디오까지의 누적 시간 계산
     if (videoDurations.length > index) {
-      const cumulativeTime = videoDurations.slice(0, index).reduce((sum, dur) => sum + dur, 0)
+      const cumulativeTime = videoDurations.slice(0, index).reduce((sum: number, dur: number) => sum + dur, 0)
       setGlobalTime(cumulativeTime)
     } else {
       setGlobalTime(index * 60)

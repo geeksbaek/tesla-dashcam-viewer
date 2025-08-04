@@ -6,8 +6,6 @@ import './i18n'
 import App from './App.tsx'
 
 const theme = createTheme({
-  colorScheme: 'dark',
-  defaultColorScheme: 'dark',
   fontFamily: '-apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "SF Pro KR", "SF Pro Display", "SF Pro Text", "Malgun Gothic", "맑은 고딕", "Helvetica Neue", Helvetica, Arial, sans-serif',
   fontFamilyMonospace: '"SF Mono", Monaco, "Cascadia Mono", "Roboto Mono", monospace',
   headings: {

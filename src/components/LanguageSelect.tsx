@@ -67,13 +67,6 @@ export default function LanguageSelect() {
           height: 'auto !important',
           overflow: 'visible !important',
         },
-        viewport: {
-          maxHeight: 'none !important',
-          height: 'auto !important',
-        },
-        scrollArea: {
-          height: 'auto !important',
-        },
       }}
     />
   );

@@ -1,5 +1,5 @@
-import { useRef, useEffect, useState, useMemo, useCallback } from 'react'
-import { Paper, Button, Group, Stack, Box, Text } from '@mantine/core'
+import { useRef, useEffect, useState, useMemo } from 'react'
+import { Paper, Box, Text } from '@mantine/core'
 import { useTranslation } from 'react-i18next'
 import type { VideoFilters } from './VideoFilterControls'
 
@@ -39,17 +39,11 @@ export default function VideoGrid({
   currentVideoIndex, 
   isPlaying, 
   currentTime, 
-  globalTime, 
-  duration, 
   playbackRate,
-  seekMode,
   videoFilters,
   onTimeUpdate, 
-  onSeek,
   onPlayPause,
   onVideoSelect,
-  onPlaybackRateChange,
-  onSeekModeChange,
   onFrameRateUpdate,
   onVideoDurationUpdate,
   sidebarExpanded = true
@@ -135,8 +129,8 @@ export default function VideoGrid({
     setVideoUrls(newUrls)
     
     return () => {
-      Object.values(newUrls).forEach(url => {
-        if (url) URL.revokeObjectURL(url)
+      Object.values(newUrls).forEach((url) => {
+        if (url) URL.revokeObjectURL(url as string)
       })
     }
   }, [videoFile])
