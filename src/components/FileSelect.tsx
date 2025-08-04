@@ -139,18 +139,6 @@ export default function FileSelect({ onFilesLoaded, onLoadDummy }: FileSelectPro
           </Stack>
         </Paper>
         
-        {/* 개발 모드에서만 테스트 버튼 표시 */}
-        {import.meta.env.DEV && onLoadDummy && (
-          <Button
-            variant="subtle"
-            size="sm"
-            onClick={onLoadDummy}
-            style={{ marginTop: '20px' }}
-          >
-            테스트 데이터 로드 (개발용)
-          </Button>
-        )}
-        
         {/* 숨겨진 파일 입력 요소 */}
         <input
           id="file-input"
