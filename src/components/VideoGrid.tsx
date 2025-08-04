@@ -48,11 +48,39 @@ export default function VideoGrid({
   onVideoDurationUpdate,
   sidebarExpanded = true
 }: VideoGridProps) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const frontRef = useRef<HTMLVideoElement>(null)
   const backRef = useRef<HTMLVideoElement>(null)
   const leftRef = useRef<HTMLVideoElement>(null)
   const rightRef = useRef<HTMLVideoElement>(null)
+  
+  // 타임스탬프를 Date 객체로 파싱
+  const parseTimestamp = (timestamp: string): Date => {
+    // Format: YYYY-MM-DD_HH-MM-SS
+    const [date, time] = timestamp.split('_')
+    const [year, month, day] = date.split('-').map(Number)
+    const [hour, minute, second] = time.split('-').map(Number)
+    return new Date(year, month - 1, day, hour, minute, second)
+  }
+  
+  // 실시간 타임스탬프 계산 및 포맷 (국제화 적용)
+  const getCurrentTimestamp = (baseTimestamp: string, offsetSeconds: number): string => {
+    const baseDate = parseTimestamp(baseTimestamp)
+    const currentDate = new Date(baseDate.getTime() + offsetSeconds * 1000)
+    
+    // 현재 언어에 맞는 날짜/시간 포맷 사용
+    const formatter = new Intl.DateTimeFormat(i18n.language, {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: false // 24시간 형식 사용
+    })
+    
+    return formatter.format(currentDate)
+  }
 
   const videoRefs = [frontRef, backRef, leftRef, rightRef]
   
@@ -60,6 +88,9 @@ export default function VideoGrid({
   const [fullscreenCamera, setFullscreenCamera] = useState<string | null>(null)
   const [hoveredCamera, setHoveredCamera] = useState<string | null>(null)
   const fullscreenContainerRef = useRef<HTMLDivElement>(null)
+  
+  // 실시간 타임스탬프 상태
+  const [displayTimestamp, setDisplayTimestamp] = useState<string>('')
   
   // CSS 필터 문자열 생성
   const filterString = useMemo(() => {
@@ -108,6 +139,13 @@ export default function VideoGrid({
     left_repeater?: string
     right_repeater?: string
   }>({})
+
+  // 실시간 타임스탬프 업데이트
+  useEffect(() => {
+    if (videoFile?.timestamp) {
+      setDisplayTimestamp(getCurrentTimestamp(videoFile.timestamp, currentTime))
+    }
+  }, [videoFile?.timestamp, currentTime, i18n.language])
 
   // 비디오 파일이 변경될 때 URL 생성 및 정리
   useEffect(() => {
@@ -611,22 +649,39 @@ export default function VideoGrid({
             onClick={() => videoUrls.front && toggleFullscreen('front')}
           >
             {videoUrls.front ? (
-              <video
-                ref={frontRef}
-                src={videoUrls.front}
-                style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', filter: filterString }}
-                controls={false}
-                muted
-                preload="auto"
-                playsInline
-                disablePictureInPicture
-                onLoadedMetadata={(e) => {
-                  const video = e.target as HTMLVideoElement
-                  if (video.duration && !isNaN(video.duration) && isFinite(video.duration)) {
-                    onVideoDurationUpdate(video.duration)
-                  }
-                }}
-              />
+              <>
+                <video
+                  ref={frontRef}
+                  src={videoUrls.front}
+                  style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', filter: filterString }}
+                  controls={false}
+                  muted
+                  preload="auto"
+                  playsInline
+                  disablePictureInPicture
+                  onLoadedMetadata={(e) => {
+                    const video = e.target as HTMLVideoElement
+                    if (video.duration && !isNaN(video.duration) && isFinite(video.duration)) {
+                      onVideoDurationUpdate(video.duration)
+                    }
+                  }}
+                />
+                {/* 타임스탬프 표시 */}
+                <Box style={{ 
+                  position: 'absolute', 
+                  top: '8px', 
+                  right: '8px', 
+                  pointerEvents: 'none'
+                }}>
+                  <Text size="xs" style={{ 
+                    fontFamily: 'monospace',
+                    color: 'white',
+                    textShadow: '0 0 2px black, 0 0 2px black, 0 0 2px black, 0 0 2px black'
+                  }}>
+                    {displayTimestamp}
+                  </Text>
+                </Box>
+              </>
             ) : (
               <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', color: 'var(--mantine-color-dimmed)' }}>
 {t('videoGrid.noVideo')}
@@ -674,16 +729,33 @@ export default function VideoGrid({
             onClick={() => videoUrls.back && toggleFullscreen('back')}
           >
             {videoUrls.back ? (
-              <video
-                ref={backRef}
-                src={videoUrls.back}
-                style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', filter: filterString }}
-                controls={false}
-                muted
-                preload="auto"
-                playsInline
-                disablePictureInPicture
-              />
+              <>
+                <video
+                  ref={backRef}
+                  src={videoUrls.back}
+                  style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', filter: filterString }}
+                  controls={false}
+                  muted
+                  preload="auto"
+                  playsInline
+                  disablePictureInPicture
+                />
+                {/* 타임스탬프 표시 */}
+                <Box style={{ 
+                  position: 'absolute', 
+                  top: '8px', 
+                  right: '8px', 
+                  pointerEvents: 'none'
+                }}>
+                  <Text size="xs" style={{ 
+                    fontFamily: 'monospace',
+                    color: 'white',
+                    textShadow: '0 0 2px black, 0 0 2px black, 0 0 2px black, 0 0 2px black'
+                  }}>
+                    {displayTimestamp}
+                  </Text>
+                </Box>
+              </>
             ) : (
               <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', color: 'var(--mantine-color-dimmed)' }}>
 {t('videoGrid.noVideo')}
@@ -729,16 +801,33 @@ export default function VideoGrid({
             onClick={() => videoUrls.right_repeater && toggleFullscreen('right')}
           >
             {videoUrls.right_repeater ? (
-              <video
-                ref={rightRef}
-                src={videoUrls.right_repeater}
-                style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', filter: filterString }}
-                controls={false}
-                muted
-                preload="auto"
-                playsInline
-                disablePictureInPicture
-              />
+              <>
+                <video
+                  ref={rightRef}
+                  src={videoUrls.right_repeater}
+                  style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', filter: filterString }}
+                  controls={false}
+                  muted
+                  preload="auto"
+                  playsInline
+                  disablePictureInPicture
+                />
+                {/* 타임스탬프 표시 */}
+                <Box style={{ 
+                  position: 'absolute', 
+                  top: '8px', 
+                  right: '8px', 
+                  pointerEvents: 'none'
+                }}>
+                  <Text size="xs" style={{ 
+                    fontFamily: 'monospace',
+                    color: 'white',
+                    textShadow: '0 0 2px black, 0 0 2px black, 0 0 2px black, 0 0 2px black'
+                  }}>
+                    {displayTimestamp}
+                  </Text>
+                </Box>
+              </>
             ) : (
               <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', color: 'var(--mantine-color-dimmed)' }}>
 {t('videoGrid.noVideo')}
@@ -781,16 +870,33 @@ export default function VideoGrid({
             onClick={() => videoUrls.left_repeater && toggleFullscreen('left')}
           >
             {videoUrls.left_repeater ? (
-              <video
-                ref={leftRef}
-                src={videoUrls.left_repeater}
-                style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', filter: filterString }}
-                controls={false}
-                muted
-                preload="auto"
-                playsInline
-                disablePictureInPicture
-              />
+              <>
+                <video
+                  ref={leftRef}
+                  src={videoUrls.left_repeater}
+                  style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', filter: filterString }}
+                  controls={false}
+                  muted
+                  preload="auto"
+                  playsInline
+                  disablePictureInPicture
+                />
+                {/* 타임스탬프 표시 */}
+                <Box style={{ 
+                  position: 'absolute', 
+                  top: '8px', 
+                  right: '8px', 
+                  pointerEvents: 'none'
+                }}>
+                  <Text size="xs" style={{ 
+                    fontFamily: 'monospace',
+                    color: 'white',
+                    textShadow: '0 0 2px black, 0 0 2px black, 0 0 2px black, 0 0 2px black'
+                  }}>
+                    {displayTimestamp}
+                  </Text>
+                </Box>
+              </>
             ) : (
               <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', color: 'var(--mantine-color-dimmed)' }}>
 {t('videoGrid.noVideo')}

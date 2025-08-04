@@ -52,7 +52,7 @@ export default function ControlPanel({
   playbackRate,
   onPlaybackRateChange
 }: ControlPanelProps) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const videoListRef = useRef<HTMLDivElement>(null);
   const expandedVideoListRef = useRef<HTMLDivElement>(null);
   const currentButtonRef = useRef<HTMLButtonElement>(null);
@@ -136,20 +136,17 @@ export default function ControlPanel({
       const date = new Date(year, month - 1, day, newHours, newMinutes, newSecs)
       
       // Intl.DateTimeFormat을 사용한 국제화 포맷팅
-      const dateFormatter = new Intl.DateTimeFormat('ko-KR', {
+      const formatter = new Intl.DateTimeFormat(i18n.language, {
         year: 'numeric',
         month: '2-digit',
-        day: '2-digit'
-      })
-      
-      const timeFormatter = new Intl.DateTimeFormat('ko-KR', {
+        day: '2-digit',
         hour: '2-digit',
         minute: '2-digit',
         second: '2-digit',
-        hour12: false
+        hour12: false // 24시간 형식 사용
       })
       
-      return `${dateFormatter.format(date)} ${timeFormatter.format(date)}`
+      return formatter.format(date)
     } catch (error) {
       // 파싱 실패 시 기본 포맷 반환
       return baseTimestamp.replace(/_/g, ' ').replace(/-/g, ':')
