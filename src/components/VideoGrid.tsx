@@ -495,22 +495,40 @@ export default function VideoGrid({
         >
           {fullscreenCamera === 'front' && (
             videoUrls.front ? (
-              <video
-                src={videoUrls.front}
-                style={{ width: '100%', height: '100%', objectFit: 'contain', filter: filterString }}
-                controls={false}
-                muted
-                preload="auto"
-                playsInline
-                disablePictureInPicture
-                ref={(video) => {
-                  if (video && frontRef.current) {
-                    video.currentTime = frontRef.current.currentTime
-                    if (isPlaying) video.play()
-                    else video.pause()
-                  }
-                }}
-              />
+              <>
+                <video
+                  src={videoUrls.front}
+                  style={{ width: '100%', height: '100%', objectFit: 'contain', filter: filterString }}
+                  controls={false}
+                  muted
+                  preload="auto"
+                  playsInline
+                  disablePictureInPicture
+                  ref={(video) => {
+                    if (video && frontRef.current) {
+                      video.currentTime = frontRef.current.currentTime
+                      if (isPlaying) video.play()
+                      else video.pause()
+                    }
+                  }}
+                />
+                {/* 전체화면 타임스탬프 표시 */}
+                <Box style={{ 
+                  position: 'absolute', 
+                  top: '16px', 
+                  right: '16px', 
+                  pointerEvents: 'none'
+                }}>
+                  <Text style={{ 
+                    fontFamily: 'monospace',
+                    color: 'white',
+                    textShadow: '0 0 3px black, 0 0 3px black, 0 0 3px black, 0 0 3px black',
+                    fontSize: '0.96rem'
+                  }}>
+                    {displayTimestamp}
+                  </Text>
+                </Box>
+              </>
             ) : (
               <Box style={{ 
                 width: '100%', 
@@ -528,22 +546,40 @@ export default function VideoGrid({
           
           {fullscreenCamera === 'back' && (
             videoUrls.back ? (
-              <video
-                src={videoUrls.back}
-                style={{ width: '100%', height: '100%', objectFit: 'contain', filter: filterString }}
-                controls={false}
-                muted
-                preload="auto"
-                playsInline
-                disablePictureInPicture
-                ref={(video) => {
-                  if (video && backRef.current) {
-                    video.currentTime = backRef.current.currentTime
-                    if (isPlaying) video.play()
-                    else video.pause()
-                  }
-                }}
-              />
+              <>
+                <video
+                  src={videoUrls.back}
+                  style={{ width: '100%', height: '100%', objectFit: 'contain', filter: filterString }}
+                  controls={false}
+                  muted
+                  preload="auto"
+                  playsInline
+                  disablePictureInPicture
+                  ref={(video) => {
+                    if (video && backRef.current) {
+                      video.currentTime = backRef.current.currentTime
+                      if (isPlaying) video.play()
+                      else video.pause()
+                    }
+                  }}
+                />
+                {/* 전체화면 타임스탬프 표시 */}
+                <Box style={{ 
+                  position: 'absolute', 
+                  top: '16px', 
+                  right: '16px', 
+                  pointerEvents: 'none'
+                }}>
+                  <Text style={{ 
+                    fontFamily: 'monospace',
+                    color: 'white',
+                    textShadow: '0 0 3px black, 0 0 3px black, 0 0 3px black, 0 0 3px black',
+                    fontSize: '0.96rem'
+                  }}>
+                    {displayTimestamp}
+                  </Text>
+                </Box>
+              </>
             ) : (
               <Box style={{ 
                 width: '100%', 
@@ -561,22 +597,40 @@ export default function VideoGrid({
           
           {fullscreenCamera === 'right' && (
             videoUrls.right_repeater ? (
-              <video
-                src={videoUrls.right_repeater}
-                style={{ width: '100%', height: '100%', objectFit: 'contain', filter: filterString }}
-                controls={false}
-                muted
-                preload="auto"
-                playsInline
-                disablePictureInPicture
-                ref={(video) => {
-                  if (video && rightRef.current) {
-                    video.currentTime = rightRef.current.currentTime
-                    if (isPlaying) video.play()
-                    else video.pause()
-                  }
-                }}
-              />
+              <>
+                <video
+                  src={videoUrls.right_repeater}
+                  style={{ width: '100%', height: '100%', objectFit: 'contain', filter: filterString }}
+                  controls={false}
+                  muted
+                  preload="auto"
+                  playsInline
+                  disablePictureInPicture
+                  ref={(video) => {
+                    if (video && rightRef.current) {
+                      video.currentTime = rightRef.current.currentTime
+                      if (isPlaying) video.play()
+                      else video.pause()
+                    }
+                  }}
+                />
+                {/* 전체화면 타임스탬프 표시 */}
+                <Box style={{ 
+                  position: 'absolute', 
+                  top: '16px', 
+                  right: '16px', 
+                  pointerEvents: 'none'
+                }}>
+                  <Text style={{ 
+                    fontFamily: 'monospace',
+                    color: 'white',
+                    textShadow: '0 0 3px black, 0 0 3px black, 0 0 3px black, 0 0 3px black',
+                    fontSize: '0.96rem'
+                  }}>
+                    {displayTimestamp}
+                  </Text>
+                </Box>
+              </>
             ) : (
               <Box style={{ 
                 width: '100%', 
@@ -594,22 +648,40 @@ export default function VideoGrid({
           
           {fullscreenCamera === 'left' && (
             videoUrls.left_repeater ? (
-              <video
-                src={videoUrls.left_repeater}
-                style={{ width: '100%', height: '100%', objectFit: 'contain', filter: filterString }}
-                controls={false}
-                muted
-                preload="auto"
-                playsInline
-                disablePictureInPicture
-                ref={(video) => {
-                  if (video && leftRef.current) {
-                    video.currentTime = leftRef.current.currentTime
-                    if (isPlaying) video.play()
-                    else video.pause()
-                  }
-                }}
-              />
+              <>
+                <video
+                  src={videoUrls.left_repeater}
+                  style={{ width: '100%', height: '100%', objectFit: 'contain', filter: filterString }}
+                  controls={false}
+                  muted
+                  preload="auto"
+                  playsInline
+                  disablePictureInPicture
+                  ref={(video) => {
+                    if (video && leftRef.current) {
+                      video.currentTime = leftRef.current.currentTime
+                      if (isPlaying) video.play()
+                      else video.pause()
+                    }
+                  }}
+                />
+                {/* 전체화면 타임스탬프 표시 */}
+                <Box style={{ 
+                  position: 'absolute', 
+                  top: '16px', 
+                  right: '16px', 
+                  pointerEvents: 'none'
+                }}>
+                  <Text style={{ 
+                    fontFamily: 'monospace',
+                    color: 'white',
+                    textShadow: '0 0 3px black, 0 0 3px black, 0 0 3px black, 0 0 3px black',
+                    fontSize: '0.96rem'
+                  }}>
+                    {displayTimestamp}
+                  </Text>
+                </Box>
+              </>
             ) : (
               <Box style={{ 
                 width: '100%', 
@@ -673,10 +745,11 @@ export default function VideoGrid({
                   right: '8px', 
                   pointerEvents: 'none'
                 }}>
-                  <Text size="xs" style={{ 
+                  <Text style={{ 
                     fontFamily: 'monospace',
                     color: 'white',
-                    textShadow: '0 0 2px black, 0 0 2px black, 0 0 2px black, 0 0 2px black'
+                    textShadow: '0 0 2px black, 0 0 2px black, 0 0 2px black, 0 0 2px black',
+                    fontSize: '0.6rem'
                   }}>
                     {displayTimestamp}
                   </Text>
@@ -747,10 +820,11 @@ export default function VideoGrid({
                   right: '8px', 
                   pointerEvents: 'none'
                 }}>
-                  <Text size="xs" style={{ 
+                  <Text style={{ 
                     fontFamily: 'monospace',
                     color: 'white',
-                    textShadow: '0 0 2px black, 0 0 2px black, 0 0 2px black, 0 0 2px black'
+                    textShadow: '0 0 2px black, 0 0 2px black, 0 0 2px black, 0 0 2px black',
+                    fontSize: '0.6rem'
                   }}>
                     {displayTimestamp}
                   </Text>
@@ -819,10 +893,11 @@ export default function VideoGrid({
                   right: '8px', 
                   pointerEvents: 'none'
                 }}>
-                  <Text size="xs" style={{ 
+                  <Text style={{ 
                     fontFamily: 'monospace',
                     color: 'white',
-                    textShadow: '0 0 2px black, 0 0 2px black, 0 0 2px black, 0 0 2px black'
+                    textShadow: '0 0 2px black, 0 0 2px black, 0 0 2px black, 0 0 2px black',
+                    fontSize: '0.6rem'
                   }}>
                     {displayTimestamp}
                   </Text>
@@ -888,10 +963,11 @@ export default function VideoGrid({
                   right: '8px', 
                   pointerEvents: 'none'
                 }}>
-                  <Text size="xs" style={{ 
+                  <Text style={{ 
                     fontFamily: 'monospace',
                     color: 'white',
-                    textShadow: '0 0 2px black, 0 0 2px black, 0 0 2px black, 0 0 2px black'
+                    textShadow: '0 0 2px black, 0 0 2px black, 0 0 2px black, 0 0 2px black',
+                    fontSize: '0.6rem'
                   }}>
                     {displayTimestamp}
                   </Text>
