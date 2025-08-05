@@ -2,6 +2,8 @@
 
 一款现代化的网络应用，用于查看和分析Tesla行车记录仪录像，支持同步多摄像头播放。使用React、TypeScript和Vite构建。
 
+![Tesla 行车记录仪查看器截图](images/screenshot.png)
+
 ## 🌐 其他语言
 - [English](README.en.md) | [한국어](README.md) | **中文** | [Deutsch](README.de.md) | [Norsk](README.nb.md) | [Nederlands](README.nl.md) | [Français](README.fr.md) | [Svenska](README.sv.md) | [Dansk](README.da.md) | [Español](README.es.md)
 

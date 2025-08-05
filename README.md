@@ -2,6 +2,8 @@
 
 동기화된 다중 카메라 재생 기능을 갖춘 Tesla 대시캠 영상 보기 및 분석을 위한 현대적인 웹 애플리케이션입니다. React, TypeScript, Vite로 구축되었습니다.
 
+![Tesla 대시캠 뷰어 스크린샷](images/screenshot.png)
+
 ## 🌐 다른 언어
 - [English](README.en.md) | **한국어** | [中文](README.zh.md) | [Deutsch](README.de.md) | [Norsk](README.nb.md) | [Nederlands](README.nl.md) | [Français](README.fr.md) | [Svenska](README.sv.md) | [Dansk](README.da.md) | [Español](README.es.md)
 

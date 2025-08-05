@@ -2,6 +2,8 @@
 
 Een moderne webapplicatie voor het bekijken en analyseren van Tesla dashcam beelden met gesynchroniseerde multi-camera weergave. Gebouwd met React, TypeScript en Vite.
 
+![Tesla Dashcam Viewer Screenshot](images/screenshot.png)
+
 ## 🌐 Andere talen
 - [English](README.en.md) | [한국어](README.md) | [中文](README.zh.md) | [Deutsch](README.de.md) | [Norsk](README.nb.md) | **Nederlands** | [Français](README.fr.md) | [Svenska](README.sv.md) | [Dansk](README.da.md) | [Español](README.es.md)
 
