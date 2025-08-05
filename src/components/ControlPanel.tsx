@@ -413,25 +413,6 @@ export default function ControlPanel({
               </Group>
             </Stack>
 
-            {/* 카메라 상태 표시 */}
-            {videoFiles[currentIndex] && (
-              <Group gap={4}>
-                {[
-                  { key: 'front', label: t('videoGrid.front') },
-                  { key: 'back', label: t('videoGrid.back') },
-                  { key: 'right_repeater', label: t('videoGrid.rightRepeater') },
-                  { key: 'left_repeater', label: t('videoGrid.leftRepeater') }
-                ].map(({ key, label }) => (
-                  <Badge 
-                    key={key}
-                    variant={videoFiles[currentIndex][key as keyof Omit<VideoFile, 'timestamp'>] ? 'filled' : 'light'}
-                    size="sm"
-                  >
-                    {label}
-                  </Badge>
-                ))}
-              </Group>
-            )}
           </Stack>
 
           {/* 클립 목록 - 스크롤 가능 */}
