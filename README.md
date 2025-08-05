@@ -1,69 +1,162 @@
-# React + TypeScript + Vite
+# Tesla 대시캠 뷰어
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+동기화된 다중 카메라 재생 기능을 갖춘 Tesla 대시캠 영상 보기 및 분석을 위한 현대적인 웹 애플리케이션입니다. React, TypeScript, Vite로 구축되었습니다.
 
-Currently, two official plugins are available:
+## 🌐 다른 언어
+- [English](README.en.md) | **한국어** | [中文](README.zh.md) | [Deutsch](README.de.md) | [Norsk](README.nb.md) | [Nederlands](README.nl.md) | [Français](README.fr.md) | [Svenska](README.sv.md) | [Dansk](README.da.md) | [Español](README.es.md)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚗 기능
 
-## Expanding the ESLint configuration
+### 다중 카메라 동기화
+- **4대 카메라 지원**: 전방, 후방, 좌측 리피터, 우측 리피터 카메라
+- **완벽한 동기화**: 모든 카메라가 완벽하게 동기화되어 재생
+- **단일 타임라인**: 여러 비디오 클립을 끊김없이 탐색
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### 고급 재생 제어
+- **타임라인 탐색**: 전체 대시캠 세션을 스크러빙으로 탐색
+- **재생 속도 제어**: 0.25배속부터 2배속까지 속도 조절
+- **프레임 단위 이동**: 정밀한 분석을 위한 프레임별 탐색
+- **키보드 단축키**: 모든 기능에 빠른 접근
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### 비디오 향상
+- **번호판 최적화**: `F` 키를 눌러 대비와 선명도 향상 토글
+- **비디오 필터**: 밝기, 대비, 채도 조절
+- **전체화면 모드**: 카메라 클릭 또는 숫자 키(1-4) 사용
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+### 사용자 경험
+- **드래그 앤 드롭**: Tesla 영상 폴더를 브라우저에 간단히 드래그
+- **10개국어 지원**: 한국어, 영어, 중국어 등 10개 언어 인터페이스
+- **다크 테마**: 비디오 시청에 최적화
+- **반응형 디자인**: 모든 화면 크기에서 작동
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## 🎯 온라인 사용
+
+**웹사이트 방문**: https://geeksbaek.github.io/tesla-dashcam-viewer/
+
+설치 없이 바로 브라우저에서 사용하세요!
+
+## 📁 Tesla 대시캠 파일 구조
+
+Tesla 대시캠 파일은 다음 명명 규칙을 따라야 합니다:
+```
+2024-01-15_14-30-25-front.mp4
+2024-01-15_14-30-25-back.mp4
+2024-01-15_14-30-25-left_repeater.mp4
+2024-01-15_14-30-25-right_repeater.mp4
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+앱은 자동으로 타임스탬프별로 파일을 그룹화하여 동기화된 클립으로 표시합니다.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## 🎮 사용 방법
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+### 영상 로드
+1. **드래그 앤 드롭**: Tesla 대시캠 전체 폴더를 브라우저에 드롭
+2. **파일 찾아보기**: "파일 찾아보기" 버튼을 클릭하여 여러 비디오 파일 선택
+3. **자동 그룹화**: 앱이 자동으로 타임스탬프별로 파일 정리
+
+### 탐색 컨트롤
+- **타임라인 슬라이더**: 클릭 및 드래그로 영상의 원하는 지점으로 이동
+- **비디오 목록**: 사이드바의 원하는 비디오를 클릭하여 해당 클립으로 이동
+- **재생/일시정지**: 재생 버튼 클릭 또는 `Space` 키 누르기
+
+### 키보드 단축키
+
+#### 재생
+- `Space` - 재생/일시정지
+- `←` `→` - 뒤로/앞으로 탐색 (5초 또는 1프레임)
+- `↑` `↓` - 이전/다음 비디오 클립
+
+#### 카메라 뷰
+- `1` - 전방 카메라 전체화면
+- `2` - 후방 카메라 전체화면
+- `3` - 우측 리피터 전체화면
+- `4` - 좌측 리피터 전체화면
+
+#### 영상 향상
+- `F` - 번호판 인식 필터 토글 (고대비 + 그레이스케일)
+
+### 영상 분석 기능
+
+#### 번호판 모드 (`F` 키)
+번호판 판독에 최적화된 설정:
+- 향상된 대비 (150%)
+- 그레이스케일 변환
+- 이미지 선명화
+- 일반 밝기
+
+#### 프레임 단위 탐색
+1. 컨트롤 패널에서 "프레임" 모드로 전환
+2. `←` `→` 화살표 키를 사용하여 개별 프레임 단위로 이동
+3. 사고 분석이나 특정 순간 캡처에 완벽
+
+#### 다중 카메라 분석
+- 4개 카메라 각도를 동시에 보기
+- 원하는 카메라를 클릭하여 전체화면으로 보기
+- 모든 카메라가 완벽하게 동기화됨
+
+## 🛠️ 기술적 세부사항
+
+### 사용 기술
+- **React 19** - 최신 기능을 갖춘 현대적인 React
+- **TypeScript** - 타입 안전 개발
+- **Vite** - 빠른 빌드 도구 및 개발 서버
+- **Mantine** - UI 컴포넌트 라이브러리
+- **Tailwind CSS** - 유틸리티 우선 스타일링
+- **i18next** - 국제화
+
+### 브라우저 요구사항
+- ES6+ 및 HTML5 비디오를 지원하는 최신 브라우저
+- Chrome, Firefox, Safari, Edge (최신 버전)
+- JavaScript 활성화
+- 다중 비디오 스트림을 위한 충분한 RAM
+
+### 성능 참고사항
+- 최적의 성능을 위해 비디오를 객체 URL로 로드
+- 클립 전환 시 메모리가 자동으로 정리됨
+- 권장사항: 원활한 4카메라 재생을 위해 8GB+ RAM
+
+
+## 🐛 문제 해결
+
+### 일반적인 문제
+
+**영상이 로드되지 않음**
+- 파일명이 Tesla 형식과 일치하는지 확인: `YYYY-MM-DD_HH-MM-SS-[camera].mp4`
+- 파일이 유효한 MP4 비디오인지 확인
+- 먼저 더 적은 파일로 시도해보기
+
+**성능 저하**
+- 다른 브라우저 탭 닫기
+- 최고 성능을 위해 Chrome 사용
+- 가능한 경우 비디오 품질 낮추기
+- 충분한 RAM 확보 (8GB+ 권장)
+
+**동기화 문제**
+- 타임스탬프 그룹의 모든 비디오가 동일한 길이여야 함
+- 비디오 파일이 손상되지 않았는지 확인
+- 페이지 새로고침 시도
+
+### 브라우저 호환성
+- **Chrome**: 완전 지원 (권장)
+- **Firefox**: 완전 지원
+- **Safari**: 완전 지원
+- **Edge**: 완전 지원
+- **모바일 브라우저**: 제한적 지원 (성능)
+
+## 📄 라이선스
+
+이 프로젝트는 오픈 소스입니다. 자세한 내용은 LICENSE 파일을 확인하세요.
+
+## 🤝 기여
+
+기여를 환영합니다! 언제든지 Pull Request를 제출해 주세요.
+
+## 🙏 감사의 글
+
+- 놀라운 대시캠 시스템을 만든 Tesla
+- 훌륭한 도구와 라이브러리를 제공하는 오픈 소스 커뮤니티
+- 이 프로젝트를 더 좋게 만들어 주는 기여자들
+
+---
+
+**참고**: 이 애플리케이션은 완전히 브라우저에서 실행됩니다. 어떤 비디오 데이터도 업로드되거나 외부에 공유되지 않습니다. 귀하의 개인정보와 데이터 보안이 항상 유지됩니다.
