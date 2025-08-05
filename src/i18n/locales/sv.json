@@ -41,7 +41,8 @@
     "pause": "Pausa",
     "playbackSpeed": "Hastighet",
     "seekMode": "Sök läge",
-    "timeMode": "Tid",
+    "seekModeShortcut": "Navigera med piltangenter",
+    "timeMode": "5 Sek",
     "frameMode": "Ram"
   },
   "shortcuts": {
@@ -67,5 +68,11 @@
     "swedish": "Svenska",
     "danish": "Dansk",
     "spanish": "Español"
+  },
+  "filters": {
+    "licensePlate": "Registreringsskylt förstärkning"
+  },
+  "github": {
+    "viewOnGitHub": "Visa på GitHub"
   }
 }

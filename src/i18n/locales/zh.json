@@ -41,7 +41,8 @@
     "pause": "暂停",
     "playbackSpeed": "播放速度",
     "seekMode": "跳转模式",
-    "timeMode": "时间",
+    "seekModeShortcut": "使用方向键导航",
+    "timeMode": "5秒",
     "frameMode": "帧"
   },
   "shortcuts": {
@@ -67,5 +68,11 @@
     "swedish": "Svenska",
     "danish": "Dansk",
     "spanish": "Español"
+  },
+  "filters": {
+    "licensePlate": "车牌增强"
+  },
+  "github": {
+    "viewOnGitHub": "在 GitHub 上查看"
   }
 }

@@ -14,8 +14,8 @@
     "multipleFiles": "여러 파일을 선택할 수 있습니다",
     "features": {
       "tesla": "테슬라",
-      "teslaCompatible": "테슬라 4채널 대시캠 호환",
-      "synchronizedPlayback": "4채널 대시캠 동기화 재생",
+      "teslaCompatible": "테슬라 4채널 블랙박스 호환",
+      "synchronizedPlayback": "4채널 블랙박스 동기화 재생",
       "frameNavigation": "프레임 단위 이동",
       "licensePlateFilter": "번호판 강조 필터",
       "4kSupport": "4K 지원",
@@ -41,7 +41,8 @@
     "pause": "일시정지",
     "playbackSpeed": "재생 속도",
     "seekMode": "이동 모드",
-    "timeMode": "시간",
+    "seekModeShortcut": "좌우 방향키로 이동",
+    "timeMode": "5초",
     "frameMode": "프레임"
   },
   "shortcuts": {
@@ -70,5 +71,8 @@
     "swedish": "Svenska",
     "danish": "Dansk",
     "spanish": "Español"
+  },
+  "github": {
+    "viewOnGitHub": "GitHub에서 보기"
   }
 }

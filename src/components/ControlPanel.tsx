@@ -357,14 +357,23 @@ export default function ControlPanel({
               fullWidth
               onFocus={(e) => e.target.blur()}
             >
-              {isPlaying ? <Group gap="xs"><IconPlayerPause size={16} /><Text>{t('controlPanel.pause')}</Text></Group> : <Group gap="xs"><IconPlayerPlay size={16} /><Text>{t('controlPanel.play')}</Text></Group>}
+              {isPlaying ? 
+                <Group gap="xs">
+                  <IconPlayerPause size={16} />
+                  <Text>{t('controlPanel.pause')} (Space)</Text>
+                </Group> : 
+                <Group gap="xs">
+                  <IconPlayerPlay size={16} />
+                  <Text>{t('controlPanel.play')} (Space)</Text>
+                </Group>
+              }
             </Button>
 
             {/* 방향키 이동 모드 선택 */}
             <Stack gap="xs">
               <Group gap="xs">
                 <IconSettings size={12} />
-                <Text size="xs" c="dimmed">{t('controlPanel.seekMode')}</Text>
+                <Text size="xs" c="dimmed">{t('controlPanel.seekMode')} ({t('controlPanel.seekModeShortcut')})</Text>
               </Group>
               <SegmentedControl
                 value={seekMode}
@@ -380,9 +389,6 @@ export default function ControlPanel({
                 }}
                 onFocus={(e) => e.target.blur()}
               />
-              <Text size="xs" c="dimmed" style={{ textAlign: 'center', marginTop: '4px' }}>
-                {t('shortcuts.space')} • {seekMode === 'frame' ? t('shortcuts.leftArrow') : t('shortcuts.rightArrow')}
-              </Text>
             </Stack>
 
             {/* 재생 속도 선택 */}

@@ -41,7 +41,8 @@
     "pause": "Pause",
     "playbackSpeed": "Vitesse",
     "seekMode": "Mode de recherche",
-    "timeMode": "Temps",
+    "seekModeShortcut": "Naviguer avec les flèches",
+    "timeMode": "5 Sec",
     "frameMode": "Image"
   },
   "shortcuts": {
@@ -67,5 +68,11 @@
     "swedish": "Svenska",
     "danish": "Dansk",
     "spanish": "Español"
+  },
+  "filters": {
+    "licensePlate": "Amélioration de plaque d'immatriculation"
+  },
+  "github": {
+    "viewOnGitHub": "Voir sur GitHub"
   }
 }

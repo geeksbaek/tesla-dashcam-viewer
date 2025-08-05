@@ -41,7 +41,8 @@
     "pause": "Pauzeren",
     "playbackSpeed": "Snelheid",
     "seekMode": "Zoek modus",
-    "timeMode": "Tijd",
+    "seekModeShortcut": "Navigeren met pijltjestoetsen",
+    "timeMode": "5 Sec",
     "frameMode": "Frame"
   },
   "shortcuts": {
@@ -67,5 +68,11 @@
     "swedish": "Svenska",
     "danish": "Dansk",
     "spanish": "Español"
+  },
+  "filters": {
+    "licensePlate": "Kentekenplaat verbetering"
+  },
+  "github": {
+    "viewOnGitHub": "Bekijk op GitHub"
   }
 }

@@ -21,6 +21,10 @@ export default function LanguageSelect() {
   const handleLanguageChange = (value: string | null) => {
     if (value) {
       i18n.changeLanguage(value);
+      // 언어 변경 후 포커스 제거하여 스페이스바 단축키가 정상 작동하도록 함
+      setTimeout(() => {
+        (document.activeElement as HTMLElement)?.blur();
+      }, 100);
     }
   };
 
@@ -33,11 +37,21 @@ export default function LanguageSelect() {
       size="sm"
       variant="filled"
       w="100%"
+      onFocus={(e) => {
+        // 드롭다운이 열릴 때만 포커스 유지, 선택 후에는 즉시 제거
+        setTimeout(() => e.target.blur(), 50);
+      }}
       comboboxProps={{
         shadow: 'md',
         radius: 'md',
         dropdownPadding: 0,
         withinPortal: false,
+        onDropdownClose: () => {
+          // 드롭다운이 닫힐 때 포커스 제거
+          setTimeout(() => {
+            (document.activeElement as HTMLElement)?.blur();
+          }, 50);
+        },
       }}
       maxDropdownHeight={500}
       styles={{

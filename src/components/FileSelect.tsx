@@ -233,7 +233,7 @@ export default function FileSelect({ onFilesLoaded }: FileSelectProps) {
                 backgroundColor: 'transparent'
               }}
             >
-              View on GitHub
+              {t('github.viewOnGitHub')}
             </Button>
           </Group>
           

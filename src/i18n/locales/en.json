@@ -41,7 +41,8 @@
     "pause": "Pause",
     "playbackSpeed": "Speed",
     "seekMode": "Seek Mode",
-    "timeMode": "Time",
+    "seekModeShortcut": "Navigate with arrow keys",
+    "timeMode": "5 Sec",
     "frameMode": "Frame"
   },
   "shortcuts": {
@@ -70,5 +71,8 @@
     "swedish": "Swedish",
     "danish": "Danish",
     "spanish": "Spanish"
+  },
+  "github": {
+    "viewOnGitHub": "View on GitHub"
   }
 }

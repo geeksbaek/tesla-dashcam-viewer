@@ -41,7 +41,8 @@
     "pause": "Pausar",
     "playbackSpeed": "Velocidad",
     "seekMode": "Modo de búsqueda",
-    "timeMode": "Tiempo",
+    "seekModeShortcut": "Navegar con teclas de flecha",
+    "timeMode": "5 Seg",
     "frameMode": "Fotograma"
   },
   "shortcuts": {
@@ -67,5 +68,11 @@
     "swedish": "Svenska",
     "danish": "Dansk",
     "spanish": "Español"
+  },
+  "filters": {
+    "licensePlate": "Mejora de matrícula"
+  },
+  "github": {
+    "viewOnGitHub": "Ver en GitHub"
   }
 }
