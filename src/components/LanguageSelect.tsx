@@ -46,12 +46,12 @@ export default function LanguageSelect() {
         radius: 'md',
         dropdownPadding: 0,
         withinPortal: false,
-        onDropdownClose: () => {
-          // 드롭다운이 닫힐 때 포커스 제거
-          setTimeout(() => {
-            (document.activeElement as HTMLElement)?.blur();
-          }, 50);
-        },
+      }}
+      onDropdownClose={() => {
+        // 드롭다운이 닫힐 때 포커스 제거
+        setTimeout(() => {
+          (document.activeElement as HTMLElement)?.blur();
+        }, 50);
       }}
       maxDropdownHeight={500}
       styles={{

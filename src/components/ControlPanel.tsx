@@ -1,5 +1,5 @@
 import { Button, Paper, Text, Title, Badge, Group, Stack, Box, ActionIcon, SegmentedControl, Tooltip } from '@mantine/core'
-import { IconChevronLeft, IconChevronRight, IconVideo, IconPlayerPlay, IconPlayerPause, IconSettings, IconHome, IconPlayerTrackNext, IconBrandGithub } from '@tabler/icons-react'
+import { IconChevronLeft, IconChevronRight, IconVideo, IconPlayerPlay, IconPlayerPause, IconSettings, IconHome, IconPlayerTrackNext, IconBrandGithub, IconVideoFilled, IconPlayerPlayFilled, IconPlayerPauseFilled, IconSettingsFilled, IconHomeFilled } from '@tabler/icons-react'
 import { useRef, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import LanguageSelect from './LanguageSelect'
@@ -225,7 +225,7 @@ export default function ControlPanel({
                 }}
                 onFocus={(e) => e.target.blur()}
               >
-                {isPlaying ? <IconPlayerPause size={16} /> : <IconPlayerPlay size={16} />}
+                {isPlaying ? <IconPlayerPauseFilled size={16} /> : <IconPlayerPlayFilled size={16} />}
               </Button>
               
               {/* 클립 목록 - 스크롤 가능 */}
@@ -294,7 +294,7 @@ export default function ControlPanel({
                   }}
                   onFocus={(e) => e.target.blur()}
                 >
-                  <IconHome size={14} />
+                  <IconHomeFilled size={14} />
                 </Button>
               </Group>
             </Box>
@@ -327,7 +327,7 @@ export default function ControlPanel({
       <Stack gap="sm" mb="md">
         <Group justify="space-between" align="center">
           <Group gap="xs">
-            <IconVideo size={16} />
+            <IconVideoFilled size={16} />
             <Title order={5}>{t('app.title')}</Title>
           </Group>
           <ActionIcon
@@ -359,11 +359,11 @@ export default function ControlPanel({
             >
               {isPlaying ? 
                 <Group gap="xs">
-                  <IconPlayerPause size={16} />
+                  <IconPlayerPauseFilled size={16} />
                   <Text>{t('controlPanel.pause')} (Space)</Text>
                 </Group> : 
                 <Group gap="xs">
-                  <IconPlayerPlay size={16} />
+                  <IconPlayerPlayFilled size={16} />
                   <Text>{t('controlPanel.play')} (Space)</Text>
                 </Group>
               }
@@ -372,7 +372,7 @@ export default function ControlPanel({
             {/* 방향키 이동 모드 선택 */}
             <Stack gap="xs">
               <Group gap="xs">
-                <IconSettings size={12} />
+                <IconSettingsFilled size={12} />
                 <Text size="xs" c="dimmed">{t('controlPanel.seekMode')} ({t('controlPanel.seekModeShortcut')})</Text>
               </Group>
               <SegmentedControl
@@ -419,7 +419,7 @@ export default function ControlPanel({
           <Stack gap="xs" style={{ flex: 1, minHeight: 0, overflow: 'hidden' }}>
             <Group justify="space-between" align="center">
               <Group gap="xs">
-                <IconVideo size={16} />
+                <IconVideoFilled size={16} />
                 <Title order={6}>{t('controlPanel.videos')}</Title>
               </Group>
               <Text size="xs" c="dimmed">
@@ -543,7 +543,7 @@ export default function ControlPanel({
                 onFocus={(e) => e.target.blur()}
               >
                 <Group gap="xs">
-                  <IconHome size={16} />
+                  <IconHomeFilled size={16} />
                   <Text>{t('controlPanel.home')}</Text>
                 </Group>
               </Button>
