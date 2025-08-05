@@ -14,11 +14,10 @@ interface VideoFile {
 
 interface FileSelectProps {
   onFilesLoaded: (files: VideoFile[]) => void
-  onLoadDummy?: () => void
 }
 
 
-export default function FileSelect({ onFilesLoaded, onLoadDummy }: FileSelectProps) {
+export default function FileSelect({ onFilesLoaded }: FileSelectProps) {
   const { t } = useTranslation();
   const parseVideoFiles = useCallback((files: FileList) => {
     const videoFiles: { [key: string]: VideoFile } = {}
@@ -83,7 +82,7 @@ export default function FileSelect({ onFilesLoaded, onLoadDummy }: FileSelectPro
             transition: 'all 200ms ease',
             '--paper-hover-border-color': 'var(--mantine-color-blue-4)',
             '--paper-hover-background-color': 'var(--mantine-color-dark-6)'
-          } as any}
+          } as React.CSSProperties}
           p="xl"
           onDrop={handleDrop}
           onDragOver={handleDragOver}

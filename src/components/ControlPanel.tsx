@@ -147,7 +147,7 @@ export default function ControlPanel({
       })
       
       return formatter.format(date)
-    } catch (error) {
+    } catch {
       // 파싱 실패 시 기본 포맷 반환
       return baseTimestamp.replace(/_/g, ' ').replace(/-/g, ':')
     }

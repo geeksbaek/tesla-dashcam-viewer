@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState, useMemo } from 'react'
+import React, { useRef, useEffect, useState, useMemo } from 'react'
 import { Paper, Box, Text } from '@mantine/core'
 import { useTranslation } from 'react-i18next'
 import type { VideoFilters } from './VideoFilterControls'
