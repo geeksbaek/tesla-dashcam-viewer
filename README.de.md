@@ -15,7 +15,7 @@ Eine moderne Webanwendung zum Anzeigen und Analysieren von Tesla Dashcam-Aufnahm
 
 ### Erweiterte Wiedergabesteuerung
 - **Timeline-Navigation**: Scrubben durch Ihre gesamte Dashcam-Sitzung
-- **Wiedergabegeschwindigkeitskontrolle**: Geschwindigkeit von 0,25x bis 2x anpassen
+- **Wiedergabegeschwindigkeitskontrolle**: Geschwindigkeit von 0,1x bis 1x anpassen
 - **Frame-für-Frame-Stepping**: Präzise Navigation für detaillierte Analysen
 - **Tastenkombinationen**: Schneller Zugriff auf alle Funktionen
 

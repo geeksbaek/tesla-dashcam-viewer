@@ -14,7 +14,7 @@ A modern web application for viewing and analyzing Tesla dashcam footage with sy
 
 ### Advanced Playback Controls
 - **Timeline navigation**: Scrub through your entire dashcam session
-- **Playback speed control**: Adjust speed from 0.25x to 2x
+- **Playback speed control**: Adjust speed from 0.1x to 1x
 - **Frame-by-frame stepping**: Precise navigation for detailed analysis
 - **Keyboard shortcuts**: Quick access to all functions
 

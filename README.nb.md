@@ -15,7 +15,7 @@ En moderne webapplikasjon for å se og analysere Tesla dashcam-opptak med synkro
 
 ### Avanserte avspillingskontroller
 - **Tidslinje navigasjon**: Skrubb gjennom hele dashcam-økten din
-- **Avspillingshastighet kontroll**: Juster hastighet fra 0.25x til 2x
+- **Avspillingshastighet kontroll**: Juster hastighet fra 0.1x til 1x
 - **Bilde-for-bilde stepping**: Presis navigasjon for detaljerte analyser
 - **Tastatursnarveier**: Rask tilgang til alle funksjoner
 

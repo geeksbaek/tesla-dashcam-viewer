@@ -15,7 +15,7 @@ Una aplicación web moderna para ver y analizar grabaciones de dashcam Tesla con
 
 ### Controles de reproducción avanzados
 - **Navegación de línea de tiempo**: Desplázate por toda tu sesión de dashcam
-- **Control de velocidad de reproducción**: Ajusta la velocidad de 0.25x a 2x
+- **Control de velocidad de reproducción**: Ajusta la velocidad de 0.1x a 1x
 - **Navegación cuadro por cuadro**: Navegación precisa para análisis detallado
 - **Atajos de teclado**: Acceso rápido a todas las funciones
 

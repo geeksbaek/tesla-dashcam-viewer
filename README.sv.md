@@ -15,7 +15,7 @@ En modern webbapplikation för att visa och analysera Tesla dashcam-inspelningar
 
 ### Avancerade uppspelningskontroller
 - **Tidslinje navigering**: Skrubba genom din hela dashcam session
-- **Uppspelningshastighet kontroll**: Justera hastighet från 0.25x till 2x
+- **Uppspelningshastighet kontroll**: Justera hastighet från 0.1x till 1x
 - **Bild-för-bild stegning**: Precis navigering för detaljerad analys
 - **Tangentbordsgenvägar**: Snabb åtkomst till alla funktioner
 

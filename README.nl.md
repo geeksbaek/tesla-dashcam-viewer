@@ -15,7 +15,7 @@ Een moderne webapplicatie voor het bekijken en analyseren van Tesla dashcam beel
 
 ### Geavanceerde afspeelbesturing
 - **Tijdlijn navigatie**: Scrub door je hele dashcam sessie
-- **Afspeelsnelheid besturing**: Pas snelheid aan van 0.25x tot 2x
+- **Afspeelsnelheid besturing**: Pas snelheid aan van 0.1x tot 1x
 - **Frame-voor-frame stappen**: Precieze navigatie voor gedetailleerde analyse
 - **Toetsenbord sneltoetsen**: Snelle toegang tot alle functies
 

@@ -15,7 +15,7 @@ Une application web moderne pour visualiser et analyser les enregistrements de d
 
 ### Contrôles de lecture avancés
 - **Navigation timeline**: Parcourez votre session dashcam entière
-- **Contrôle de vitesse de lecture**: Ajustez la vitesse de 0.25x à 2x
+- **Contrôle de vitesse de lecture**: Ajustez la vitesse de 0.1x à 1x
 - **Navigation image par image**: Navigation précise pour une analyse détaillée
 - **Raccourcis clavier**: Accès rapide à toutes les fonctions
 
