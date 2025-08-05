@@ -516,7 +516,7 @@ export default function VideoGrid({
                 <Box style={{ 
                   position: 'absolute', 
                   top: '16px', 
-                  right: '16px', 
+                  right: '12px', 
                   pointerEvents: 'none'
                 }}>
                   <Text style={{ 
@@ -567,7 +567,7 @@ export default function VideoGrid({
                 <Box style={{ 
                   position: 'absolute', 
                   top: '16px', 
-                  right: '16px', 
+                  right: '12px', 
                   pointerEvents: 'none'
                 }}>
                   <Text style={{ 
@@ -618,7 +618,7 @@ export default function VideoGrid({
                 <Box style={{ 
                   position: 'absolute', 
                   top: '16px', 
-                  right: '16px', 
+                  right: '12px', 
                   pointerEvents: 'none'
                 }}>
                   <Text style={{ 
@@ -669,7 +669,7 @@ export default function VideoGrid({
                 <Box style={{ 
                   position: 'absolute', 
                   top: '16px', 
-                  right: '16px', 
+                  right: '12px', 
                   pointerEvents: 'none'
                 }}>
                   <Text style={{ 
@@ -742,7 +742,7 @@ export default function VideoGrid({
                 <Box style={{ 
                   position: 'absolute', 
                   top: '8px', 
-                  right: '8px', 
+                  right: '12px', 
                   pointerEvents: 'none'
                 }}>
                   <Text style={{ 
@@ -817,8 +817,9 @@ export default function VideoGrid({
                 <Box style={{ 
                   position: 'absolute', 
                   top: '8px', 
-                  right: '8px', 
-                  pointerEvents: 'none'
+                  right: sidebarExpanded ? '12px' : '24px', 
+                  pointerEvents: 'none',
+                  transition: 'right 300ms ease'
                 }}>
                   <Text style={{ 
                     fontFamily: 'monospace',
@@ -890,7 +891,7 @@ export default function VideoGrid({
                 <Box style={{ 
                   position: 'absolute', 
                   top: '8px', 
-                  right: '8px', 
+                  right: '12px', 
                   pointerEvents: 'none'
                 }}>
                   <Text style={{ 
@@ -960,8 +961,9 @@ export default function VideoGrid({
                 <Box style={{ 
                   position: 'absolute', 
                   top: '8px', 
-                  right: '8px', 
-                  pointerEvents: 'none'
+                  right: sidebarExpanded ? '12px' : '24px', 
+                  pointerEvents: 'none',
+                  transition: 'right 300ms ease'
                 }}>
                   <Text style={{ 
                     fontFamily: 'monospace',
