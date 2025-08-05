@@ -1,5 +1,5 @@
-import { Button, Paper, Text, Title, Badge, Group, Stack, Box, ActionIcon, SegmentedControl } from '@mantine/core'
-import { IconChevronLeft, IconChevronRight, IconVideo, IconPlayerPlay, IconPlayerPause, IconSettings, IconHome, IconPlayerTrackNext } from '@tabler/icons-react'
+import { Button, Paper, Text, Title, Badge, Group, Stack, Box, ActionIcon, SegmentedControl, Tooltip } from '@mantine/core'
+import { IconChevronLeft, IconChevronRight, IconVideo, IconPlayerPlay, IconPlayerPause, IconSettings, IconHome, IconPlayerTrackNext, IconBrandGithub } from '@tabler/icons-react'
 import { useRef, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import LanguageSelect from './LanguageSelect'
@@ -271,19 +271,32 @@ export default function ControlPanel({
               display: 'flex',
               justifyContent: 'center'
             }}>
-              <Button
-                onClick={onGoToHome}
-                size="lg"
-                variant="subtle"
-                style={{
-                  width: '40px',
-                  height: '40px',
-                  padding: 0
-                }}
-                onFocus={(e) => e.target.blur()}
-              >
-                <IconHome size={14} />
-              </Button>
+              <Group gap={4}>
+                <Tooltip label="GitHub Repository" withArrow>
+                  <ActionIcon
+                    size="md"
+                    variant="subtle"
+                    color="gray"
+                    onClick={() => window.open('https://github.com/geeksbaek/tesla-dashcam-viewer', '_blank')}
+                    onFocus={(e) => e.target.blur()}
+                  >
+                    <IconBrandGithub size={14} />
+                  </ActionIcon>
+                </Tooltip>
+                <Button
+                  onClick={onGoToHome}
+                  size="lg"
+                  variant="subtle"
+                  style={{
+                    width: '40px',
+                    height: '40px',
+                    padding: 0
+                  }}
+                  onFocus={(e) => e.target.blur()}
+                >
+                  <IconHome size={14} />
+                </Button>
+              </Group>
             </Box>
           </Box>
         </Paper>
@@ -521,17 +534,31 @@ export default function ControlPanel({
         }}>
           <Stack gap="xs">
             <LanguageSelect />
-            <Button
-              onClick={onGoToHome}
-              size="sm"
-              variant="subtle"
-              fullWidth
-            >
-              <Group gap="xs">
-                <IconHome size={16} />
-                <Text>{t('controlPanel.home')}</Text>
-              </Group>
-            </Button>
+            <Group gap="xs" grow>
+              <Button
+                onClick={() => window.open('https://github.com/geeksbaek/tesla-dashcam-viewer', '_blank')}
+                size="sm"
+                variant="subtle"
+                color="gray"
+                style={{ flex: 1 }}
+              >
+                <Group gap="xs">
+                  <IconBrandGithub size={16} />
+                  <Text>GitHub</Text>
+                </Group>
+              </Button>
+              <Button
+                onClick={onGoToHome}
+                size="sm"
+                variant="subtle"
+                style={{ flex: 1 }}
+              >
+                <Group gap="xs">
+                  <IconHome size={16} />
+                  <Text>{t('controlPanel.home')}</Text>
+                </Group>
+              </Button>
+            </Group>
           </Stack>
         </Box>
       </Box>

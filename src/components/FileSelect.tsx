@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react'
-import { Paper, Title, Text, Button, Group, Stack, Container, Box, Badge, Divider, Center } from '@mantine/core'
-import { IconVideo, IconMovie, IconDragDrop, IconBrandTesla, IconCar, IconUpload, IconFolders } from '@tabler/icons-react'
+import { Paper, Title, Text, Button, Group, Stack, Container, Box, Badge, Divider, Center, ActionIcon, Tooltip } from '@mantine/core'
+import { IconVideo, IconMovie, IconDragDrop, IconBrandTesla, IconCar, IconUpload, IconFolders, IconBrandGithub } from '@tabler/icons-react'
 import { useTranslation } from 'react-i18next'
 import LanguageSelect from './LanguageSelect'
 
@@ -195,19 +195,46 @@ export default function FileSelect({ onFilesLoaded }: FileSelectProps) {
           </Paper>
 
           {/* Features Section */}
-          <Group justify="center" gap="xl">
-            <Group gap="xs">
-              <IconVideo size={16} style={{ color: 'var(--mantine-color-blue-5)' }} />
-              <Text size="sm" c="dimmed">{t('fileSelect.features.synchronizedPlayback')}</Text>
+          <Box style={{ 
+            width: '100%',
+            display: 'flex',
+            justifyContent: 'center',
+            overflow: 'visible'
+          }}>
+            <Group justify="center" gap="xl" wrap="nowrap" style={{ 
+              minWidth: 'max-content',
+              overflow: 'visible'
+            }}>
+              <Group gap="xs" wrap="nowrap" style={{ minWidth: 0, flex: '0 0 auto' }}>
+                <IconVideo size={16} style={{ color: 'var(--mantine-color-blue-5)', flexShrink: 0 }} />
+                <Text size="sm" c="dimmed" style={{ whiteSpace: 'nowrap' }}>{t('fileSelect.features.synchronizedPlayback')}</Text>
+              </Group>
+              <Group gap="xs" wrap="nowrap" style={{ minWidth: 0, flex: '0 0 auto' }}>
+                <IconMovie size={16} style={{ color: 'var(--mantine-color-green-5)', flexShrink: 0 }} />
+                <Text size="sm" c="dimmed" style={{ whiteSpace: 'nowrap' }}>{t('fileSelect.features.frameNavigation')}</Text>
+              </Group>
+              <Group gap="xs" wrap="nowrap" style={{ minWidth: 0, flex: '0 0 auto' }}>
+                <IconVideo size={16} style={{ color: 'var(--mantine-color-orange-5)', flexShrink: 0 }} />
+                <Text size="sm" c="dimmed" style={{ whiteSpace: 'nowrap' }}>{t('fileSelect.features.licensePlateFilter')}</Text>
+              </Group>
             </Group>
-            <Group gap="xs">
-              <IconMovie size={16} style={{ color: 'var(--mantine-color-green-5)' }} />
-              <Text size="sm" c="dimmed">{t('fileSelect.features.frameNavigation')}</Text>
-            </Group>
-            <Group gap="xs">
-              <IconVideo size={16} style={{ color: 'var(--mantine-color-orange-5)' }} />
-              <Text size="sm" c="dimmed">{t('fileSelect.features.licensePlateFilter')}</Text>
-            </Group>
+          </Box>
+
+          {/* GitHub Link */}
+          <Group justify="center">
+            <Button
+              variant="subtle"
+              color="gray"
+              size="sm"
+              leftSection={<IconBrandGithub size={16} />}
+              onClick={() => window.open('https://github.com/geeksbaek/tesla-dashcam-viewer', '_blank')}
+              style={{
+                color: 'var(--mantine-color-dimmed)',
+                backgroundColor: 'transparent'
+              }}
+            >
+              View on GitHub
+            </Button>
           </Group>
           
           {/* 숨겨진 파일 입력 요소 */}
