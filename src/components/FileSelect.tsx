@@ -1,6 +1,6 @@
-import React, { useCallback } from 'react'
-import { Paper, Title, Text, Button, Group, Stack, Container, Box } from '@mantine/core'
-import { IconVideo, IconMovie, IconDragDrop } from '@tabler/icons-react'
+import React, { useCallback, useState } from 'react'
+import { Paper, Title, Text, Button, Group, Stack, Container, Box, Badge, Divider, Center } from '@mantine/core'
+import { IconVideo, IconMovie, IconDragDrop, IconBrandTesla, IconCar, IconUpload, IconFolders } from '@tabler/icons-react'
 import { useTranslation } from 'react-i18next'
 import LanguageSelect from './LanguageSelect'
 
@@ -19,6 +19,8 @@ interface FileSelectProps {
 
 export default function FileSelect({ onFilesLoaded }: FileSelectProps) {
   const { t } = useTranslation();
+  const [isDragOver, setIsDragOver] = useState(false);
+  
   const parseVideoFiles = useCallback((files: FileList) => {
     const videoFiles: { [key: string]: VideoFile } = {}
     
@@ -49,6 +51,7 @@ export default function FileSelect({ onFilesLoaded }: FileSelectProps) {
 
   const handleDrop = useCallback((e: React.DragEvent) => {
     e.preventDefault()
+    setIsDragOver(false)
     const files = e.dataTransfer.files
     if (files.length > 0) {
       parseVideoFiles(files)
@@ -64,90 +67,160 @@ export default function FileSelect({ onFilesLoaded }: FileSelectProps) {
 
   const handleDragOver = useCallback((e: React.DragEvent) => {
     e.preventDefault()
+    setIsDragOver(true)
+  }, [])
+
+  const handleDragLeave = useCallback((e: React.DragEvent) => {
+    e.preventDefault()
+    setIsDragOver(false)
   }, [])
 
   return (
-    <Container size="md" style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
+    <Box style={{ 
+      minHeight: '100vh', 
+      background: 'linear-gradient(135deg, var(--mantine-color-dark-8) 0%, var(--mantine-color-dark-7) 100%)',
+      position: 'relative'
+    }}>
       {/* Language selector - 우측 상단 고정 */}
       <Box style={{ position: 'fixed', top: '20px', right: '20px', zIndex: 1000 }}>
         <LanguageSelect />
       </Box>
       
-      <Stack gap="xl" style={{ width: '100%' }}>
-        {/* 메인 파일 선택 카드 */}
-        <Paper
-          style={{
-            border: '2px dashed var(--mantine-color-dark-4)',
-            cursor: 'pointer',
-            transition: 'all 200ms ease',
-            '--paper-hover-border-color': 'var(--mantine-color-blue-4)',
-            '--paper-hover-background-color': 'var(--mantine-color-dark-6)'
-          } as React.CSSProperties}
-          p="xl"
-          onDrop={handleDrop}
-          onDragOver={handleDragOver}
-          onClick={() => document.getElementById('file-input')?.click()}
-        >
-          <Stack align="center" gap="lg">
+      <Container size="lg" style={{ height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <Stack gap="lg" style={{ width: '100%', maxWidth: '600px' }}>
+          {/* Hero Section */}
+          <Stack align="center" gap="md">
             <Box style={{ 
-              width: '64px',
-              height: '64px',
-              borderRadius: '50%',
-              backgroundColor: 'var(--mantine-color-blue-6)',
+              position: 'relative',
+              width: '120px',
+              height: '120px',
+              borderRadius: '24px',
+              background: 'linear-gradient(135deg, #dc2626 0%, #b91c1c 100%)',
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'center'
+              justifyContent: 'center',
+              boxShadow: '0 20px 40px rgba(220, 38, 38, 0.3)',
+              border: '3px solid rgba(255, 255, 255, 0.1)'
             }}>
-              <IconVideo size={32} />
+              <IconBrandTesla size={48} color="white" />
             </Box>
             
-            <Title order={2} ta="center" className="font-apple">{t('app.title')}</Title>
-            <Text ta="center" size="lg" c="dimmed" className="font-apple">
-              {t('fileSelect.description')}
-            </Text>
-            
-            <Stack gap="xs" align="center">
-              <Text size="sm" c="dimmed">
-                {t('fileSelect.dragDrop')}
-              </Text>
-              <Text size="xs" c="dimmed">
-                {t('fileSelect.supportedFormats')}
-              </Text>
-            </Stack>
-            
-            {/* 파일 선택 버튼 */}
-            <Button
-              size="md"
-              variant="light"
-              onClick={(e) => {
-                e.stopPropagation()
-                document.getElementById('file-input')?.click()
-              }}
-            >
-              <Group gap="xs">
-                <IconMovie size={16} />
-                <Text>{t('fileSelect.browse')}</Text>
-              </Group>
-            </Button>
-            
-            {/* 드래그 앤 드롭 힌트 */}
-            <Group gap="xs">
-              <IconDragDrop size={16} />
-              <Text size="sm" c="dimmed">{t('fileSelect.multipleFiles')}</Text>
-            </Group>
+            <Title order={1} ta="center" style={{ 
+              fontSize: '2.5rem',
+              fontWeight: 700,
+              background: 'linear-gradient(135deg, #ffffff 0%, #e5e7eb 100%)',
+              backgroundClip: 'text',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent'
+            }}>
+              {t('app.title')}
+            </Title>
           </Stack>
-        </Paper>
-        
-        {/* 숨겨진 파일 입력 요소 */}
-        <input
-          id="file-input"
-          type="file"
-          multiple
-          accept="video/*"
-          style={{ display: 'none' }}
-          onChange={handleFileSelect}
-        />
-      </Stack>
-    </Container>
+
+          {/* Main Upload Area */}
+          <Paper
+            radius="xl"
+            style={{
+              border: isDragOver 
+                ? '3px solid var(--mantine-color-red-5)' 
+                : '2px dashed var(--mantine-color-dark-4)',
+              cursor: 'pointer',
+              transition: 'all 300ms ease',
+              background: isDragOver 
+                ? 'var(--mantine-color-dark-6)' 
+                : 'var(--mantine-color-dark-7)',
+              boxShadow: isDragOver 
+                ? '0 20px 40px rgba(220, 38, 38, 0.2)' 
+                : '0 10px 30px rgba(0, 0, 0, 0.3)',
+              transform: isDragOver ? 'scale(1.02)' : 'scale(1)'
+            }}
+            p="xl"
+            onDrop={handleDrop}
+            onDragOver={handleDragOver}
+            onDragLeave={handleDragLeave}
+            onClick={() => document.getElementById('file-input')?.click()}
+          >
+            <Stack align="center" gap="lg">
+              <Box style={{ 
+                width: '80px',
+                height: '80px',
+                borderRadius: '20px',
+                background: isDragOver 
+                  ? 'linear-gradient(135deg, #dc2626 0%, #b91c1c 100%)'
+                  : 'linear-gradient(135deg, var(--mantine-color-blue-6) 0%, var(--mantine-color-blue-7) 100%)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                transition: 'all 300ms ease',
+                boxShadow: '0 10px 25px rgba(59, 130, 246, 0.3)'
+              }}>
+                {isDragOver ? (
+                  <IconUpload size={36} color="white" />
+                ) : (
+                  <IconFolders size={36} color="white" />
+                )}
+              </Box>
+              
+              <Stack align="center" gap="xs">
+                <Title order={3} ta="center" style={{ fontWeight: 600 }}>
+                  {isDragOver ? t('fileSelect.dropHere') : t('fileSelect.dragDrop')}
+                </Title>
+                
+                <Text size="sm" c="dimmed" ta="center">
+                  {t('fileSelect.supportedFormats')}
+                </Text>
+              </Stack>
+              
+              <Button
+                size="lg"
+                radius="xl"
+                variant="gradient"
+                gradient={{ from: 'red', to: 'pink' }}
+                style={{ 
+                  paddingLeft: '2rem', 
+                  paddingRight: '2rem',
+                  boxShadow: '0 8px 20px rgba(220, 38, 38, 0.3)'
+                }}
+                onClick={(e) => {
+                  e.stopPropagation()
+                  document.getElementById('file-input')?.click()
+                }}
+              >
+                <Group gap="sm">
+                  <IconMovie size={20} />
+                  <Text size="md" fw={600}>{t('fileSelect.browse')}</Text>
+                </Group>
+              </Button>
+            </Stack>
+          </Paper>
+
+          {/* Features Section */}
+          <Group justify="center" gap="xl">
+            <Group gap="xs">
+              <IconVideo size={16} style={{ color: 'var(--mantine-color-blue-5)' }} />
+              <Text size="sm" c="dimmed">{t('fileSelect.features.synchronizedPlayback')}</Text>
+            </Group>
+            <Group gap="xs">
+              <IconMovie size={16} style={{ color: 'var(--mantine-color-green-5)' }} />
+              <Text size="sm" c="dimmed">{t('fileSelect.features.frameNavigation')}</Text>
+            </Group>
+            <Group gap="xs">
+              <IconVideo size={16} style={{ color: 'var(--mantine-color-orange-5)' }} />
+              <Text size="sm" c="dimmed">{t('fileSelect.features.licensePlateFilter')}</Text>
+            </Group>
+          </Group>
+          
+          {/* 숨겨진 파일 입력 요소 */}
+          <input
+            id="file-input"
+            type="file"
+            multiple
+            accept="video/*"
+            style={{ display: 'none' }}
+            onChange={handleFileSelect}
+          />
+        </Stack>
+      </Container>
+    </Box>
   )
 }

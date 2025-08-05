@@ -7,10 +7,20 @@
     "title": "Selecteer Tesla Dashcam bestanden",
     "description": "Kies uw Tesla dashcam videobestanden om te bekijken",
     "dragDrop": "Sleep uw videobestanden hier naartoe",
+    "dropHere": "Zet uw bestanden hier neer!",
     "browse": "Bestanden bladeren",
     "loadDemo": "Demo data laden",
     "supportedFormats": "Ondersteunde formaten: MP4, MOV",
-    "multipleFiles": "U kunt meerdere bestanden selecteren"
+    "multipleFiles": "U kunt meerdere bestanden selecteren",
+    "features": {
+      "tesla": "Tesla",
+      "teslaCompatible": "Tesla 4-Kanaals Dashcam Compatibel",
+      "synchronizedPlayback": "4-Kanaals Dashcam Gesynchroniseerde Weergave",
+      "frameNavigation": "Frame-voor-frame Navigatie",
+      "licensePlateFilter": "Kentekenplaat Versterkingsfilter",
+      "4kSupport": "4K Ondersteuning",
+      "multiCamera": "Multi-Camera"
+    }
   },
   "videoGrid": {
     "front": "Voorkant",

@@ -7,10 +7,20 @@
     "title": "Välj Tesla Dashcam filer",
     "description": "Välj dina Tesla dashcam videofiler för att börja titta",
     "dragDrop": "Dra och släpp dina videofiler här",
+    "dropHere": "Släpp dina filer här!",
     "browse": "Bläddra bland filer",
     "loadDemo": "Ladda demo data",
     "supportedFormats": "Format som stöds: MP4, MOV",
-    "multipleFiles": "Du kan välja flera filer"
+    "multipleFiles": "Du kan välja flera filer",
+    "features": {
+      "tesla": "Tesla",
+      "teslaCompatible": "Tesla 4-Kanals Dashcam Kompatibel",
+      "synchronizedPlayback": "4-Kanals Dashcam Synkroniserad Uppspelning",
+      "frameNavigation": "Bildruta-för-bildruta Navigering",
+      "licensePlateFilter": "Registreringsskylt Förstärkningsfilter",
+      "4kSupport": "4K Stöd",
+      "multiCamera": "Multi-Kamera"
+    }
   },
   "videoGrid": {
     "front": "Fram",

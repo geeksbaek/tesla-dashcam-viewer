@@ -7,10 +7,20 @@
     "title": "选择特斯拉行车记录仪文件",
     "description": "选择您要查看的特斯拉行车记录仪视频文件",
     "dragDrop": "将视频文件拖放到此处",
+    "dropHere": "将文件放到这里！",
     "browse": "浏览文件",
     "loadDemo": "加载演示数据",
     "supportedFormats": "支持格式：MP4, MOV",
-    "multipleFiles": "您可以选择多个文件"
+    "multipleFiles": "您可以选择多个文件",
+    "features": {
+      "tesla": "特斯拉",
+      "teslaCompatible": "特斯拉4通道行车记录仪兼容",
+      "synchronizedPlayback": "4通道行车记录仪同步播放",
+      "frameNavigation": "逐帧导航",
+      "licensePlateFilter": "车牌增强滤镜",
+      "4kSupport": "4K支持",
+      "multiCamera": "多摄像头"
+    }
   },
   "videoGrid": {
     "front": "前方",
