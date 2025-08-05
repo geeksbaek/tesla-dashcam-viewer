@@ -541,6 +541,7 @@ export default function ControlPanel({
                 variant="subtle"
                 color="gray"
                 style={{ flex: 1 }}
+                onFocus={(e) => e.target.blur()}
               >
                 <Group gap="xs">
                   <IconBrandGithub size={16} />
@@ -552,6 +553,7 @@ export default function ControlPanel({
                 size="sm"
                 variant="subtle"
                 style={{ flex: 1 }}
+                onFocus={(e) => e.target.blur()}
               >
                 <Group gap="xs">
                   <IconHome size={16} />
