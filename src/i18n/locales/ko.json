@@ -43,7 +43,14 @@
     "seekMode": "이동 모드",
     "seekModeShortcut": "좌우 방향키로 이동",
     "timeMode": "5초",
-    "frameMode": "프레임"
+    "frameMode": "프레임",
+    "videoFitting": "비디오 피팅",
+    "fitModes": {
+      "cover": "꽉 채우기",
+      "contain": "잘리지 않게",
+      "coverDescription": "화면을 꽉 채움 (영상이 잘릴 수 있음)",
+      "containDescription": "전체 영상을 표시 (검은 여백이 생길 수 있음)"
+    }
   },
   "shortcuts": {
     "title": "키보드 단축키",

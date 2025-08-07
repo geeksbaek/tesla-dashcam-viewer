@@ -43,7 +43,14 @@
     "seekMode": "Seek Mode",
     "seekModeShortcut": "Navigate with arrow keys",
     "timeMode": "5 Sec",
-    "frameMode": "Frame"
+    "frameMode": "Frame",
+    "videoFitting": "Video Fitting",
+    "fitModes": {
+      "cover": "Fill Screen",
+      "contain": "Fit Screen",
+      "coverDescription": "Fill the screen (may crop video)",
+      "containDescription": "Show entire video (may have black bars)"
+    }
   },
   "shortcuts": {
     "title": "Keyboard Shortcuts",

@@ -4,4 +4,6 @@ export interface VideoFile {
   back?: File
   left_repeater?: File
   right_repeater?: File
+  left_pillar?: File
+  right_pillar?: File
 }

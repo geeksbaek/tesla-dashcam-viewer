@@ -9,6 +9,8 @@ interface VideoFile {
   back?: File
   left_repeater?: File
   right_repeater?: File
+  left_pillar?: File
+  right_pillar?: File
 }
 
 interface VideoGridProps {
@@ -22,6 +24,7 @@ interface VideoGridProps {
   playbackRate: number
   seekMode: 'frame' | 'time'
   videoFilters: VideoFilters
+  videoFitMode: 'cover' | 'contain'
   onTimeUpdate: (time: number) => void
   onSeek: (time: number) => void
   onPlayPause: () => void
@@ -41,6 +44,7 @@ export default function VideoGrid({
   currentTime, 
   playbackRate,
   videoFilters,
+  videoFitMode,
   onTimeUpdate, 
   onPlayPause,
   onVideoSelect,
@@ -53,6 +57,8 @@ export default function VideoGrid({
   const backRef = useRef<HTMLVideoElement>(null)
   const leftRef = useRef<HTMLVideoElement>(null)
   const rightRef = useRef<HTMLVideoElement>(null)
+  const leftPillarRef = useRef<HTMLVideoElement>(null)
+  const rightPillarRef = useRef<HTMLVideoElement>(null)
   
   // 타임스탬프를 Date 객체로 파싱
   const parseTimestamp = (timestamp: string): Date => {
@@ -82,7 +88,7 @@ export default function VideoGrid({
     return formatter.format(currentDate)
   }
 
-  const videoRefs = [frontRef, backRef, leftRef, rightRef]
+  const videoRefs = [frontRef, backRef, leftRef, rightRef, leftPillarRef, rightPillarRef]
   
   // 전체화면 모드 상태
   const [fullscreenCamera, setFullscreenCamera] = useState<string | null>(null)
@@ -138,6 +144,8 @@ export default function VideoGrid({
     back?: string  
     left_repeater?: string
     right_repeater?: string
+    left_pillar?: string
+    right_pillar?: string
   }>({})
 
   // 실시간 타임스탬프 업데이트
@@ -162,6 +170,12 @@ export default function VideoGrid({
     }
     if (videoFile?.right_repeater) {
       newUrls.right_repeater = URL.createObjectURL(videoFile.right_repeater)
+    }
+    if (videoFile?.left_pillar) {
+      newUrls.left_pillar = URL.createObjectURL(videoFile.left_pillar)
+    }
+    if (videoFile?.right_pillar) {
+      newUrls.right_pillar = URL.createObjectURL(videoFile.right_pillar)
     }
     
     setVideoUrls(newUrls)
@@ -452,6 +466,91 @@ export default function VideoGrid({
     }
   }
 
+  // 비디오 컴포넌트 생성 함수
+  const createVideoComponent = (
+    cameraType: 'front' | 'back' | 'left_repeater' | 'right_repeater' | 'left_pillar' | 'right_pillar',
+    ref: React.RefObject<HTMLVideoElement>,
+    hoverKey: string,
+    style?: React.CSSProperties
+  ) => (
+    <Paper 
+      style={{
+        flex: 1,
+        border: 'none',
+        borderRadius: 0,
+        backgroundColor: 'black',
+        position: 'relative',
+        overflow: 'hidden',
+        cursor: videoUrls[cameraType] ? 'pointer' : 'default',
+        transition: 'all 200ms ease',
+        ...style
+      }}
+      onMouseEnter={() => videoUrls[cameraType] && setHoveredCamera(hoverKey)}
+      onMouseLeave={() => setHoveredCamera(null)}
+      onClick={() => videoUrls[cameraType] && toggleFullscreen(hoverKey)}
+    >
+      {videoUrls[cameraType] ? (
+        <>
+          <video
+            ref={ref}
+            src={videoUrls[cameraType]}
+            style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: videoFitMode, filter: filterString }}
+            controls={false}
+            muted
+            preload="auto"
+            playsInline
+            disablePictureInPicture
+            onLoadedMetadata={(e) => {
+              if (cameraType === 'front') {
+                const video = e.target as HTMLVideoElement
+                if (video.duration && !isNaN(video.duration) && isFinite(video.duration)) {
+                  onVideoDurationUpdate(video.duration)
+                }
+              }
+            }}
+          />
+          {/* 타임스탬프 표시 */}
+          <Box style={{ 
+            position: 'absolute', 
+            top: '8px', 
+            right: '12px', 
+            pointerEvents: 'none'
+          }}>
+            <Text style={{ 
+              fontFamily: 'monospace',
+              color: 'white',
+              textShadow: '0 0 2px black, 0 0 2px black, 0 0 2px black, 0 0 2px black',
+              fontSize: '0.6rem'
+            }}>
+              {displayTimestamp}
+            </Text>
+          </Box>
+        </>
+      ) : (
+        <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', color: 'var(--mantine-color-dimmed)' }}>
+          {t('videoGrid.noVideo')}
+        </Box>
+      )}
+      {/* 호버 시 전체화면 아이콘 표시 */}
+      {hoveredCamera === hoverKey && (
+        <Box style={{ position: 'absolute', inset: 0, backgroundColor: 'rgba(0,0,0,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <Box style={{ 
+            backgroundColor: 'rgba(0,0,0,0.7)', 
+            backdropFilter: 'blur(4px)', 
+            width: '48px',
+            height: '48px',
+            borderRadius: '50%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}>
+            <Text size="xl" c="white" style={{ lineHeight: 1 }}>⛶</Text>
+          </Box>
+        </Box>
+      )}
+    </Paper>
+  )
+
   if (!videoFile) {
     return (
       <Box style={{ 
@@ -493,513 +592,252 @@ export default function VideoGrid({
           }}
           onClick={exitFullscreen}
         >
-          {fullscreenCamera === 'front' && (
-            videoUrls.front ? (
-              <>
-                <video
-                  src={videoUrls.front}
-                  style={{ width: '100%', height: '100%', objectFit: 'contain', filter: filterString }}
-                  controls={false}
-                  muted
-                  preload="auto"
-                  playsInline
-                  disablePictureInPicture
-                  ref={(video) => {
-                    if (video && frontRef.current) {
-                      video.currentTime = frontRef.current.currentTime
-                      if (isPlaying) video.play()
-                      else video.pause()
-                    }
-                  }}
-                />
-                {/* 전체화면 타임스탬프 표시 */}
-                <Box style={{ 
-                  position: 'absolute', 
-                  top: '16px', 
-                  right: '12px', 
-                  pointerEvents: 'none'
-                }}>
-                  <Text style={{ 
-                    fontFamily: 'monospace',
-                    color: 'white',
-                    textShadow: '0 0 3px black, 0 0 3px black, 0 0 3px black, 0 0 3px black',
-                    fontSize: '0.96rem'
-                  }}>
-                    {displayTimestamp}
-                  </Text>
-                </Box>
-              </>
-            ) : (
-              <Box style={{ 
-                width: '100%', 
-                height: '100%', 
-                display: 'flex', 
-                alignItems: 'center', 
-                justifyContent: 'center',
-                color: 'white',
-                fontSize: '1.5rem'
-              }}>
-{t('videoGrid.front')} {t('videoGrid.demoMode')}
-              </Box>
-            )
+          {fullscreenCamera === 'front' && videoUrls.front && (
+            <video
+              src={videoUrls.front}
+              style={{ width: '100%', height: '100%', objectFit: videoFitMode, filter: filterString }}
+              controls={false}
+              muted
+              preload="auto"
+              playsInline
+              disablePictureInPicture
+              ref={(video) => {
+                if (video && frontRef.current) {
+                  video.currentTime = frontRef.current.currentTime
+                  if (isPlaying) video.play()
+                  else video.pause()
+                }
+              }}
+            />
           )}
-          
-          {fullscreenCamera === 'back' && (
-            videoUrls.back ? (
-              <>
-                <video
-                  src={videoUrls.back}
-                  style={{ width: '100%', height: '100%', objectFit: 'contain', filter: filterString }}
-                  controls={false}
-                  muted
-                  preload="auto"
-                  playsInline
-                  disablePictureInPicture
-                  ref={(video) => {
-                    if (video && backRef.current) {
-                      video.currentTime = backRef.current.currentTime
-                      if (isPlaying) video.play()
-                      else video.pause()
-                    }
-                  }}
-                />
-                {/* 전체화면 타임스탬프 표시 */}
-                <Box style={{ 
-                  position: 'absolute', 
-                  top: '16px', 
-                  right: '12px', 
-                  pointerEvents: 'none'
-                }}>
-                  <Text style={{ 
-                    fontFamily: 'monospace',
-                    color: 'white',
-                    textShadow: '0 0 3px black, 0 0 3px black, 0 0 3px black, 0 0 3px black',
-                    fontSize: '0.96rem'
-                  }}>
-                    {displayTimestamp}
-                  </Text>
-                </Box>
-              </>
-            ) : (
-              <Box style={{ 
-                width: '100%', 
-                height: '100%', 
-                display: 'flex', 
-                alignItems: 'center', 
-                justifyContent: 'center',
-                color: 'white',
-                fontSize: '1.5rem'
-              }}>
-{t('videoGrid.back')} {t('videoGrid.demoMode')}
-              </Box>
-            )
+          {fullscreenCamera === 'back' && videoUrls.back && (
+            <video
+              src={videoUrls.back}
+              style={{ width: '100%', height: '100%', objectFit: videoFitMode, filter: filterString }}
+              controls={false}
+              muted
+              preload="auto"
+              playsInline
+              disablePictureInPicture
+              ref={(video) => {
+                if (video && backRef.current) {
+                  video.currentTime = backRef.current.currentTime
+                  if (isPlaying) video.play()
+                  else video.pause()
+                }
+              }}
+            />
           )}
-          
-          {fullscreenCamera === 'right' && (
-            videoUrls.right_repeater ? (
-              <>
-                <video
-                  src={videoUrls.right_repeater}
-                  style={{ width: '100%', height: '100%', objectFit: 'contain', filter: filterString }}
-                  controls={false}
-                  muted
-                  preload="auto"
-                  playsInline
-                  disablePictureInPicture
-                  ref={(video) => {
-                    if (video && rightRef.current) {
-                      video.currentTime = rightRef.current.currentTime
-                      if (isPlaying) video.play()
-                      else video.pause()
-                    }
-                  }}
-                />
-                {/* 전체화면 타임스탬프 표시 */}
-                <Box style={{ 
-                  position: 'absolute', 
-                  top: '16px', 
-                  right: '12px', 
-                  pointerEvents: 'none'
-                }}>
-                  <Text style={{ 
-                    fontFamily: 'monospace',
-                    color: 'white',
-                    textShadow: '0 0 3px black, 0 0 3px black, 0 0 3px black, 0 0 3px black',
-                    fontSize: '0.96rem'
-                  }}>
-                    {displayTimestamp}
-                  </Text>
-                </Box>
-              </>
-            ) : (
-              <Box style={{ 
-                width: '100%', 
-                height: '100%', 
-                display: 'flex', 
-                alignItems: 'center', 
-                justifyContent: 'center',
-                color: 'white',
-                fontSize: '1.5rem'
-              }}>
-{t('videoGrid.rightRepeater')} {t('videoGrid.demoMode')}
-              </Box>
-            )
+          {fullscreenCamera === 'left' && videoUrls.left_repeater && (
+            <video
+              src={videoUrls.left_repeater}
+              style={{ width: '100%', height: '100%', objectFit: videoFitMode, filter: filterString }}
+              controls={false}
+              muted
+              preload="auto"
+              playsInline
+              disablePictureInPicture
+              ref={(video) => {
+                if (video && leftRef.current) {
+                  video.currentTime = leftRef.current.currentTime
+                  if (isPlaying) video.play()
+                  else video.pause()
+                }
+              }}
+            />
           )}
-          
-          {fullscreenCamera === 'left' && (
-            videoUrls.left_repeater ? (
-              <>
-                <video
-                  src={videoUrls.left_repeater}
-                  style={{ width: '100%', height: '100%', objectFit: 'contain', filter: filterString }}
-                  controls={false}
-                  muted
-                  preload="auto"
-                  playsInline
-                  disablePictureInPicture
-                  ref={(video) => {
-                    if (video && leftRef.current) {
-                      video.currentTime = leftRef.current.currentTime
-                      if (isPlaying) video.play()
-                      else video.pause()
-                    }
-                  }}
-                />
-                {/* 전체화면 타임스탬프 표시 */}
-                <Box style={{ 
-                  position: 'absolute', 
-                  top: '16px', 
-                  right: '12px', 
-                  pointerEvents: 'none'
-                }}>
-                  <Text style={{ 
-                    fontFamily: 'monospace',
-                    color: 'white',
-                    textShadow: '0 0 3px black, 0 0 3px black, 0 0 3px black, 0 0 3px black',
-                    fontSize: '0.96rem'
-                  }}>
-                    {displayTimestamp}
-                  </Text>
-                </Box>
-              </>
-            ) : (
-              <Box style={{ 
-                width: '100%', 
-                height: '100%', 
-                display: 'flex', 
-                alignItems: 'center', 
-                justifyContent: 'center',
-                color: 'white',
-                fontSize: '1.5rem'
-              }}>
-{t('videoGrid.leftRepeater')} {t('videoGrid.demoMode')}
-              </Box>
-            )
+          {fullscreenCamera === 'right' && videoUrls.right_repeater && (
+            <video
+              src={videoUrls.right_repeater}
+              style={{ width: '100%', height: '100%', objectFit: videoFitMode, filter: filterString }}
+              controls={false}
+              muted
+              preload="auto"
+              playsInline
+              disablePictureInPicture
+              ref={(video) => {
+                if (video && rightRef.current) {
+                  video.currentTime = rightRef.current.currentTime
+                  if (isPlaying) video.play()
+                  else video.pause()
+                }
+              }}
+            />
           )}
+          {fullscreenCamera === 'leftPillar' && videoUrls.left_pillar && (
+            <video
+              src={videoUrls.left_pillar}
+              style={{ width: '100%', height: '100%', objectFit: videoFitMode, filter: filterString }}
+              controls={false}
+              muted
+              preload="auto"
+              playsInline
+              disablePictureInPicture
+              ref={(video) => {
+                if (video && leftPillarRef.current) {
+                  video.currentTime = leftPillarRef.current.currentTime
+                  if (isPlaying) video.play()
+                  else video.pause()
+                }
+              }}
+            />
+          )}
+          {fullscreenCamera === 'rightPillar' && videoUrls.right_pillar && (
+            <video
+              src={videoUrls.right_pillar}
+              style={{ width: '100%', height: '100%', objectFit: videoFitMode, filter: filterString }}
+              controls={false}
+              muted
+              preload="auto"
+              playsInline
+              disablePictureInPicture
+              ref={(video) => {
+                if (video && rightPillarRef.current) {
+                  video.currentTime = rightPillarRef.current.currentTime
+                  if (isPlaying) video.play()
+                  else video.pause()
+                }
+              }}
+            />
+          )}
+          {/* 전체화면 타임스탬프 표시 */}
+          <Box style={{ 
+            position: 'absolute', 
+            top: '16px', 
+            right: '12px', 
+            pointerEvents: 'none'
+          }}>
+            <Text style={{ 
+              fontFamily: 'monospace',
+              color: 'white',
+              textShadow: '0 0 3px black, 0 0 3px black, 0 0 3px black, 0 0 3px black',
+              fontSize: '0.96rem'
+            }}>
+              {displayTimestamp}
+            </Text>
+          </Box>
         </Box>
       )}
 
-      {/* 비디오 그리드 - 2x2 형태 */}
+      {/* 비디오 그리드 - 6채널이면 3x2, 4채널이면 2x2 */}
       <Box style={{ flex: 1, width: '100%', display: 'flex', flexDirection: 'column' }}>
-        {/* 상단 행 */}
-        <Box style={{ display: 'flex', height: '50%' }}>
-          {/* 전방 카메라 */}
-          <Paper 
-            style={{
-              flex: 1,
-              border: 'none',
-              borderRadius: 0,
-              backgroundColor: 'black',
-              position: 'relative',
-              overflow: 'hidden',
-              cursor: videoUrls.front ? 'pointer' : 'default',
-              transition: 'all 200ms ease',
-              borderRight: '1px solid rgba(255,255,255,0.1)'
-            }}
-            onMouseEnter={() => videoUrls.front && setHoveredCamera('front')}
-            onMouseLeave={() => setHoveredCamera(null)}
-            onClick={() => videoUrls.front && toggleFullscreen('front')}
-          >
-            {videoUrls.front ? (
-              <>
-                <video
-                  ref={frontRef}
-                  src={videoUrls.front}
-                  style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', filter: filterString }}
-                  controls={false}
-                  muted
-                  preload="auto"
-                  playsInline
-                  disablePictureInPicture
-                  onLoadedMetadata={(e) => {
-                    const video = e.target as HTMLVideoElement
-                    if (video.duration && !isNaN(video.duration) && isFinite(video.duration)) {
-                      onVideoDurationUpdate(video.duration)
-                    }
-                  }}
-                />
-                {/* 타임스탬프 표시 */}
-                <Box style={{ 
-                  position: 'absolute', 
-                  top: '8px', 
-                  right: '12px', 
-                  pointerEvents: 'none'
-                }}>
-                  <Text style={{ 
-                    fontFamily: 'monospace',
-                    color: 'white',
-                    textShadow: '0 0 2px black, 0 0 2px black, 0 0 2px black, 0 0 2px black',
-                    fontSize: '0.6rem'
-                  }}>
-                    {displayTimestamp}
-                  </Text>
-                </Box>
-              </>
-            ) : (
-              <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', color: 'var(--mantine-color-dimmed)' }}>
-{t('videoGrid.noVideo')}
-              </Box>
-            )}
-            {/* 호버 시 전체화면 아이콘 표시 */}
-            {hoveredCamera === 'front' && (
-              <Box style={{ position: 'absolute', inset: 0, backgroundColor: 'rgba(0,0,0,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <Box style={{ 
-                  backgroundColor: 'rgba(0,0,0,0.7)', 
-                  backdropFilter: 'blur(4px)', 
-                  width: '48px',
-                  height: '48px',
-                  borderRadius: '50%',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center'
-                }}>
-                  <Text size="xl" c="white" style={{ lineHeight: 1 }}>⛶</Text>
-                </Box>
-                {!videoUrls.front && (
-                  <Box style={{ position: 'absolute', bottom: '8px', left: '8px', right: '8px', textAlign: 'center', color: 'white', fontSize: '12px', backgroundColor: 'rgba(0,0,0,0.7)', borderRadius: '4px', padding: '4px' }}>
-                    {t('videoGrid.fullscreenDemo')}
-                  </Box>
-                )}
-              </Box>
-            )}
-          </Paper>
-          
-          {/* 후방 카메라 */}
-          <Paper 
-            style={{
-              flex: 1,
-              border: 'none',
-              borderRadius: 0,
-              backgroundColor: 'black',
-              position: 'relative',
-              overflow: 'hidden',
-              cursor: videoUrls.back ? 'pointer' : 'default',
-              transition: 'all 200ms ease',
-              borderLeft: '1px solid rgba(255,255,255,0.1)'
-            }}
-            onMouseEnter={() => videoUrls.back && setHoveredCamera('back')}
-            onMouseLeave={() => setHoveredCamera(null)}
-            onClick={() => videoUrls.back && toggleFullscreen('back')}
-          >
-            {videoUrls.back ? (
-              <>
-                <video
-                  ref={backRef}
-                  src={videoUrls.back}
-                  style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', filter: filterString }}
-                  controls={false}
-                  muted
-                  preload="auto"
-                  playsInline
-                  disablePictureInPicture
-                />
-                {/* 타임스탬프 표시 */}
-                <Box style={{ 
-                  position: 'absolute', 
-                  top: '8px', 
-                  right: sidebarExpanded ? '12px' : '24px', 
-                  pointerEvents: 'none',
-                  transition: 'right 300ms ease'
-                }}>
-                  <Text style={{ 
-                    fontFamily: 'monospace',
-                    color: 'white',
-                    textShadow: '0 0 2px black, 0 0 2px black, 0 0 2px black, 0 0 2px black',
-                    fontSize: '0.6rem'
-                  }}>
-                    {displayTimestamp}
-                  </Text>
-                </Box>
-              </>
-            ) : (
-              <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', color: 'var(--mantine-color-dimmed)' }}>
-{t('videoGrid.noVideo')}
-              </Box>
-            )}
-            {hoveredCamera === 'back' && (
-              <Box style={{ position: 'absolute', inset: 0, backgroundColor: 'rgba(0,0,0,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <Box style={{ 
-                  backgroundColor: 'rgba(0,0,0,0.7)', 
-                  backdropFilter: 'blur(4px)', 
-                  width: '48px',
-                  height: '48px',
-                  borderRadius: '50%',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center'
-                }}>
-                  <Text size="xl" c="white" style={{ lineHeight: 1 }}>⛶</Text>
-                </Box>
-              </Box>
-            )}
-          </Paper>
-        </Box>
-        
-        {/* 하단 행 */}
-        <Box style={{ display: 'flex', height: '50%' }}>
-          {/* 우측 카메라 */}
-          <Paper 
-            style={{
-              flex: 1,
-              border: 'none',
-              borderRadius: 0,
-              backgroundColor: 'black',
-              position: 'relative',
-              overflow: 'hidden',
-              cursor: videoUrls.right_repeater ? 'pointer' : 'default',
-              transition: 'all 200ms ease',
-              borderRight: '1px solid rgba(255,255,255,0.1)',
-              borderTop: '1px solid rgba(255,255,255,0.1)'
-            }}
-            onMouseEnter={() => videoUrls.right_repeater && setHoveredCamera('right')}
-            onMouseLeave={() => setHoveredCamera(null)}
-            onClick={() => videoUrls.right_repeater && toggleFullscreen('right')}
-          >
-            {videoUrls.right_repeater ? (
-              <>
-                <video
-                  ref={rightRef}
-                  src={videoUrls.right_repeater}
-                  style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', filter: filterString }}
-                  controls={false}
-                  muted
-                  preload="auto"
-                  playsInline
-                  disablePictureInPicture
-                />
-                {/* 타임스탬프 표시 */}
-                <Box style={{ 
-                  position: 'absolute', 
-                  top: '8px', 
-                  right: '12px', 
-                  pointerEvents: 'none'
-                }}>
-                  <Text style={{ 
-                    fontFamily: 'monospace',
-                    color: 'white',
-                    textShadow: '0 0 2px black, 0 0 2px black, 0 0 2px black, 0 0 2px black',
-                    fontSize: '0.6rem'
-                  }}>
-                    {displayTimestamp}
-                  </Text>
-                </Box>
-              </>
-            ) : (
-              <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', color: 'var(--mantine-color-dimmed)' }}>
-{t('videoGrid.noVideo')}
-              </Box>
-            )}
-            {hoveredCamera === 'right' && (
-              <Box style={{ position: 'absolute', inset: 0, backgroundColor: 'rgba(0,0,0,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <Box style={{ 
-                  backgroundColor: 'rgba(0,0,0,0.7)', 
-                  backdropFilter: 'blur(4px)', 
-                  width: '48px',
-                  height: '48px',
-                  borderRadius: '50%',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center'
-                }}>
-                  <Text size="xl" c="white" style={{ lineHeight: 1 }}>⛶</Text>
-                </Box>
-              </Box>
-            )}
-          </Paper>
-          
-          {/* 좌측 카메라 */}
-          <Paper 
-            style={{
-              flex: 1,
-              border: 'none',
-              borderRadius: 0,
-              backgroundColor: 'black',
-              position: 'relative',
-              overflow: 'hidden',
-              cursor: videoUrls.left_repeater ? 'pointer' : 'default',
-              transition: 'all 200ms ease',
-              borderLeft: '1px solid rgba(255,255,255,0.1)',
-              borderTop: '1px solid rgba(255,255,255,0.1)'
-            }}
-            onMouseEnter={() => videoUrls.left_repeater && setHoveredCamera('left')}
-            onMouseLeave={() => setHoveredCamera(null)}
-            onClick={() => videoUrls.left_repeater && toggleFullscreen('left')}
-          >
-            {videoUrls.left_repeater ? (
-              <>
-                <video
-                  ref={leftRef}
-                  src={videoUrls.left_repeater}
-                  style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', filter: filterString }}
-                  controls={false}
-                  muted
-                  preload="auto"
-                  playsInline
-                  disablePictureInPicture
-                />
-                {/* 타임스탬프 표시 */}
-                <Box style={{ 
-                  position: 'absolute', 
-                  top: '8px', 
-                  right: sidebarExpanded ? '12px' : '24px', 
-                  pointerEvents: 'none',
-                  transition: 'right 300ms ease'
-                }}>
-                  <Text style={{ 
-                    fontFamily: 'monospace',
-                    color: 'white',
-                    textShadow: '0 0 2px black, 0 0 2px black, 0 0 2px black, 0 0 2px black',
-                    fontSize: '0.6rem'
-                  }}>
-                    {displayTimestamp}
-                  </Text>
-                </Box>
-              </>
-            ) : (
-              <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', color: 'var(--mantine-color-dimmed)' }}>
-{t('videoGrid.noVideo')}
-              </Box>
-            )}
-            {hoveredCamera === 'left' && (
-              <Box style={{ position: 'absolute', inset: 0, backgroundColor: 'rgba(0,0,0,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <Box style={{ 
-                  backgroundColor: 'rgba(0,0,0,0.7)', 
-                  backdropFilter: 'blur(4px)', 
-                  width: '48px',
-                  height: '48px',
-                  borderRadius: '50%',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center'
-                }}>
-                  <Text size="xl" c="white" style={{ lineHeight: 1 }}>⛶</Text>
-                </Box>
-              </Box>
-            )}
-          </Paper>
-        </Box>
+        {(videoFile.left_pillar || videoFile.right_pillar) ? (
+          <>
+            {/* 6채널 레이아웃 - 상단 행: 전방, 우측 B필러, 좌측 B필러 */}
+            <Box style={{ display: 'flex', height: '50%' }}>
+              {/* 전방 카메라 */}
+              {createVideoComponent(
+                'front',
+                frontRef,
+                'front',
+                { borderRight: '1px solid rgba(255,255,255,0.1)' }
+              )}
+              
+              {/* 우측 B필러 카메라 */}
+              {createVideoComponent(
+                'right_pillar',
+                rightPillarRef,
+                'rightPillar',
+                { 
+                  borderLeft: '1px solid rgba(255,255,255,0.1)',
+                  borderRight: '1px solid rgba(255,255,255,0.1)'
+                }
+              )}
+              
+              {/* 좌측 B필러 카메라 */}
+              {createVideoComponent(
+                'left_pillar',
+                leftPillarRef,
+                'leftPillar',
+                { borderLeft: '1px solid rgba(255,255,255,0.1)' }
+              )}
+            </Box>
+            
+            {/* 6채널 레이아웃 - 하단 행: 후방, 우측 리피터, 좌측 리피터 */}
+            <Box style={{ display: 'flex', height: '50%' }}>
+              {/* 후방 카메라 */}
+              {createVideoComponent(
+                'back',
+                backRef,
+                'back',
+                { 
+                  borderRight: '1px solid rgba(255,255,255,0.1)',
+                  borderTop: '1px solid rgba(255,255,255,0.1)'
+                }
+              )}
+              
+              {/* 우측 리피터 카메라 */}
+              {createVideoComponent(
+                'right_repeater',
+                rightRef,
+                'right',
+                { 
+                  borderLeft: '1px solid rgba(255,255,255,0.1)',
+                  borderRight: '1px solid rgba(255,255,255,0.1)',
+                  borderTop: '1px solid rgba(255,255,255,0.1)'
+                }
+              )}
+              
+              {/* 좌측 리피터 카메라 */}
+              {createVideoComponent(
+                'left_repeater',
+                leftRef,
+                'left',
+                { 
+                  borderLeft: '1px solid rgba(255,255,255,0.1)',
+                  borderTop: '1px solid rgba(255,255,255,0.1)'
+                }
+              )}
+            </Box>
+          </>
+        ) : (
+          <>
+            {/* 4채널 레이아웃 - 상단 행: 전방, 후방 */}
+            <Box style={{ display: 'flex', height: '50%' }}>
+              {/* 전방 카메라 */}
+              {createVideoComponent(
+                'front',
+                frontRef,
+                'front',
+                { borderRight: '1px solid rgba(255,255,255,0.1)' }
+              )}
+              
+              {/* 후방 카메라 */}
+              {createVideoComponent(
+                'back',
+                backRef,
+                'back',
+                { borderLeft: '1px solid rgba(255,255,255,0.1)' }
+              )}
+            </Box>
+            
+            {/* 4채널 레이아웃 - 하단 행: 우측 리피터, 좌측 리피터 */}
+            <Box style={{ display: 'flex', height: '50%' }}>
+              {/* 우측 리피터 카메라 */}
+              {createVideoComponent(
+                'right_repeater',
+                rightRef,
+                'right',
+                { 
+                  borderRight: '1px solid rgba(255,255,255,0.1)',
+                  borderTop: '1px solid rgba(255,255,255,0.1)'
+                }
+              )}
+              
+              {/* 좌측 리피터 카메라 */}
+              {createVideoComponent(
+                'left_repeater',
+                leftRef,
+                'left',
+                { 
+                  borderLeft: '1px solid rgba(255,255,255,0.1)',
+                  borderTop: '1px solid rgba(255,255,255,0.1)'
+                }
+              )}
+            </Box>
+          </>
+        )}
       </Box>
-
     </Box>
   )
 }

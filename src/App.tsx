@@ -11,6 +11,8 @@ export interface VideoFile {
   back?: File
   left_repeater?: File
   right_repeater?: File
+  left_pillar?: File
+  right_pillar?: File
 }
 
 function App() {
@@ -33,6 +35,7 @@ function App() {
     invert: false,
     grayscale: false,
   })
+  const [videoFitMode, setVideoFitMode] = useState<'cover' | 'contain'>('cover') // 비디오 피팅 모드
 
   const handleFilesLoaded = (files: VideoFile[]) => {
     setVideoFiles(files)
@@ -240,19 +243,27 @@ function App() {
         }
       } else if (event.code === 'Digit1') {
         event.preventDefault()
-        // 전방 카메라 전체화면
+        // 전방 카메라 전체화면 (1번)
         window.dispatchEvent(new CustomEvent('toggleFullscreen', { detail: { camera: 'front' } }))
       } else if (event.code === 'Digit2') {
         event.preventDefault()
-        // 후방 카메라 전체화면
-        window.dispatchEvent(new CustomEvent('toggleFullscreen', { detail: { camera: 'back' } }))
+        // 우측 B필러 카메라 전체화면 (2번)
+        window.dispatchEvent(new CustomEvent('toggleFullscreen', { detail: { camera: 'rightPillar' } }))
       } else if (event.code === 'Digit3') {
         event.preventDefault()
-        // 우측 카메라 전체화면
-        window.dispatchEvent(new CustomEvent('toggleFullscreen', { detail: { camera: 'right' } }))
+        // 좌측 B필러 카메라 전체화면 (3번)
+        window.dispatchEvent(new CustomEvent('toggleFullscreen', { detail: { camera: 'leftPillar' } }))
       } else if (event.code === 'Digit4') {
         event.preventDefault()
-        // 좌측 카메라 전체화면
+        // 후방 카메라 전체화면 (4번)
+        window.dispatchEvent(new CustomEvent('toggleFullscreen', { detail: { camera: 'back' } }))
+      } else if (event.code === 'Digit5') {
+        event.preventDefault()
+        // 우측 리피터 카메라 전체화면 (5번)
+        window.dispatchEvent(new CustomEvent('toggleFullscreen', { detail: { camera: 'right' } }))
+      } else if (event.code === 'Digit6') {
+        event.preventDefault()
+        // 좌측 리피터 카메라 전체화면 (6번)
         window.dispatchEvent(new CustomEvent('toggleFullscreen', { detail: { camera: 'left' } }))
       } else if (event.code === 'ArrowUp') {
         event.preventDefault()
@@ -297,6 +308,7 @@ function App() {
             seekMode={seekMode}
             sidebarExpanded={sidebarExpanded}
             videoFilters={videoFilters}
+            videoFitMode={videoFitMode}
             onTimeUpdate={handleTimeUpdate}
             onSeek={handleSeek}
             onPlayPause={() => setIsPlaying(!isPlaying)}
@@ -322,6 +334,8 @@ function App() {
             videoDurations={videoDurations}
             videoFilters={videoFilters}
             onVideoFiltersChange={setVideoFilters}
+            videoFitMode={videoFitMode}
+            onVideoFitModeChange={setVideoFitMode}
             playbackRate={playbackRate}
             onPlaybackRateChange={handlePlaybackRateChange}
           />

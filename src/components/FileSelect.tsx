@@ -10,6 +10,8 @@ interface VideoFile {
   back?: File
   left_repeater?: File
   right_repeater?: File
+  left_pillar?: File
+  right_pillar?: File
 }
 
 interface FileSelectProps {
@@ -27,7 +29,7 @@ export default function FileSelect({ onFilesLoaded }: FileSelectProps) {
     Array.from(files).forEach(file => {
       if (file.type.startsWith('video/')) {
         // 파일명에서 타임스탬프와 카메라 위치 추출
-        const match = file.name.match(/(\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2})-(front|back|left_repeater|right_repeater)\.mp4/)
+        const match = file.name.match(/(\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2})-(front|back|left_repeater|right_repeater|left_pillar|right_pillar)\.mp4/)
         
         if (match) {
           const [, timestamp, position] = match

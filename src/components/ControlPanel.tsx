@@ -12,6 +12,8 @@ interface VideoFile {
   back?: File
   left_repeater?: File
   right_repeater?: File
+  left_pillar?: File
+  right_pillar?: File
 }
 
 interface ControlPanelProps {
@@ -30,6 +32,8 @@ interface ControlPanelProps {
   videoDurations: number[]
   videoFilters: VideoFilters
   onVideoFiltersChange: (filters: VideoFilters) => void
+  videoFitMode: 'cover' | 'contain'
+  onVideoFitModeChange: (mode: 'cover' | 'contain') => void
   playbackRate: number
   onPlaybackRateChange: (rate: number) => void
 }
@@ -49,6 +53,8 @@ export default function ControlPanel({
   videoDurations,
   videoFilters,
   onVideoFiltersChange,
+  videoFitMode,
+  onVideoFitModeChange,
   playbackRate,
   onPlaybackRateChange
 }: ControlPanelProps) {
@@ -511,6 +517,44 @@ export default function ControlPanel({
               filters={videoFilters}
               onFiltersChange={onVideoFiltersChange}
             />
+          </Box>
+          
+          {/* 비디오 피팅 모드 컨트롤 */}
+          <Box style={{ 
+            paddingTop: '16px'
+          }}>
+            <Stack gap="xs">
+              <Group gap="xs" align="center">
+                <IconVideo size={16} style={{ color: 'var(--mantine-color-blue-5)' }} />
+                <Text size="sm" fw={600}>
+                  {t('controlPanel.videoFitting')}
+                </Text>
+              </Group>
+              <SegmentedControl
+                value={videoFitMode}
+                onChange={(value) => onVideoFitModeChange(value as 'cover' | 'contain')}
+                data={[
+                  { 
+                    label: t('controlPanel.fitModes.cover'), 
+                    value: 'cover' 
+                  },
+                  { 
+                    label: t('controlPanel.fitModes.contain'), 
+                    value: 'contain' 
+                  }
+                ]}
+                size="sm"
+                style={{ width: '100%' }}
+                onFocus={(e) => e.target.blur()}
+                tabIndex={-1}
+              />
+              <Text size="xs" c="dimmed">
+                {videoFitMode === 'cover' 
+                  ? t('controlPanel.fitModes.coverDescription')
+                  : t('controlPanel.fitModes.containDescription')
+                }
+              </Text>
+            </Stack>
           </Box>
         </Stack>
         
