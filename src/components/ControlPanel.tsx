@@ -186,7 +186,7 @@ export default function ControlPanel({
             right: 0,
             top: 0,
             height: '100vh',
-            width: 'auto',
+            width: '80px',
             backgroundColor: 'rgba(26, 27, 30, 0.95)',
             backdropFilter: 'blur(8px)',
             zIndex: 40,
@@ -277,7 +277,7 @@ export default function ControlPanel({
               display: 'flex',
               justifyContent: 'center'
             }}>
-              <Group gap={4}>
+              <Stack gap={4} align="center">
                 <Tooltip label="GitHub Repository" withArrow>
                   <ActionIcon
                     size="md"
@@ -302,7 +302,7 @@ export default function ControlPanel({
                 >
                   <IconHomeFilled size={14} />
                 </Button>
-              </Group>
+              </Stack>
             </Box>
           </Box>
         </Paper>

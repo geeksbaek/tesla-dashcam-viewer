@@ -568,7 +568,7 @@ export default function VideoGrid({
   return (
     <Box style={{ 
       height: '100vh', 
-      width: sidebarExpanded ? 'calc(100vw - 320px)' : 'calc(100vw - 60px)', 
+      width: sidebarExpanded ? 'calc(100vw - 320px)' : 'calc(100vw - 80px)', 
       display: 'flex', 
       flexDirection: 'column', 
       overflow: 'hidden', 
