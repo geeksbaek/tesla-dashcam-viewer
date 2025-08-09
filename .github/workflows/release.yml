@@ -106,18 +106,22 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          cat << 'EOF' > release_notes.md
+          ## 🚀 릴리즈 v${{ steps.new_version.outputs.version }}
+          
+          **버전 변경:** ${{ steps.current_version.outputs.version }} → ${{ steps.new_version.outputs.version }} (${{ steps.new_version.outputs.bump_type }})
+          
+          ### 📝 변경사항
+          **커밋:** ${{ steps.commit_info.outputs.commit_sha }}
+          ${{ steps.commit_info.outputs.commit_msg }}
+          
+          ---
+          *이 릴리즈는 main 브랜치 커밋으로 자동 생성되었습니다.*
+          EOF
+          
           gh release create v${{ steps.new_version.outputs.version }} \
             --title "v${{ steps.new_version.outputs.version }}" \
-            --notes "## 🚀 릴리즈 v${{ steps.new_version.outputs.version }}
-            
-**버전 변경:** ${{ steps.current_version.outputs.version }} → ${{ steps.new_version.outputs.version }} (${{ steps.new_version.outputs.bump_type }})
-
-### 📝 변경사항
-**커밋:** ${{ steps.commit_info.outputs.commit_sha }}
-${{ steps.commit_info.outputs.commit_msg }}
-
----
-*이 릴리즈는 main 브랜치 커밋으로 자동 생성되었습니다.*" \
+            --notes-file release_notes.md \
             --target main
       
       - name: Commit version update
