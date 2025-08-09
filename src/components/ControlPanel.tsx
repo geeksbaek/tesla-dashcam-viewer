@@ -364,29 +364,65 @@ export default function ControlPanel({
               onFocus={(e) => e.target.blur()}
             >
               {isPlaying ? 
-                <Group gap="xs">
+                <Group gap="xs" align="center">
                   <IconPlayerPauseFilled size={16} />
-                  <Text>{t('controlPanel.pause')} (Space)</Text>
+                  <Text style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    {t('controlPanel.pause')} 
+                    <kbd style={{ 
+                      padding: '2px 6px', 
+                      borderRadius: '4px', 
+                      backgroundColor: 'rgba(255,255,255,0.1)', 
+                      border: '1px solid rgba(255,255,255,0.2)',
+                      fontSize: '11px',
+                      fontFamily: 'monospace',
+                      display: 'inline-flex',
+                      alignItems: 'center'
+                    }}>Space</kbd>
+                  </Text>
                 </Group> : 
-                <Group gap="xs">
+                <Group gap="xs" align="center">
                   <IconPlayerPlayFilled size={16} />
-                  <Text>{t('controlPanel.play')} (Space)</Text>
+                  <Text style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    {t('controlPanel.play')} 
+                    <kbd style={{ 
+                      padding: '2px 6px', 
+                      borderRadius: '4px', 
+                      backgroundColor: 'rgba(255,255,255,0.1)', 
+                      border: '1px solid rgba(255,255,255,0.2)',
+                      fontSize: '11px',
+                      fontFamily: 'monospace',
+                      display: 'inline-flex',
+                      alignItems: 'center'
+                    }}>Space</kbd>
+                  </Text>
                 </Group>
               }
             </Button>
 
             {/* 방향키 이동 모드 선택 */}
             <Stack gap="xs">
-              <Group gap="xs">
-                <IconSettingsFilled size={12} />
-                <Text size="xs" c="dimmed">{t('controlPanel.seekMode')} ({t('controlPanel.seekModeShortcut')})</Text>
+              <Group gap="xs" align="center">
+                <IconSettingsFilled size={16} />
+                <Text size="sm" fw={600} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  {t('controlPanel.seekMode')}
+                  <kbd style={{ 
+                    padding: '2px 6px', 
+                    borderRadius: '4px', 
+                    backgroundColor: 'rgba(255,255,255,0.1)', 
+                    border: '1px solid rgba(255,255,255,0.2)',
+                    fontSize: '10px',
+                    fontFamily: 'monospace',
+                    display: 'inline-flex',
+                    alignItems: 'center'
+                  }}>M</kbd>
+                </Text>
               </Group>
               <SegmentedControl
                 value={seekMode}
                 onChange={(value) => onSeekModeChange(value as 'frame' | 'time')}
                 data={[
-                  { label: t('controlPanel.frameMode'), value: 'frame' },
-                  { label: t('controlPanel.timeMode'), value: 'time' }
+                  { label: `${t('controlPanel.frameMode')}`, value: 'frame' },
+                  { label: `${t('controlPanel.timeMode')}`, value: 'time' }
                 ]}
                 size="xs"
                 fullWidth
@@ -399,9 +435,9 @@ export default function ControlPanel({
 
             {/* 재생 속도 선택 */}
             <Stack gap="xs">
-              <Group gap="xs">
-                <IconPlayerTrackNext size={12} />
-                <Text size="xs" c="dimmed">{t('controlPanel.playbackSpeed', '재생 속도')}</Text>
+              <Group gap="xs" align="center">
+                <IconPlayerTrackNext size={16} />
+                <Text size="sm" fw={600}>{t('controlPanel.playbackSpeed', '재생 속도')}</Text>
               </Group>
               <Group gap={4} grow>
                 {[0.1, 0.25, 0.5, 1].map((rate) => (
@@ -424,9 +460,53 @@ export default function ControlPanel({
           {/* 클립 목록 - 스크롤 가능 */}
           <Stack gap="xs" style={{ flex: 1, minHeight: 0, overflow: 'hidden' }}>
             <Group justify="space-between" align="center">
-              <Group gap="xs">
+              <Group gap="xs" align="center">
                 <IconVideoFilled size={16} />
-                <Title order={6}>{t('controlPanel.videos')}</Title>
+                <Text size="sm" fw={600} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  {t('controlPanel.videos')}
+                  <span style={{ display: 'inline-flex', gap: '2px' }}>
+                    <kbd style={{ 
+                      padding: '2px 6px', 
+                      borderRadius: '4px', 
+                      backgroundColor: 'rgba(255,255,255,0.1)', 
+                      border: '1px solid rgba(255,255,255,0.2)',
+                      fontSize: '10px',
+                      fontFamily: 'monospace',
+                      display: 'inline-flex',
+                      alignItems: 'center'
+                    }}>↑</kbd>
+                    <kbd style={{ 
+                      padding: '2px 6px', 
+                      borderRadius: '4px', 
+                      backgroundColor: 'rgba(255,255,255,0.1)', 
+                      border: '1px solid rgba(255,255,255,0.2)',
+                      fontSize: '10px',
+                      fontFamily: 'monospace',
+                      display: 'inline-flex',
+                      alignItems: 'center'
+                    }}>↓</kbd>
+                    <kbd style={{ 
+                      padding: '2px 6px', 
+                      borderRadius: '4px', 
+                      backgroundColor: 'rgba(255,255,255,0.1)', 
+                      border: '1px solid rgba(255,255,255,0.2)',
+                      fontSize: '10px',
+                      fontFamily: 'monospace',
+                      display: 'inline-flex',
+                      alignItems: 'center'
+                    }}>←</kbd>
+                    <kbd style={{ 
+                      padding: '2px 6px', 
+                      borderRadius: '4px', 
+                      backgroundColor: 'rgba(255,255,255,0.1)', 
+                      border: '1px solid rgba(255,255,255,0.2)',
+                      fontSize: '10px',
+                      fontFamily: 'monospace',
+                      display: 'inline-flex',
+                      alignItems: 'center'
+                    }}>→</kbd>
+                  </span>
+                </Text>
               </Group>
               <Text size="xs" c="dimmed">
                 {t('time.total')} {videoFiles.length}
@@ -447,14 +527,17 @@ export default function ControlPanel({
                         transition: 'all 200ms ease',
                         position: 'relative',
                         overflow: 'hidden',
-                        padding: 'var(--mantine-spacing-xs)',
+                        padding: '4px 8px',
                         borderRadius: 'var(--mantine-radius-default)',
                         backgroundColor: isActive 
                           ? 'var(--mantine-color-blue-filled)' 
                           : 'rgba(255, 255, 255, 0.05)',
                         border: isActive 
                           ? '1px solid var(--mantine-color-blue-6)' 
-                          : '1px solid rgba(255, 255, 255, 0.1)'
+                          : '1px solid rgba(255, 255, 255, 0.1)',
+                        height: '30px',
+                        display: 'flex',
+                        alignItems: 'center'
                       }}
                       onClick={() => onVideoSelect(index)}
                       onMouseEnter={(e) => {
@@ -487,20 +570,19 @@ export default function ControlPanel({
                       )}
                       
                       {/* 텍스트 컨테이너 - 상대 위치로 위에 표시 */}
-                      <div style={{ position: 'relative' }}>
-                        <Stack gap={2} style={{ minWidth: 0, flex: 1 }}>
-                          <Text 
-                            size="xs" 
-                            fw={500} 
-                            truncate
-                            c={isActive ? 'white' : undefined}
-                          >
-                            {isActive ? 
-                              getCurrentTimestamp() : 
-                              formatTimestamp(video.timestamp)
-                            }
-                          </Text>
-                        </Stack>
+                      <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+                        <Text 
+                          size="xs" 
+                          fw={500} 
+                          truncate
+                          c={isActive ? 'white' : undefined}
+                          style={{ lineHeight: 1 }}
+                        >
+                          {isActive ? 
+                            getCurrentTimestamp() : 
+                            formatTimestamp(video.timestamp)
+                          }
+                        </Text>
                       </div>
                     </div>
                   )
@@ -510,9 +592,7 @@ export default function ControlPanel({
           </Stack>
           
           {/* 비디오 필터 컨트롤 */}
-          <Box style={{ 
-            paddingTop: '8px'
-          }}>
+          <Box>
             <VideoFilterControls 
               filters={videoFilters}
               onFiltersChange={onVideoFiltersChange}
@@ -520,14 +600,22 @@ export default function ControlPanel({
           </Box>
           
           {/* 비디오 피팅 모드 컨트롤 */}
-          <Box style={{ 
-            paddingTop: '16px'
-          }}>
+          <Box>
             <Stack gap="xs">
               <Group gap="xs" align="center">
                 <IconVideo size={16} style={{ color: 'var(--mantine-color-blue-5)' }} />
-                <Text size="sm" fw={600}>
+                <Text size="sm" fw={600} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                   {t('controlPanel.videoFitting')}
+                  <kbd style={{ 
+                    padding: '2px 6px', 
+                    borderRadius: '4px', 
+                    backgroundColor: 'rgba(255,255,255,0.1)', 
+                    border: '1px solid rgba(255,255,255,0.2)',
+                    fontSize: '10px',
+                    fontFamily: 'monospace',
+                    display: 'inline-flex',
+                    alignItems: 'center'
+                  }}>V</kbd>
                 </Text>
               </Group>
               <SegmentedControl
@@ -535,12 +623,12 @@ export default function ControlPanel({
                 onChange={(value) => onVideoFitModeChange(value as 'cover' | 'contain')}
                 data={[
                   { 
-                    label: t('controlPanel.fitModes.cover'), 
-                    value: 'cover' 
-                  },
-                  { 
                     label: t('controlPanel.fitModes.contain'), 
                     value: 'contain' 
+                  },
+                  { 
+                    label: t('controlPanel.fitModes.cover'), 
+                    value: 'cover' 
                   }
                 ]}
                 size="sm"
@@ -548,20 +636,18 @@ export default function ControlPanel({
                 onFocus={(e) => e.target.blur()}
                 tabIndex={-1}
               />
-              <Text size="xs" c="dimmed">
-                {videoFitMode === 'cover' 
-                  ? t('controlPanel.fitModes.coverDescription')
-                  : t('controlPanel.fitModes.containDescription')
-                }
-              </Text>
+              {videoFitMode === 'cover' && t('controlPanel.fitModes.coverDescription') && (
+                <Text size="xs" c="dimmed">
+                  {t('controlPanel.fitModes.coverDescription')}
+                </Text>
+              )}
             </Stack>
           </Box>
         </Stack>
         
         {/* 첫 페이지로 이동 버튼 - 하단 고정 */}
         <Box style={{ 
-          paddingTop: '16px',
-          borderTop: '1px solid rgba(255,255,255,0.1)' 
+          paddingTop: '16px'
         }}>
           <Stack gap="xs">
             <LanguageSelect />

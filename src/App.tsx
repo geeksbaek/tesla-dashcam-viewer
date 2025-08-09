@@ -35,7 +35,7 @@ function App() {
     invert: false,
     grayscale: false,
   })
-  const [videoFitMode, setVideoFitMode] = useState<'cover' | 'contain'>('cover') // 비디오 피팅 모드
+  const [videoFitMode, setVideoFitMode] = useState<'cover' | 'contain'>('contain') // 비디오 피팅 모드
 
   const handleFilesLoaded = (files: VideoFile[]) => {
     setVideoFiles(files)
@@ -277,12 +277,20 @@ function App() {
         if (currentVideoIndex < videoFiles.length - 1) {
           handleVideoSelect(currentVideoIndex + 1)
         }
+      } else if (event.code === 'KeyV') {
+        event.preventDefault()
+        // 비디오 피팅 모드 토글
+        setVideoFitMode(prevMode => prevMode === 'contain' ? 'cover' : 'contain')
+      } else if (event.code === 'KeyM') {
+        event.preventDefault()
+        // 이동 모드 토글 (시간 <-> 프레임)
+        setSeekMode(prevMode => prevMode === 'time' ? 'frame' : 'time')
       }
     }
 
     window.addEventListener('keydown', handleKeyPress)
     return () => window.removeEventListener('keydown', handleKeyPress)
-  }, [isPlaying, globalTime, totalDuration, handleSeek, seekMode, currentVideoIndex, videoFilters, handleVideoSelect, videoFiles.length])
+  }, [isPlaying, globalTime, totalDuration, handleSeek, seekMode, currentVideoIndex, videoFilters, handleVideoSelect, videoFiles.length, videoFitMode])
 
   return (
     <div className="font-apple" style={{ 

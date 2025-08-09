@@ -48,7 +48,7 @@
     "fitModes": {
       "cover": "꽉 채우기",
       "contain": "잘리지 않게",
-      "coverDescription": "화면을 꽉 채움 (영상이 잘릴 수 있음)",
+      "coverDescription": "",
       "containDescription": "전체 영상을 표시 (검은 여백이 생길 수 있음)"
     }
   },

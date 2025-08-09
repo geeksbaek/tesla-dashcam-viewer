@@ -49,10 +49,22 @@ export default function VideoFilterControls({ filters, onFiltersChange }: VideoF
   };
 
   return (
-    <Group justify="space-between" align="center" mb="md">
-      <Group gap="xs">
+    <Group justify="space-between" align="center">
+      <Group gap="xs" align="center">
         <IconScan size={16} />
-        <Text size="sm">{t('filters.licensePlate', '번호판 인식 최적화')}</Text>
+        <Text size="sm" fw={600} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          {t('filters.licensePlate', '번호판 인식 최적화')}
+          <kbd style={{ 
+            padding: '2px 6px', 
+            borderRadius: '4px', 
+            backgroundColor: 'rgba(255,255,255,0.1)', 
+            border: '1px solid rgba(255,255,255,0.2)',
+            fontSize: '10px',
+            fontFamily: 'monospace',
+            display: 'inline-flex',
+            alignItems: 'center'
+          }}>F</kbd>
+        </Text>
       </Group>
       <Switch
         checked={isLicensePlateMode}
