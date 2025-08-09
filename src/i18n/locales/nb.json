@@ -14,10 +14,10 @@
     "multipleFiles": "Du kan velge flere filer",
     "features": {
       "tesla": "Tesla",
-      "teslaCompatible": "Tesla 4-Kanals Dashcam Kompatibel",
-      "synchronizedPlayback": "4-Kanals Dashcam Synkronisert Avspilling",
-      "frameNavigation": "Bilde-for-bilde Navigasjon",
-      "licensePlateFilter": "Bilskilt Forbedringsfilter",
+      "teslaCompatible": "Tesla 4-kanals, 6-kanals dashcam kompatibel",
+      "synchronizedPlayback": "4-kanals, 6-kanals dashcam synkronisert avspilling",
+      "noUploadRequired": "Ingen opplasting nødvendig, øyeblikkelig avspilling i nettleser",
+      "offlineCapable": "Fungerer helt uten nettilkobling",
       "4kSupport": "4K Støtte",
       "multiCamera": "Multi-Kamera"
     }
@@ -43,7 +43,12 @@
     "seekMode": "Søk modus",
     "seekModeShortcut": "Naviger med piltaster",
     "timeMode": "5 Sek",
-    "frameMode": "Ramme"
+    "frameMode": "Ramme",
+    "videoFitting": "Video tilpasning",
+    "fitModes": {
+      "cover": "Fyll skjermen",
+      "contain": "Ikke beskjær"
+    }
   },
   "shortcuts": {
     "title": "Tastatursnarveier",

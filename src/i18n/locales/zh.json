@@ -14,10 +14,10 @@
     "multipleFiles": "您可以选择多个文件",
     "features": {
       "tesla": "特斯拉",
-      "teslaCompatible": "特斯拉4通道行车记录仪兼容",
-      "synchronizedPlayback": "4通道行车记录仪同步播放",
-      "frameNavigation": "逐帧导航",
-      "licensePlateFilter": "车牌增强滤镜",
+      "teslaCompatible": "特斯拉4通道、6通道行车记录仪兼容",
+      "synchronizedPlayback": "4通道、6通道行车记录仪同步播放",
+      "noUploadRequired": "无需上传，浏览器内即时播放",
+      "offlineCapable": "完全离线使用",
       "4kSupport": "4K支持",
       "multiCamera": "多摄像头"
     }
@@ -43,7 +43,12 @@
     "seekMode": "跳转模式",
     "seekModeShortcut": "使用方向键导航",
     "timeMode": "5秒",
-    "frameMode": "帧"
+    "frameMode": "帧",
+    "videoFitting": "视频适配",
+    "fitModes": {
+      "cover": "填满屏幕",
+      "contain": "适应屏幕"
+    }
   },
   "shortcuts": {
     "title": "键盘快捷键",

@@ -143,26 +143,6 @@ export default function FileSelect({ onFilesLoaded }: FileSelectProps) {
             onClick={() => document.getElementById('file-input')?.click()}
           >
             <Stack align="center" gap="lg">
-              <Box style={{ 
-                width: '80px',
-                height: '80px',
-                borderRadius: '20px',
-                background: isDragOver 
-                  ? 'linear-gradient(135deg, #dc2626 0%, #b91c1c 100%)'
-                  : 'linear-gradient(135deg, var(--mantine-color-blue-6) 0%, var(--mantine-color-blue-7) 100%)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                transition: 'all 300ms ease',
-                boxShadow: '0 10px 25px rgba(59, 130, 246, 0.3)'
-              }}>
-                {isDragOver ? (
-                  <IconUpload size={36} color="white" />
-                ) : (
-                  <IconFolders size={36} color="white" />
-                )}
-              </Box>
-              
               <Stack align="center" gap="xs">
                 <Title order={3} ta="center" style={{ fontWeight: 600 }}>
                   {isDragOver ? t('fileSelect.dropHere') : t('fileSelect.dragDrop')}
@@ -213,11 +193,11 @@ export default function FileSelect({ onFilesLoaded }: FileSelectProps) {
               </Group>
               <Group gap="xs" wrap="nowrap" style={{ minWidth: 0, flex: '0 0 auto' }}>
                 <IconMovie size={16} style={{ color: 'var(--mantine-color-green-5)', flexShrink: 0 }} />
-                <Text size="sm" c="dimmed" style={{ whiteSpace: 'nowrap' }}>{t('fileSelect.features.frameNavigation')}</Text>
+                <Text size="sm" c="dimmed" style={{ whiteSpace: 'nowrap' }}>{t('fileSelect.features.noUploadRequired')}</Text>
               </Group>
               <Group gap="xs" wrap="nowrap" style={{ minWidth: 0, flex: '0 0 auto' }}>
                 <IconVideo size={16} style={{ color: 'var(--mantine-color-orange-5)', flexShrink: 0 }} />
-                <Text size="sm" c="dimmed" style={{ whiteSpace: 'nowrap' }}>{t('fileSelect.features.licensePlateFilter')}</Text>
+                <Text size="sm" c="dimmed" style={{ whiteSpace: 'nowrap' }}>{t('fileSelect.features.offlineCapable')}</Text>
               </Group>
             </Group>
           </Box>

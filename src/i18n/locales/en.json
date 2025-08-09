@@ -14,10 +14,10 @@
     "multipleFiles": "You can select multiple files",
     "features": {
       "tesla": "Tesla",
-      "teslaCompatible": "Tesla 4-Channel Dashcam Compatible",
-      "synchronizedPlayback": "4-Channel Dashcam Synchronized Playback",
-      "frameNavigation": "Frame-by-Frame Navigation",
-      "licensePlateFilter": "License Plate Enhancement Filter",
+      "teslaCompatible": "Tesla 4-Channel, 6-Channel Dashcam Compatible",
+      "synchronizedPlayback": "4-Channel, 6-Channel Dashcam Synchronized Playback",
+      "noUploadRequired": "Instant Playback Without Upload",
+      "offlineCapable": "Works Completely Offline",
       "4kSupport": "4K Support",
       "multiCamera": "Multi-Camera"
     }
@@ -47,9 +47,7 @@
     "videoFitting": "Video Fitting",
     "fitModes": {
       "cover": "Fill Screen",
-      "contain": "Fit Screen",
-      "coverDescription": "Fill the screen (may crop video)",
-      "containDescription": "Show entire video (may have black bars)"
+      "contain": "Fit Screen"
     }
   },
   "shortcuts": {
@@ -69,15 +67,15 @@
   "language": {
     "select": "Language",
     "english": "English",
-    "korean": "Korean",
-    "chinese": "Chinese",
-    "german": "German",
-    "norwegian": "Norwegian", 
-    "dutch": "Dutch",
-    "french": "French",
-    "swedish": "Swedish",
-    "danish": "Danish",
-    "spanish": "Spanish"
+    "korean": "한국어",
+    "chinese": "中文",
+    "german": "Deutsch",
+    "norwegian": "Norsk", 
+    "dutch": "Nederlands",
+    "french": "Français",
+    "swedish": "Svenska",
+    "danish": "Dansk",
+    "spanish": "Español"
   },
   "github": {
     "viewOnGitHub": "View on GitHub"

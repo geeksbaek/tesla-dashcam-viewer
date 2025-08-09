@@ -14,10 +14,10 @@
     "multipleFiles": "Puedes seleccionar múltiples archivos",
     "features": {
       "tesla": "Tesla",
-      "teslaCompatible": "Compatible con Dashcam Tesla de 4 Canales",
-      "synchronizedPlayback": "Reproducción Sincronizada Dashcam de 4 Canales",
-      "frameNavigation": "Navegación Cuadro por Cuadro",
-      "licensePlateFilter": "Filtro de Mejora de Matrícula",
+      "teslaCompatible": "Compatible con dashcam Tesla de 4 canales, 6 canales",
+      "synchronizedPlayback": "Reproducción sincronizada dashcam de 4 canales, 6 canales",
+      "noUploadRequired": "No requiere carga, reproducción instantánea en navegador",
+      "offlineCapable": "Funciona completamente sin conexión",
       "4kSupport": "Soporte 4K",
       "multiCamera": "Multi-cámara"
     }
@@ -43,7 +43,12 @@
     "seekMode": "Modo de búsqueda",
     "seekModeShortcut": "Navegar con teclas de flecha",
     "timeMode": "5 Seg",
-    "frameMode": "Fotograma"
+    "frameMode": "Fotograma",
+    "videoFitting": "Ajuste de video",
+    "fitModes": {
+      "cover": "Llenar pantalla",
+      "contain": "No recortar"
+    }
   },
   "shortcuts": {
     "title": "Atajos de teclado",

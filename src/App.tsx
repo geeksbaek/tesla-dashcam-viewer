@@ -1,9 +1,11 @@
 import { useState, useEffect, useCallback } from 'react'
 import { flushSync } from 'react-dom'
+import { MantineProvider } from '@mantine/core'
 import VideoGrid from './components/VideoGrid'
 import FileSelect from './components/FileSelect'
 import ControlPanel from './components/ControlPanel'
 import type { VideoFilters } from './components/VideoFilterControls'
+import { theme } from './theme'
 
 export interface VideoFile {
   timestamp: string
@@ -293,63 +295,65 @@ function App() {
   }, [isPlaying, globalTime, totalDuration, handleSeek, seekMode, currentVideoIndex, videoFilters, handleVideoSelect, videoFiles.length, videoFitMode])
 
   return (
-    <div className="font-apple" style={{ 
-      height: '100vh', 
-      width: '100vw', 
-      backgroundColor: 'black', 
-      overflow: 'hidden', 
-      position: 'relative' 
-    }}>
-      {!videoFiles.length ? (
-        <FileSelect onFilesLoaded={handleFilesLoaded} onLoadDummy={loadDummyData} />
-      ) : (
-        <>
-          <VideoGrid 
-            videoFile={currentVideo}
-            videoFiles={videoFiles}
-            currentVideoIndex={currentVideoIndex}
-            isPlaying={isPlaying}
-            currentTime={currentTime}
-            globalTime={globalTime}
-            duration={totalDuration}
-            playbackRate={playbackRate}
-            seekMode={seekMode}
-            sidebarExpanded={sidebarExpanded}
-            videoFilters={videoFilters}
-            videoFitMode={videoFitMode}
-            onTimeUpdate={handleTimeUpdate}
-            onSeek={handleSeek}
-            onPlayPause={() => setIsPlaying(!isPlaying)}
-            onVideoSelect={handleVideoSelect}
-            onPlaybackRateChange={handlePlaybackRateChange}
-            onSeekModeChange={handleSeekModeChange}
-            onFrameRateUpdate={handleFrameRateUpdate}
-            onVideoDurationUpdate={handleVideoDurationUpdate}
-          />
-          <ControlPanel
-            videoFiles={videoFiles}
-            currentIndex={currentVideoIndex}
-            isPlaying={isPlaying}
-            onPlayPause={() => setIsPlaying(!isPlaying)}
-            onVideoSelect={handleVideoSelect}
-            globalTime={globalTime}
-            totalDuration={totalDuration}
-            isExpanded={sidebarExpanded}
-            onToggleExpanded={setSidebarExpanded}
-            seekMode={seekMode}
-            onSeekModeChange={handleSeekModeChange}
-            onGoToHome={handleGoToHome}
-            videoDurations={videoDurations}
-            videoFilters={videoFilters}
-            onVideoFiltersChange={setVideoFilters}
-            videoFitMode={videoFitMode}
-            onVideoFitModeChange={setVideoFitMode}
-            playbackRate={playbackRate}
-            onPlaybackRateChange={handlePlaybackRateChange}
-          />
-        </>
-      )}
-    </div>
+    <MantineProvider theme={theme} defaultColorScheme="dark">
+      <div className="font-apple" style={{ 
+        height: '100vh', 
+        width: '100vw', 
+        backgroundColor: 'black', 
+        overflow: 'hidden', 
+        position: 'relative' 
+      }}>
+        {!videoFiles.length ? (
+          <FileSelect onFilesLoaded={handleFilesLoaded} onLoadDummy={loadDummyData} />
+        ) : (
+          <>
+            <VideoGrid 
+              videoFile={currentVideo}
+              videoFiles={videoFiles}
+              currentVideoIndex={currentVideoIndex}
+              isPlaying={isPlaying}
+              currentTime={currentTime}
+              globalTime={globalTime}
+              duration={totalDuration}
+              playbackRate={playbackRate}
+              seekMode={seekMode}
+              sidebarExpanded={sidebarExpanded}
+              videoFilters={videoFilters}
+              videoFitMode={videoFitMode}
+              onTimeUpdate={handleTimeUpdate}
+              onSeek={handleSeek}
+              onPlayPause={() => setIsPlaying(!isPlaying)}
+              onVideoSelect={handleVideoSelect}
+              onPlaybackRateChange={handlePlaybackRateChange}
+              onSeekModeChange={handleSeekModeChange}
+              onFrameRateUpdate={handleFrameRateUpdate}
+              onVideoDurationUpdate={handleVideoDurationUpdate}
+            />
+            <ControlPanel
+              videoFiles={videoFiles}
+              currentIndex={currentVideoIndex}
+              isPlaying={isPlaying}
+              onPlayPause={() => setIsPlaying(!isPlaying)}
+              onVideoSelect={handleVideoSelect}
+              globalTime={globalTime}
+              totalDuration={totalDuration}
+              isExpanded={sidebarExpanded}
+              onToggleExpanded={setSidebarExpanded}
+              seekMode={seekMode}
+              onSeekModeChange={handleSeekModeChange}
+              onGoToHome={handleGoToHome}
+              videoDurations={videoDurations}
+              videoFilters={videoFilters}
+              onVideoFiltersChange={setVideoFilters}
+              videoFitMode={videoFitMode}
+              onVideoFitModeChange={setVideoFitMode}
+              playbackRate={playbackRate}
+              onPlaybackRateChange={handlePlaybackRateChange}
+            />
+          </>
+        )}
+      </div>
+    </MantineProvider>
   )
 }
 

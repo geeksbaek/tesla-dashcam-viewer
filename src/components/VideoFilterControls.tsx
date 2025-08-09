@@ -1,6 +1,7 @@
-import { Switch, Group, Text } from '@mantine/core';
+import { Switch, Group, Text, Tooltip } from '@mantine/core';
 import { IconScan } from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
+import { useRef, useState, useEffect } from 'react';
 
 export interface VideoFilters {
   brightness: number;
@@ -36,6 +37,8 @@ const licensePlateFilters: VideoFilters = {
 
 export default function VideoFilterControls({ filters, onFiltersChange }: VideoFilterControlsProps) {
   const { t } = useTranslation();
+  const textRef = useRef<HTMLDivElement>(null);
+  const [isTextTruncated, setIsTextTruncated] = useState(false);
   
   const isLicensePlateMode = 
     filters.brightness === licensePlateFilters.brightness &&
@@ -48,12 +51,49 @@ export default function VideoFilterControls({ filters, onFiltersChange }: VideoF
     onFiltersChange(checked ? licensePlateFilters : defaultFilters);
   };
 
+  const licensePlateText = t('filters.licensePlate', '번호판 인식 최적화');
+
+  useEffect(() => {
+    const checkTruncation = () => {
+      if (textRef.current) {
+        setIsTextTruncated(textRef.current.scrollWidth > textRef.current.clientWidth);
+      }
+    };
+
+    checkTruncation();
+    window.addEventListener('resize', checkTruncation);
+    return () => window.removeEventListener('resize', checkTruncation);
+  }, [licensePlateText]);
+
   return (
-    <Group justify="space-between" align="center">
-      <Group gap="xs" align="center">
-        <IconScan size={16} />
-        <Text size="sm" fw={600} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          {t('filters.licensePlate', '번호판 인식 최적화')}
+    <div style={{ 
+      display: 'flex', 
+      justifyContent: 'space-between', 
+      alignItems: 'center',
+      gap: '8px'
+    }}>
+      <div style={{ 
+        display: 'flex', 
+        alignItems: 'center', 
+        gap: '8px',
+        minWidth: 0,
+        flex: 1
+      }}>
+        <IconScan size={16} style={{ flexShrink: 0 }} />
+        <div style={{ 
+          display: 'flex', 
+          alignItems: 'center', 
+          gap: '8px',
+          minWidth: 0,
+          flex: 1
+        }}>
+          <Tooltip label={licensePlateText} disabled={!isTextTruncated}>
+            <Text ref={textRef} size="sm" fw={600} truncate style={{ 
+              minWidth: 0
+            }}>
+              {licensePlateText}
+            </Text>
+          </Tooltip>
           <kbd style={{ 
             padding: '2px 6px', 
             borderRadius: '4px', 
@@ -61,16 +101,16 @@ export default function VideoFilterControls({ filters, onFiltersChange }: VideoF
             border: '1px solid rgba(255,255,255,0.2)',
             fontSize: '10px',
             fontFamily: 'monospace',
-            display: 'inline-flex',
-            alignItems: 'center'
+            flexShrink: 0
           }}>F</kbd>
-        </Text>
-      </Group>
+        </div>
+      </div>
       <Switch
         checked={isLicensePlateMode}
         onChange={(event) => handleToggle(event.currentTarget.checked)}
         size="md"
+        style={{ flexShrink: 0 }}
       />
-    </Group>
+    </div>
   );
 }

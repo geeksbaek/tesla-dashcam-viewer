@@ -247,7 +247,8 @@ export default function ControlPanel({
                     ref={index === currentIndex ? currentButtonRef : null}
                     key={index}
                     size="lg"
-                    variant={index === currentIndex ? "light" : "subtle"}
+                    variant={index === currentIndex ? "filled" : "subtle"}
+                    color={index === currentIndex ? "tesla-red" : undefined}
                     onClick={() => onVideoSelect(index)}
                     style={{
                       width: '40px',
@@ -355,7 +356,7 @@ export default function ControlPanel({
       }}>
         <Stack gap="md" style={{ flex: 1, overflow: 'hidden' }}>
           {/* 메인 컨트롤 */}
-          <Stack gap="xs">
+          <Box>
             <Button
               onClick={onPlayPause}
               size="sm"
@@ -398,8 +399,10 @@ export default function ControlPanel({
                 </Group>
               }
             </Button>
+          </Box>
 
-            {/* 방향키 이동 모드 선택 */}
+          {/* 방향키 이동 모드 선택 */}
+          <Box>
             <Stack gap="xs">
               <Group gap="xs" align="center">
                 <IconSettingsFilled size={16} />
@@ -432,8 +435,10 @@ export default function ControlPanel({
                 onFocus={(e) => e.target.blur()}
               />
             </Stack>
+          </Box>
 
-            {/* 재생 속도 선택 */}
+          {/* 재생 속도 선택 */}
+          <Box>
             <Stack gap="xs">
               <Group gap="xs" align="center">
                 <IconPlayerTrackNext size={16} />
@@ -454,11 +459,11 @@ export default function ControlPanel({
                 ))}
               </Group>
             </Stack>
-
-          </Stack>
+          </Box>
 
           {/* 클립 목록 - 스크롤 가능 */}
-          <Stack gap="xs" style={{ flex: 1, minHeight: 0, overflow: 'hidden' }}>
+          <Box style={{ flex: 1, minHeight: 0, overflow: 'hidden' }}>
+            <Stack gap="xs" style={{ height: '100%' }}>
             <Group justify="space-between" align="center">
               <Group gap="xs" align="center">
                 <IconVideoFilled size={16} />
@@ -474,7 +479,7 @@ export default function ControlPanel({
                       fontFamily: 'monospace',
                       display: 'inline-flex',
                       alignItems: 'center'
-                    }}>↑</kbd>
+                    }}>▲</kbd>
                     <kbd style={{ 
                       padding: '2px 6px', 
                       borderRadius: '4px', 
@@ -484,7 +489,7 @@ export default function ControlPanel({
                       fontFamily: 'monospace',
                       display: 'inline-flex',
                       alignItems: 'center'
-                    }}>↓</kbd>
+                    }}>▼</kbd>
                     <kbd style={{ 
                       padding: '2px 6px', 
                       borderRadius: '4px', 
@@ -494,7 +499,7 @@ export default function ControlPanel({
                       fontFamily: 'monospace',
                       display: 'inline-flex',
                       alignItems: 'center'
-                    }}>←</kbd>
+                    }}>◀</kbd>
                     <kbd style={{ 
                       padding: '2px 6px', 
                       borderRadius: '4px', 
@@ -504,7 +509,7 @@ export default function ControlPanel({
                       fontFamily: 'monospace',
                       display: 'inline-flex',
                       alignItems: 'center'
-                    }}>→</kbd>
+                    }}>▶</kbd>
                   </span>
                 </Text>
               </Group>
@@ -530,10 +535,10 @@ export default function ControlPanel({
                         padding: '4px 8px',
                         borderRadius: 'var(--mantine-radius-default)',
                         backgroundColor: isActive 
-                          ? 'var(--mantine-color-blue-filled)' 
+                          ? 'var(--mantine-color-tesla-red-filled)' 
                           : 'rgba(255, 255, 255, 0.05)',
                         border: isActive 
-                          ? '1px solid var(--mantine-color-blue-6)' 
+                          ? '1px solid var(--mantine-color-tesla-red-6)' 
                           : '1px solid rgba(255, 255, 255, 0.1)',
                         height: '30px',
                         display: 'flex',
@@ -543,7 +548,7 @@ export default function ControlPanel({
                       onMouseEnter={(e) => {
                         if (!isActive) {
                           e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.1)'
-                          e.currentTarget.style.borderColor = 'var(--mantine-color-blue-4)'
+                          e.currentTarget.style.borderColor = 'var(--mantine-color-tesla-red-4)'
                         }
                       }}
                       onMouseLeave={(e) => {
@@ -589,7 +594,8 @@ export default function ControlPanel({
                 })}
               </Stack>
             </Box>
-          </Stack>
+            </Stack>
+          </Box>
           
           {/* 비디오 필터 컨트롤 */}
           <Box>
@@ -603,7 +609,7 @@ export default function ControlPanel({
           <Box>
             <Stack gap="xs">
               <Group gap="xs" align="center">
-                <IconVideo size={16} style={{ color: 'var(--mantine-color-blue-5)' }} />
+                <IconVideo size={16} />
                 <Text size="sm" fw={600} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                   {t('controlPanel.videoFitting')}
                   <kbd style={{ 

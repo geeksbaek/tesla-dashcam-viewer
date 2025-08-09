@@ -14,10 +14,10 @@
     "multipleFiles": "Du kan välja flera filer",
     "features": {
       "tesla": "Tesla",
-      "teslaCompatible": "Tesla 4-Kanals Dashcam Kompatibel",
-      "synchronizedPlayback": "4-Kanals Dashcam Synkroniserad Uppspelning",
-      "frameNavigation": "Bildruta-för-bildruta Navigering",
-      "licensePlateFilter": "Registreringsskylt Förstärkningsfilter",
+      "teslaCompatible": "Tesla 4-kanals, 6-kanals dashcam kompatibel",
+      "synchronizedPlayback": "4-kanals, 6-kanals dashcam synkroniserad uppspelning",
+      "noUploadRequired": "Ingen uppladdning krävs, omedelbar uppspelning i webbläsare",
+      "offlineCapable": "Fungerar helt offline",
       "4kSupport": "4K Stöd",
       "multiCamera": "Multi-Kamera"
     }
@@ -43,7 +43,12 @@
     "seekMode": "Sök läge",
     "seekModeShortcut": "Navigera med piltangenter",
     "timeMode": "5 Sek",
-    "frameMode": "Ram"
+    "frameMode": "Ram",
+    "videoFitting": "Video anpassning",
+    "fitModes": {
+      "cover": "Fyll skärmen",
+      "contain": "Klipp inte av"
+    }
   },
   "shortcuts": {
     "title": "Tangentbordsgenvägar",

@@ -14,10 +14,10 @@
     "multipleFiles": "여러 파일을 선택할 수 있습니다",
     "features": {
       "tesla": "테슬라",
-      "teslaCompatible": "테슬라 4채널 블랙박스 호환",
-      "synchronizedPlayback": "4채널 블랙박스 동기화 재생",
-      "frameNavigation": "프레임 단위 이동",
-      "licensePlateFilter": "번호판 강조 필터",
+      "teslaCompatible": "테슬라 4채널, 6채널 블랙박스 호환",
+      "synchronizedPlayback": "4채널, 6채널 블랙박스 동기화 재생",
+      "noUploadRequired": "업로드 없이 브라우저에서 즉시 재생",
+      "offlineCapable": "오프라인 환경에서도 사용 가능",
       "4kSupport": "4K 지원",
       "multiCamera": "멀티 카메라"
     }
@@ -47,9 +47,7 @@
     "videoFitting": "비디오 피팅",
     "fitModes": {
       "cover": "꽉 채우기",
-      "contain": "잘리지 않게",
-      "coverDescription": "",
-      "containDescription": "전체 영상을 표시 (검은 여백이 생길 수 있음)"
+      "contain": "잘리지 않게"
     }
   },
   "shortcuts": {
