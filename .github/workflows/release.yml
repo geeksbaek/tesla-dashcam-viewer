@@ -88,27 +88,37 @@ jobs:
           
           echo "commit_sha=$COMMIT_SHA" >> $GITHUB_OUTPUT
       
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
+      - name: Check if release exists
+        id: check_release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: v${{ steps.new_version.outputs.version }}
-          release_name: v${{ steps.new_version.outputs.version }}
-          body: |
-            ## 🚀 릴리즈 v${{ steps.new_version.outputs.version }}
+        run: |
+          if gh release view v${{ steps.new_version.outputs.version }} >/dev/null 2>&1; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+            echo "Release v${{ steps.new_version.outputs.version }} already exists"
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+            echo "Release v${{ steps.new_version.outputs.version }} does not exist"
+          fi
+      
+      - name: Create Release
+        if: steps.check_release.outputs.exists == 'false'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create v${{ steps.new_version.outputs.version }} \
+            --title "v${{ steps.new_version.outputs.version }}" \
+            --notes "## 🚀 릴리즈 v${{ steps.new_version.outputs.version }}
             
-            **버전 변경:** ${{ steps.current_version.outputs.version }} → ${{ steps.new_version.outputs.version }} (${{ steps.new_version.outputs.bump_type }})
-            
-            ### 📝 변경사항
-            **커밋:** ${{ steps.commit_info.outputs.commit_sha }}
-            ${{ steps.commit_info.outputs.commit_msg }}
-            
-            ---
-            *이 릴리즈는 main 브랜치 커밋으로 자동 생성되었습니다.*
-          draft: false
-          prerelease: false
+**버전 변경:** ${{ steps.current_version.outputs.version }} → ${{ steps.new_version.outputs.version }} (${{ steps.new_version.outputs.bump_type }})
+
+### 📝 변경사항
+**커밋:** ${{ steps.commit_info.outputs.commit_sha }}
+${{ steps.commit_info.outputs.commit_msg }}
+
+---
+*이 릴리즈는 main 브랜치 커밋으로 자동 생성되었습니다.*" \
+            --target main
       
       - name: Commit version update
         run: |
