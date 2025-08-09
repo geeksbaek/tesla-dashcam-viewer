@@ -642,11 +642,6 @@ export default function ControlPanel({
                 onFocus={(e) => e.target.blur()}
                 tabIndex={-1}
               />
-              {videoFitMode === 'cover' && t('controlPanel.fitModes.coverDescription') && (
-                <Text size="xs" c="dimmed">
-                  {t('controlPanel.fitModes.coverDescription')}
-                </Text>
-              )}
             </Stack>
           </Box>
         </Stack>
