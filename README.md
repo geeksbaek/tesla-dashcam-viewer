@@ -2,15 +2,16 @@
 
 동기화된 다중 카메라 재생 기능을 갖춘 Tesla 대시캠 영상 보기 및 분석을 위한 현대적인 웹 애플리케이션입니다. React, TypeScript, Vite로 구축되었습니다.
 
-![Tesla 대시캠 뷰어 스크린샷](images/screenshot.png)
+![Tesla 대시캠 뷰어 메인 화면](images/screenshot-main.png)
+![Tesla 대시캠 뷰어 플레이어 화면](images/screenshot-player.png)
 
 ## 🌐 다른 언어
-- [English](README.en.md) | **한국어** | [中文](README.zh.md) | [Deutsch](README.de.md) | [Norsk](README.nb.md) | [Nederlands](README.nl.md) | [Français](README.fr.md) | [Svenska](README.sv.md) | [Dansk](README.da.md) | [Español](README.es.md)
+- [English](docs/README.en.md) | **한국어** | [中文](docs/README.zh.md) | [Deutsch](docs/README.de.md) | [Norsk](docs/README.nb.md) | [Nederlands](docs/README.nl.md) | [Français](docs/README.fr.md) | [Svenska](docs/README.sv.md) | [Dansk](docs/README.da.md) | [Español](docs/README.es.md)
 
 ## 🚗 기능
 
 ### 다중 카메라 동기화
-- **4대 카메라 지원**: 전방, 후방, 좌측 리피터, 우측 리피터 카메라
+- **4채널/6채널 카메라 지원**: 전방, 후방, 좌측 리피터, 우측 리피터 + HW4 좌측/우측 필러 카메라
 - **완벽한 동기화**: 모든 카메라가 완벽하게 동기화되어 재생
 - **단일 타임라인**: 여러 비디오 클립을 끊김없이 탐색
 
