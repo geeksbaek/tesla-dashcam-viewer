@@ -1,0 +1,117 @@
+name: Create Release
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  create-release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    
+    # Skip if commit message contains [skip ci]
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+      
+      - name: Get current version
+        id: current_version
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+      
+      - name: Analyze commit and calculate new version
+        id: new_version
+        run: |
+          # Get the last commit message
+          COMMIT_MSG=$(git log -1 --pretty=%B)
+          CURRENT_VERSION=${{ steps.current_version.outputs.version }}
+          
+          # Parse current version
+          IFS='.' read -r MAJOR MINOR PATCH <<< "$CURRENT_VERSION"
+          
+          # Determine version bump based on conventional commit
+          if echo "$COMMIT_MSG" | grep -q "^BREAKING CHANGE:\|^[a-z]*!:"; then
+            # Major version bump (breaking change)
+            MAJOR=$((MAJOR + 1))
+            MINOR=0
+            PATCH=0
+            echo "bump_type=major" >> $GITHUB_OUTPUT
+          elif echo "$COMMIT_MSG" | grep -q "^feat:"; then
+            # Minor version bump (new feature)
+            MINOR=$((MINOR + 1))
+            PATCH=0
+            echo "bump_type=minor" >> $GITHUB_OUTPUT
+          elif echo "$COMMIT_MSG" | grep -q "^fix:\|^perf:\|^refactor:"; then
+            # Patch version bump (bug fix, performance, refactor)
+            PATCH=$((PATCH + 1))
+            echo "bump_type=patch" >> $GITHUB_OUTPUT
+          else
+            # Default to patch for other commits (docs, style, test, chore, etc.)
+            PATCH=$((PATCH + 1))
+            echo "bump_type=patch" >> $GITHUB_OUTPUT
+          fi
+          
+          NEW_VERSION="${MAJOR}.${MINOR}.${PATCH}"
+          echo "version=$NEW_VERSION" >> $GITHUB_OUTPUT
+          echo "New version: $NEW_VERSION"
+      
+      - name: Update package.json version
+        run: |
+          npm version ${{ steps.new_version.outputs.version }} --no-git-tag-version
+      
+      - name: Get commit info
+        id: commit_info
+        run: |
+          COMMIT_MSG=$(git log -1 --pretty=%B)
+          COMMIT_SHA=$(git rev-parse --short HEAD)
+          echo "commit_msg=$COMMIT_MSG" >> $GITHUB_OUTPUT
+          echo "commit_sha=$COMMIT_SHA" >> $GITHUB_OUTPUT
+      
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{ steps.new_version.outputs.version }}
+          release_name: v${{ steps.new_version.outputs.version }}
+          body: |
+            ## 🚀 릴리즈 v${{ steps.new_version.outputs.version }}
+            
+            **버전 변경:** ${{ steps.current_version.outputs.version }} → ${{ steps.new_version.outputs.version }} (${{ steps.new_version.outputs.bump_type }})
+            
+            ### 📝 변경사항
+            **커밋:** ${{ steps.commit_info.outputs.commit_sha }}
+            ${{ steps.commit_info.outputs.commit_msg }}
+            
+            ---
+            *이 릴리즈는 main 브랜치 커밋으로 자동 생성되었습니다.*
+          draft: false
+          prerelease: false
+      
+      - name: Commit version update
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          
+          # Check if there are changes to commit
+          if git diff --quiet; then
+            echo "No changes to commit"
+          else
+            git add package.json package-lock.json
+            git commit -m "chore: bump version to ${{ steps.new_version.outputs.version }} [skip ci]"
+            git push
+          fi
