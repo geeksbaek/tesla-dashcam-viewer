@@ -1,0 +1,1 @@
+if('serviceWorker' in navigator) navigator.serviceWorker.register('/tesla-dashcam-viewer/dev-sw.js?dev-sw', { scope: '/tesla-dashcam-viewer/', type: 'classic' })
