@@ -147,6 +147,9 @@ export default function VideoGrid({
     left_pillar?: string
     right_pillar?: string
   }>({})
+  
+  // 이전 비디오 인덱스를 추적
+  const prevVideoIndexRef = useRef(currentVideoIndex)
 
   // 실시간 타임스탬프 업데이트
   useEffect(() => {
@@ -180,12 +183,19 @@ export default function VideoGrid({
     
     setVideoUrls(newUrls)
     
+    // 비디오 URL이 변경되면 즉시 currentTime 설정을 위한 플래그 설정
+    // 이렇게 하면 비디오가 로드되자마자 올바른 시간으로 이동
+    suppressSyncRef.current = false
+    
+    // 이전 비디오 인덱스 업데이트
+    prevVideoIndexRef.current = currentVideoIndex
+    
     return () => {
       Object.values(newUrls).forEach((url) => {
         if (url) URL.revokeObjectURL(url as string)
       })
     }
-  }, [videoFile])
+  }, [videoFile, currentVideoIndex])
 
   // 비디오 초기화 및 실제 프레임레이트 감지
   useEffect(() => {
@@ -196,7 +206,8 @@ export default function VideoGrid({
       
       videos.forEach(video => {
         if (video.readyState >= 2) {
-          video.currentTime = currentTime
+          // currentTime 설정은 onLoadedMetadata에서 처리하므로 여기서는 제거
+          // video.currentTime = currentTime
           if (isPlaying && video.paused) {
             video.play().catch(err => console.log('Play failed:', err))
           }
@@ -500,9 +511,24 @@ export default function VideoGrid({
             preload="auto"
             playsInline
             disablePictureInPicture
+            onLoadStart={(e) => {
+              const video = e.target as HTMLVideoElement
+              // 비디오 로드 시작 시 즉시 pause하여 첫 프레임 방지
+              video.pause()
+            }}
             onLoadedMetadata={(e) => {
+              const video = e.target as HTMLVideoElement
+              
+              // 비디오가 로드되면 즉시 currentTime 설정
+              if (video.readyState >= 1) {
+                video.currentTime = currentTime
+                // 설정 후 재생 상태에 따라 처리
+                if (isPlaying) {
+                  video.play().catch(() => {})
+                }
+              }
+              
               if (cameraType === 'front') {
-                const video = e.target as HTMLVideoElement
                 if (video.duration && !isNaN(video.duration) && isFinite(video.duration)) {
                   onVideoDurationUpdate(video.duration)
                 }

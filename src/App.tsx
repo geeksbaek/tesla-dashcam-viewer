@@ -85,7 +85,7 @@ function App() {
   }
 
   // 슬라이더로 시간 이동
-  const handleSeek = useCallback((newGlobalTime: number) => {
+  const handleSeek = useCallback((newGlobalTime: number, fromArrowKey: boolean = false) => {
     // 실제 비디오 길이를 사용하여 올바른 비디오 인덱스와 시간 찾기
     let remainingTime = newGlobalTime
     let videoIndex = 0
@@ -104,8 +104,18 @@ function App() {
       remainingTime = newGlobalTime % 60
     }
     
-    const videoTime = remainingTime
+    let videoTime = remainingTime
     
+    // 좌측 방향키로 이전 비디오로 이동하는 경우
+    // 이전 비디오의 끝 부분으로 이동하여 첫 프레임 플래시 방지
+    if (fromArrowKey && videoIndex < currentVideoIndex && videoDurations[videoIndex] > 0) {
+      // 이전 비디오의 끝 시간으로 설정 (마지막 프레임이 보이도록)
+      // remainingTime이 음수인 경우는 이전 비디오의 끝부분을 의미
+      if (remainingTime < 5) {
+        // 5초 미만으로 남은 경우 끝에서 약간 앞으로
+        videoTime = Math.max(0, videoDurations[videoIndex] - 0.5)
+      }
+    }
     
     // flushSync를 사용하여 모든 상태를 동기적으로 업데이트
     flushSync(() => {
