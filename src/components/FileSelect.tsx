@@ -219,6 +219,11 @@ export default function FileSelect({ onFilesLoaded }: FileSelectProps) {
             </Button>
           </Group>
           
+          {/* Version Info */}
+          <Text size="xs" c="dimmed" ta="center" style={{ marginTop: 'auto' }}>
+            v{import.meta.env.VITE_APP_VERSION || '1.0.0'}
+          </Text>
+          
           {/* 숨겨진 파일 입력 요소 */}
           <input
             id="file-input"

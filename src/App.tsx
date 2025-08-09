@@ -250,24 +250,51 @@ function App() {
         window.dispatchEvent(new CustomEvent('toggleFullscreen', { detail: { camera: 'front' } }))
       } else if (event.code === 'Digit2') {
         event.preventDefault()
-        // 우측 B필러 카메라 전체화면 (2번)
-        window.dispatchEvent(new CustomEvent('toggleFullscreen', { detail: { camera: 'rightPillar' } }))
+        // 현재 비디오가 6채널인지 확인
+        const currentVideo = videoFiles[currentVideoIndex]
+        if (currentVideo && (currentVideo.left_pillar || currentVideo.right_pillar)) {
+          // 6채널: 우측 B필러 카메라 전체화면 (2번)
+          window.dispatchEvent(new CustomEvent('toggleFullscreen', { detail: { camera: 'rightPillar' } }))
+        } else {
+          // 4채널: 후방 카메라 전체화면 (2번)
+          window.dispatchEvent(new CustomEvent('toggleFullscreen', { detail: { camera: 'back' } }))
+        }
       } else if (event.code === 'Digit3') {
         event.preventDefault()
-        // 좌측 B필러 카메라 전체화면 (3번)
-        window.dispatchEvent(new CustomEvent('toggleFullscreen', { detail: { camera: 'leftPillar' } }))
+        // 현재 비디오가 6채널인지 확인
+        const currentVideo = videoFiles[currentVideoIndex]
+        if (currentVideo && (currentVideo.left_pillar || currentVideo.right_pillar)) {
+          // 6채널: 좌측 B필러 카메라 전체화면 (3번)
+          window.dispatchEvent(new CustomEvent('toggleFullscreen', { detail: { camera: 'leftPillar' } }))
+        } else {
+          // 4채널: 우측 리피터 카메라 전체화면 (3번)
+          window.dispatchEvent(new CustomEvent('toggleFullscreen', { detail: { camera: 'right' } }))
+        }
       } else if (event.code === 'Digit4') {
         event.preventDefault()
-        // 후방 카메라 전체화면 (4번)
-        window.dispatchEvent(new CustomEvent('toggleFullscreen', { detail: { camera: 'back' } }))
+        // 현재 비디오가 6채널인지 확인
+        const currentVideo = videoFiles[currentVideoIndex]
+        if (currentVideo && (currentVideo.left_pillar || currentVideo.right_pillar)) {
+          // 6채널: 후방 카메라 전체화면 (4번)
+          window.dispatchEvent(new CustomEvent('toggleFullscreen', { detail: { camera: 'back' } }))
+        } else {
+          // 4채널: 좌측 리피터 카메라 전체화면 (4번)
+          window.dispatchEvent(new CustomEvent('toggleFullscreen', { detail: { camera: 'left' } }))
+        }
       } else if (event.code === 'Digit5') {
         event.preventDefault()
-        // 우측 리피터 카메라 전체화면 (5번)
-        window.dispatchEvent(new CustomEvent('toggleFullscreen', { detail: { camera: 'right' } }))
+        // 6채널만: 우측 리피터 카메라 전체화면 (5번)
+        const currentVideo = videoFiles[currentVideoIndex]
+        if (currentVideo && (currentVideo.left_pillar || currentVideo.right_pillar)) {
+          window.dispatchEvent(new CustomEvent('toggleFullscreen', { detail: { camera: 'right' } }))
+        }
       } else if (event.code === 'Digit6') {
         event.preventDefault()
-        // 좌측 리피터 카메라 전체화면 (6번)
-        window.dispatchEvent(new CustomEvent('toggleFullscreen', { detail: { camera: 'left' } }))
+        // 6채널만: 좌측 리피터 카메라 전체화면 (6번)
+        const currentVideo = videoFiles[currentVideoIndex]
+        if (currentVideo && (currentVideo.left_pillar || currentVideo.right_pillar)) {
+          window.dispatchEvent(new CustomEvent('toggleFullscreen', { detail: { camera: 'left' } }))
+        }
       } else if (event.code === 'ArrowUp') {
         event.preventDefault()
         // 이전 클립으로 이동

@@ -1,17 +1,16 @@
 import { useRegisterSW } from 'virtual:pwa-register/react'
-import { Button, Modal, Text, Group } from '@mantine/core'
-import { IconRefresh } from '@tabler/icons-react'
+import { useEffect } from 'react'
 
 export function UpdatePrompt() {
   const {
-    offlineReady: [offlineReady, setOfflineReady],
-    needRefresh: [needRefresh, setNeedRefresh],
+    needRefresh: [needRefresh],
     updateServiceWorker,
   } = useRegisterSW({
     onRegisteredSW(swUrl, r) {
       console.log('SW registered: ' + swUrl)
       
       if (r) {
+        // 1시간마다 업데이트 확인
         setInterval(() => {
           r.update()
         }, 60 * 60 * 1000)
@@ -22,51 +21,14 @@ export function UpdatePrompt() {
     },
   })
 
-  const close = () => {
-    setOfflineReady(false)
-    setNeedRefresh(false)
-  }
+  // 새 버전이 감지되면 자동으로 업데이트
+  useEffect(() => {
+    if (needRefresh) {
+      console.log('New version available, updating automatically...')
+      updateServiceWorker(true)
+    }
+  }, [needRefresh, updateServiceWorker])
 
-  return (
-    <>
-      <Modal
-        opened={offlineReady && !needRefresh}
-        onClose={close}
-        title="오프라인 사용 가능"
-        centered
-      >
-        <Text size="sm" mb="md">
-          앱이 오프라인에서 사용 가능하도록 준비되었습니다.
-        </Text>
-        <Group justify="flex-end">
-          <Button onClick={close} variant="subtle">
-            확인
-          </Button>
-        </Group>
-      </Modal>
-
-      <Modal
-        opened={needRefresh}
-        onClose={() => {}}
-        withCloseButton={false}
-        title="새 버전 사용 가능"
-        centered
-      >
-        <Text size="sm" mb="md">
-          새로운 버전이 사용 가능합니다. 지금 업데이트하시겠습니까?
-        </Text>
-        <Group justify="flex-end">
-          <Button onClick={close} variant="subtle" color="gray">
-            나중에
-          </Button>
-          <Button
-            leftSection={<IconRefresh size={16} />}
-            onClick={() => updateServiceWorker(true)}
-          >
-            업데이트
-          </Button>
-        </Group>
-      </Modal>
-    </>
-  )
+  // 아무것도 렌더링하지 않음
+  return null
 }
