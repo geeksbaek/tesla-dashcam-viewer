@@ -4,6 +4,7 @@ import { MantineProvider } from '@mantine/core'
 import VideoGrid from './components/VideoGrid'
 import FileSelect from './components/FileSelect'
 import ControlPanel from './components/ControlPanel'
+import { UpdatePrompt } from './components/UpdatePrompt'
 import type { VideoFilters } from './components/VideoFilterControls'
 import { theme } from './theme'
 
@@ -296,6 +297,7 @@ function App() {
 
   return (
     <MantineProvider theme={theme} defaultColorScheme="dark">
+      <UpdatePrompt />
       <div className="font-apple" style={{ 
         height: '100vh', 
         width: '100vw', 
