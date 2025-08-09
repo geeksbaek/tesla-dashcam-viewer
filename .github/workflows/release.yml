@@ -35,26 +35,26 @@ jobs:
       - name: Analyze commit and calculate new version
         id: new_version
         run: |
-          # Get the last commit message
-          COMMIT_MSG=$(git log -1 --pretty=%B)
+          # Get the first line of commit message (title)
+          COMMIT_TITLE=$(git log -1 --pretty=%s)
           CURRENT_VERSION=${{ steps.current_version.outputs.version }}
           
           # Parse current version
           IFS='.' read -r MAJOR MINOR PATCH <<< "$CURRENT_VERSION"
           
           # Determine version bump based on conventional commit
-          if echo "$COMMIT_MSG" | grep -q "^BREAKING CHANGE:\|^[a-z]*!:"; then
+          if echo "$COMMIT_TITLE" | grep -q "^BREAKING CHANGE:\|^[a-z]*!:"; then
             # Major version bump (breaking change)
             MAJOR=$((MAJOR + 1))
             MINOR=0
             PATCH=0
             echo "bump_type=major" >> $GITHUB_OUTPUT
-          elif echo "$COMMIT_MSG" | grep -q "^feat:"; then
+          elif echo "$COMMIT_TITLE" | grep -q "^feat:"; then
             # Minor version bump (new feature)
             MINOR=$((MINOR + 1))
             PATCH=0
             echo "bump_type=minor" >> $GITHUB_OUTPUT
-          elif echo "$COMMIT_MSG" | grep -q "^fix:\|^perf:\|^refactor:"; then
+          elif echo "$COMMIT_TITLE" | grep -q "^fix:\|^perf:\|^refactor:"; then
             # Patch version bump (bug fix, performance, refactor)
             PATCH=$((PATCH + 1))
             echo "bump_type=patch" >> $GITHUB_OUTPUT
@@ -75,9 +75,17 @@ jobs:
       - name: Get commit info
         id: commit_info
         run: |
+          # Get commit message and handle multiline properly
           COMMIT_MSG=$(git log -1 --pretty=%B)
           COMMIT_SHA=$(git rev-parse --short HEAD)
-          echo "commit_msg=$COMMIT_MSG" >> $GITHUB_OUTPUT
+          
+          # Save multiline message to output
+          {
+            echo "commit_msg<<EOF"
+            echo "$COMMIT_MSG"
+            echo "EOF"
+          } >> $GITHUB_OUTPUT
+          
           echo "commit_sha=$COMMIT_SHA" >> $GITHUB_OUTPUT
       
       - name: Create Release
