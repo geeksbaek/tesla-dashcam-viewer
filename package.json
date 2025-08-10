@@ -16,7 +16,6 @@
   },
   "dependencies": {
     "@mantine/core": "^8.2.4",
-    "@mantine/hooks": "^8.2.4",
     "@tabler/icons-react": "^3.34.1",
     "i18next": "^25.3.4",
     "i18next-browser-languagedetector": "^8.2.0",
@@ -43,8 +42,7 @@
     "typescript": "^5.9.2",
     "typescript-eslint": "^8.39.0",
     "vite": "npm:rolldown-vite@latest",
-    "vite-plugin-pwa": "^1.0.2",
-    "workbox-window": "^7.3.0"
+    "vite-plugin-pwa": "^1.0.2"
   },
   "lint-staged": {
     "*.{ts,tsx}": [
