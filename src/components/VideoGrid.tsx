@@ -151,12 +151,50 @@ export default function VideoGrid({
   // 이전 비디오 인덱스를 추적
   const prevVideoIndexRef = useRef(currentVideoIndex)
 
+  // 브라우저 전체화면 진입
+  const enterFullscreen = async (camera: string) => {
+    setFullscreenCamera(camera)
+    
+    setTimeout(async () => {
+      if (fullscreenContainerRef.current) {
+        try {
+          await fullscreenContainerRef.current.requestFullscreen()
+        } catch (error) {
+          console.log('전체화면 진입 실패:', error)
+        }
+      }
+    }, 100)
+  }
+
+  // 브라우저 전체화면 종료
+  const exitFullscreen = async () => {
+    try {
+      if (document.fullscreenElement) {
+        await document.exitFullscreen()
+      }
+      setFullscreenCamera(null)
+    } catch (error) {
+      console.log('전체화면 종료 실패:', error)
+      setFullscreenCamera(null)
+    }
+  }
+
+  // 카메라 전체화면 토글 함수
+  const toggleFullscreen = (camera: string) => {
+    if (fullscreenCamera === camera) {
+      exitFullscreen()
+    } else {
+      enterFullscreen(camera)
+    }
+  }
+
+
   // 실시간 타임스탬프 업데이트
   useEffect(() => {
     if (videoFile?.timestamp) {
       setDisplayTimestamp(getCurrentTimestamp(videoFile.timestamp, currentTime))
     }
-  }, [videoFile?.timestamp, currentTime, i18n.language])
+  }, [videoFile?.timestamp, currentTime, i18n.language, getCurrentTimestamp])
 
   // 비디오 파일이 변경될 때 URL 생성 및 정리
   useEffect(() => {
@@ -218,7 +256,7 @@ export default function VideoGrid({
     }, 200)
     
     return () => clearTimeout(timer)
-  }, [videoFile])
+  }, [videoFile, isPlaying, onFrameRateUpdate, videoRefs])
 
   // 비디오 종료 이벤트 처리
   useEffect(() => {
@@ -258,7 +296,7 @@ export default function VideoGrid({
         masterVideo.removeEventListener('ended', handleVideoEnded)
       }
     }
-  }, [currentVideoIndex, videoFiles.length, onVideoSelect, onPlayPause])
+  }, [currentVideoIndex, videoFiles.length, onVideoSelect, onPlayPause, videoRefs])
 
   useEffect(() => {
     const videos = videoRefs.map(ref => ref.current).filter(Boolean) as HTMLVideoElement[]
@@ -276,7 +314,7 @@ export default function VideoGrid({
         }
       })
     }
-  }, [isPlaying])
+  }, [isPlaying, videoRefs])
 
   // 최소한의 비디오 시간 업데이트
   useEffect(() => {
@@ -309,7 +347,7 @@ export default function VideoGrid({
     return () => {
       masterVideo.removeEventListener('timeupdate', handleTimeUpdate)
     }
-  }, [videoFile, onTimeUpdate])
+  }, [videoFile, onTimeUpdate, videoRefs])
 
   // 재생 상태 변화 추적
   useEffect(() => {
@@ -343,7 +381,7 @@ export default function VideoGrid({
         }, 1500)
       }
     }
-  }, [isPlaying, onTimeUpdate])
+  }, [isPlaying, onTimeUpdate, videoRefs])
 
   // 외부 시간 동기화
   useEffect(() => {
@@ -377,7 +415,7 @@ export default function VideoGrid({
         }
       }
     })
-  }, [currentTime, isPlaying])
+  }, [currentTime, isPlaying, videoRefs])
 
   // 재생 속도 동기화
   useEffect(() => {
@@ -385,7 +423,7 @@ export default function VideoGrid({
     videos.forEach(video => {
       video.playbackRate = playbackRate
     })
-  }, [playbackRate])
+  }, [playbackRate, videoRefs])
 
   // 전체화면 변화 감지
   useEffect(() => {
@@ -397,7 +435,7 @@ export default function VideoGrid({
 
     document.addEventListener('fullscreenchange', handleFullscreenChange)
     return () => document.removeEventListener('fullscreenchange', handleFullscreenChange)
-  }, [])
+  }, [toggleFullscreen])
 
   // 프레임 단위 이동 이벤트 핸들러
   useEffect(() => {
@@ -427,7 +465,7 @@ export default function VideoGrid({
 
     window.addEventListener('frameSeek', handleFrameSeek as EventListener)
     return () => window.removeEventListener('frameSeek', handleFrameSeek as EventListener)
-  }, [onTimeUpdate])
+  }, [onTimeUpdate, videoRefs])
 
   // 전체화면 토글 이벤트 핸들러
   useEffect(() => {
@@ -438,44 +476,7 @@ export default function VideoGrid({
 
     window.addEventListener('toggleFullscreen', handleToggleFullscreen as EventListener)
     return () => window.removeEventListener('toggleFullscreen', handleToggleFullscreen as EventListener)
-  }, [])
-
-  // 브라우저 전체화면 진입
-  const enterFullscreen = async (camera: string) => {
-    setFullscreenCamera(camera)
-    
-    setTimeout(async () => {
-      if (fullscreenContainerRef.current) {
-        try {
-          await fullscreenContainerRef.current.requestFullscreen()
-        } catch (error) {
-          console.log('전체화면 진입 실패:', error)
-        }
-      }
-    }, 100)
-  }
-
-  // 브라우저 전체화면 종료
-  const exitFullscreen = async () => {
-    try {
-      if (document.fullscreenElement) {
-        await document.exitFullscreen()
-      }
-      setFullscreenCamera(null)
-    } catch (error) {
-      console.log('전체화면 종료 실패:', error)
-      setFullscreenCamera(null)
-    }
-  }
-
-  // 카메라 전체화면 토글 함수
-  const toggleFullscreen = (camera: string) => {
-    if (fullscreenCamera === camera) {
-      exitFullscreen()
-    } else {
-      enterFullscreen(camera)
-    }
-  }
+  }, [toggleFullscreen])
 
   // 비디오 컴포넌트 생성 함수
   const createVideoComponent = (
