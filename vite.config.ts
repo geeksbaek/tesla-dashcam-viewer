@@ -6,6 +6,9 @@ import packageJson from './package.json'
 
 // https://vite.dev/config/
 export default defineConfig({
+  experimental: {
+    enableNativePlugin: true
+  },
   plugins: [
     react(),
     VitePWA({
