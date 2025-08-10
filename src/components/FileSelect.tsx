@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react'
-import { Paper, Title, Text, Button, Group, Stack, Container, Box, Badge, Divider, Center, ActionIcon, Tooltip } from '@mantine/core'
-import { IconVideo, IconMovie, IconDragDrop, IconBrandTesla, IconCar, IconUpload, IconFolders, IconBrandGithub } from '@tabler/icons-react'
+import { Paper, Title, Text, Button, Group, Stack, Container, Box } from '@mantine/core'
+import { IconVideo, IconMovie, IconBrandTesla, IconBrandGithub } from '@tabler/icons-react'
 import { useTranslation } from 'react-i18next'
 import LanguageSelect from './LanguageSelect'
 

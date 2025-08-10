@@ -1,4 +1,4 @@
-import { Switch, Group, Text, Tooltip } from '@mantine/core';
+import { Switch, Text, Tooltip } from '@mantine/core';
 import { IconScan } from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
 import { useRef, useState, useEffect } from 'react';

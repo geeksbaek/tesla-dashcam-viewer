@@ -1,5 +1,5 @@
-import { Button, Paper, Text, Title, Badge, Group, Stack, Box, ActionIcon, SegmentedControl, Tooltip } from '@mantine/core'
-import { IconChevronLeft, IconChevronRight, IconVideo, IconPlayerPlay, IconPlayerPause, IconSettings, IconHome, IconPlayerTrackNext, IconBrandGithub, IconVideoFilled, IconPlayerPlayFilled, IconPlayerPauseFilled, IconSettingsFilled, IconHomeFilled } from '@tabler/icons-react'
+import { Button, Paper, Text, Title, Group, Stack, Box, ActionIcon, SegmentedControl, Tooltip } from '@mantine/core'
+import { IconChevronLeft, IconChevronRight, IconVideo, IconPlayerTrackNext, IconBrandGithub, IconVideoFilled, IconPlayerPlayFilled, IconPlayerPauseFilled, IconSettingsFilled, IconHomeFilled } from '@tabler/icons-react'
 import { useRef, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import LanguageSelect from './LanguageSelect'
