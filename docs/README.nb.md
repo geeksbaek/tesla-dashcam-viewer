@@ -24,13 +24,16 @@ En moderne webapplikasjon for å se og analysere Tesla dashcam-opptak med synkro
 ### Video forbedring
 - **Nummerskilt optimalisering**: Trykk `F` for å veksle forbedret kontrast og skarphet
 - **Video filtre**: Lysstyrke, kontrast, metning justeringer
-- **Fullskjerm modus**: Klikk på hvilket som helst kamera eller bruk nummer taster (1-4)
+- **Video tilpasnings moduser**: Cover/Contain modus valg
+- **Fullskjerm modus**: Klikk på hvilket som helst kamera eller bruk nummer taster (1-6)
 
 ### Brukeropplevelse
 - **Dra og slipp**: Bare dra Tesla opptak mappen inn i nettleseren
 - **10-språk støtte**: Norsk, koreansk, engelsk og 7 andre språk grensesnitt
 - **Mørkt tema**: Optimalisert for video visning
 - **Responsivt design**: Fungerer på alle skjermstørrelser
+- **PWA støtte**: Offline kapabel, installerbar som app
+- **Sanntids tidsstempel**: Viser nøyaktig avspillingstid
 
 ## 🎯 Rask start
 
@@ -43,11 +46,23 @@ Ingen installasjon nødvendig, bruk direkte i nettleseren!
 ## 📁 Tesla Dashcam filstruktur
 
 Tesla dashcam-filene dine bør følge denne navnekonvensjonen:
+
+### HW3 Kjøretøy (4-kanal)
 ```
 2024-01-15_14-30-25-front.mp4
 2024-01-15_14-30-25-back.mp4
 2024-01-15_14-30-25-left_repeater.mp4
 2024-01-15_14-30-25-right_repeater.mp4
+```
+
+### HW4 Kjøretøy (6-kanal)
+```
+2024-01-15_14-30-25-front.mp4
+2024-01-15_14-30-25-back.mp4
+2024-01-15_14-30-25-left_repeater.mp4
+2024-01-15_14-30-25-right_repeater.mp4
+2024-01-15_14-30-25-left_pillar.mp4    # HW4 tilleggs kamera
+2024-01-15_14-30-25-right_pillar.mp4   # HW4 tilleggs kamera
 ```
 
 Appen grupperer automatisk filer etter tidsstempel og viser dem som synkroniserte klipp.
@@ -76,6 +91,8 @@ Appen grupperer automatisk filer etter tidsstempel og viser dem som synkronisert
 - `2` - Bakkamera fullskjerm
 - `3` - Høyre repeater fullskjerm
 - `4` - Venstre repeater fullskjerm
+- `5` - Venstre pillar fullskjerm (kun HW4)
+- `6` - Høyre pillar fullskjerm (kun HW4)
 
 #### Video forbedring
 - `F` - Veksle nummerskilt gjenkjenningsfilter (høy kontrast + gråtone)
@@ -95,9 +112,10 @@ Optimaliserte innstillinger for å lese nummerskilt:
 3. Perfekt for å analysere hendelser eller fange spesifikke øyeblikk
 
 #### Multi-kamera analyse
-- Se alle fire kamera vinkler samtidig
+- Se 4-6 kamera vinkler samtidig (HW3: 4-kanal, HW4: 6-kanal)
 - Klikk på hvilket som helst kamera for å se i fullskjerm
 - Alle kameraer forblir perfekt synkroniserte
+- Sanntids tidsstempel for nøyaktige hendelsestidspunkter
 
 ## 🛠️ Tekniske detaljer
 
@@ -108,6 +126,7 @@ Optimaliserte innstillinger for å lese nummerskilt:
 - **Mantine** - UI komponent bibliotek
 - **Tailwind CSS** - Utility-first styling
 - **i18next** - Internasjonalisering
+- **PWA (Progressive Web App)** - Offline støtte og app installasjon
 
 ### Nettleser krav
 - Moderne nettlesere som støtter ES6+ og HTML5 video
@@ -118,7 +137,9 @@ Optimaliserte innstillinger for å lese nummerskilt:
 ### Ytelse merknader
 - Videoer lastes som objekt URLer for optimal ytelse
 - Minne ryddes automatisk opp når du bytter klipp
-- Anbefalt: 8GB+ RAM for smidig 4-kamera avspilling
+- Anbefalt:
+  - HW3 (4-kamera): 8GB+ RAM
+  - HW4 (6-kamera): 16GB+ RAM
 
 ## 🐛 Feilsøking
 

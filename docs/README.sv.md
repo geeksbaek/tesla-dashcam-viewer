@@ -24,13 +24,16 @@ En modern webbapplikation för att visa och analysera Tesla dashcam-inspelningar
 ### Video förbättring
 - **Registreringsskylt optimering**: Tryck `F` för att växla förbättrad kontrast och skärpa
 - **Video filter**: Ljusstyrka, kontrast, mättnad justeringar
-- **Helskärm läge**: Klicka på vilken kamera som helst eller använd siffertangenter (1-4)
+- **Video anpassningslägen**: Cover/Contain läge val
+- **Helskärm läge**: Klicka på vilken kamera som helst eller använd siffertangenter (1-6)
 
 ### Användarupplevelse
 - **Dra och släpp**: Dra bara din Tesla inspelnings mapp till webbläsaren
 - **10-språk stöd**: Svenska, koreanska, engelska och 7 andra språk gränssnitt
 - **Mörkt tema**: Optimerat för video visning
 - **Responsiv design**: Fungerar på alla skärmstorlekar
+- **PWA stöd**: Offline kapabel, installerbar som app
+- **Realtid tidsstämpel**: Visar exakt uppspelningstid
 
 ## 🎯 Snabb start
 
@@ -43,11 +46,23 @@ Ingen installation krävs, använd direkt i webbläsaren!
 ## 📁 Tesla Dashcam filstruktur
 
 Dina Tesla dashcam-filer bör följa denna namnkonvention:
+
+### HW3 Fordon (4-kanals)
 ```
 2024-01-15_14-30-25-front.mp4
 2024-01-15_14-30-25-back.mp4
 2024-01-15_14-30-25-left_repeater.mp4
 2024-01-15_14-30-25-right_repeater.mp4
+```
+
+### HW4 Fordon (6-kanals)
+```
+2024-01-15_14-30-25-front.mp4
+2024-01-15_14-30-25-back.mp4
+2024-01-15_14-30-25-left_repeater.mp4
+2024-01-15_14-30-25-right_repeater.mp4
+2024-01-15_14-30-25-left_pillar.mp4    # HW4 extra kamera
+2024-01-15_14-30-25-right_pillar.mp4   # HW4 extra kamera
 ```
 
 Appen grupperar automatiskt filer efter tidsstämpel och visar dem som synkroniserade klipp.
@@ -76,6 +91,8 @@ Appen grupperar automatiskt filer efter tidsstämpel och visar dem som synkronis
 - `2` - Bakkamera helskärm
 - `3` - Höger repeater helskärm
 - `4` - Vänster repeater helskärm
+- `5` - Vänster pelar helskärm (endast HW4)
+- `6` - Höger pelar helskärm (endast HW4)
 
 #### Video förbättring
 - `F` - Växla registreringsskylt igenkänningsfilter (hög kontrast + gråskala)
@@ -95,9 +112,10 @@ Optimerade inställningar för att läsa registreringsskyltar:
 3. Perfekt för att analysera incidenter eller fånga specifika ögonblick
 
 #### Multi-kamera analys
-- Se alla fyra kamera vinklar samtidigt
+- Se 4-6 kamera vinklar samtidigt (HW3: 4-kanals, HW4: 6-kanals)
 - Klicka på vilken kamera som helst för att se i helskärm
 - Alla kameror förblir perfekt synkroniserade
+- Realtid tidsstämpel för exakta incident tider
 
 ## 🛠️ Tekniska detaljer
 
@@ -108,6 +126,7 @@ Optimerade inställningar för att läsa registreringsskyltar:
 - **Mantine** - UI komponent bibliotek
 - **Tailwind CSS** - Utility-first styling
 - **i18next** - Internationalisering
+- **PWA (Progressive Web App)** - Offline stöd och app installation
 
 ### Webbläsarkrav
 - Moderna webbläsare som stöder ES6+ och HTML5 video
@@ -118,7 +137,9 @@ Optimerade inställningar för att läsa registreringsskyltar:
 ### Prestanda anteckningar
 - Videor laddas som objekt URLs för optimal prestanda
 - Minne städas automatiskt upp när du byter klipp
-- Rekommenderat: 8GB+ RAM för smidig 4-kamera uppspelning
+- Rekommenderat:
+  - HW3 (4-kamera): 8GB+ RAM
+  - HW4 (6-kamera): 16GB+ RAM
 
 ## 🐛 Felsökning
 

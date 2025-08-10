@@ -24,13 +24,16 @@ En moderne webapplikation til at se og analysere Tesla dashcam optagelser med sy
 ### Video forbedring
 - **Nummerplade optimering**: Tryk `F` for at skifte forbedret kontrast og skarphed
 - **Video filtre**: Lysstyrke, kontrast, mætning justeringer
-- **Fuldskærm tilstand**: Klik på ethvert kamera eller brug nummer taster (1-4)
+- **Video tilpasnings tilstande**: Cover/Contain tilstand valg
+- **Fuldskærm tilstand**: Klik på ethvert kamera eller brug nummer taster (1-6)
 
 ### Brugeroplevelse
 - **Træk og slip**: Træk bare din Tesla optagelses mappe til browseren
 - **10-sprog support**: Dansk, koreansk, engelsk og 7 andre sprog grænseflader
 - **Mørkt tema**: Optimeret til video visning
 - **Responsivt design**: Virker på alle skærmstørrelser
+- **PWA support**: Offline kapabel, installerbar som app
+- **Realtid tidsstempel**: Viser nøjagtig afspilningstid
 
 ## 🎯 Hurtig start
 
@@ -43,11 +46,23 @@ Ingen installation påkrævet, brug direkte i browseren!
 ## 📁 Tesla Dashcam fil struktur
 
 Dine Tesla dashcam filer skal følge denne navngivningskonvention:
+
+### HW3 Køretøjer (4-kanals)
 ```
 2024-01-15_14-30-25-front.mp4
 2024-01-15_14-30-25-back.mp4
 2024-01-15_14-30-25-left_repeater.mp4
 2024-01-15_14-30-25-right_repeater.mp4
+```
+
+### HW4 Køretøjer (6-kanals)
+```
+2024-01-15_14-30-25-front.mp4
+2024-01-15_14-30-25-back.mp4
+2024-01-15_14-30-25-left_repeater.mp4
+2024-01-15_14-30-25-right_repeater.mp4
+2024-01-15_14-30-25-left_pillar.mp4    # HW4 ekstra kamera
+2024-01-15_14-30-25-right_pillar.mp4   # HW4 ekstra kamera
 ```
 
 Appen grupperer automatisk filer efter tidsstempel og viser dem som synkroniserede klip.
@@ -76,6 +91,8 @@ Appen grupperer automatisk filer efter tidsstempel og viser dem som synkronisere
 - `2` - Bagkamera fuldskærm
 - `3` - Højre repeater fuldskærm
 - `4` - Venstre repeater fuldskærm
+- `5` - Venstre søjle fuldskærm (kun HW4)
+- `6` - Højre søjle fuldskærm (kun HW4)
 
 #### Video forbedring
 - `F` - Skift nummerplade genkendelsesfilter (høj kontrast + gråtoner)
@@ -95,9 +112,10 @@ Optimerede indstillinger til at læse nummerplader:
 3. Perfekt til at analysere hændelser eller fange specifikke øjeblikke
 
 #### Multi-kamera analyse
-- Se alle fire kamera vinkler samtidigt
+- Se 4-6 kamera vinkler samtidigt (HW3: 4-kanals, HW4: 6-kanals)
 - Klik på ethvert kamera for at se i fuldskærm
 - Alle kameraer forbliver perfekt synkroniserede
+- Realtid tidsstempel for nøjagtige hændelsestider
 
 ## 🛠️ Tekniske detaljer
 
@@ -108,6 +126,7 @@ Optimerede indstillinger til at læse nummerplader:
 - **Mantine** - UI komponent bibliotek
 - **Tailwind CSS** - Utility-first styling
 - **i18next** - Internationalisering
+- **PWA (Progressive Web App)** - Offline support og app installation
 
 ### Browser krav
 - Moderne browsere der understøtter ES6+ og HTML5 video
@@ -118,7 +137,9 @@ Optimerede indstillinger til at læse nummerplader:
 ### Performance noter
 - Videoer indlæses som objekt URLs for optimal performance
 - Hukommelse ryddes automatisk op når du skifter klip
-- Anbefalet: 8GB+ RAM for glat 4-kamera afspilning
+- Anbefalet:
+  - HW3 (4-kamera): 8GB+ RAM
+  - HW4 (6-kamera): 16GB+ RAM
 
 ## 🐛 Fejlfinding
 

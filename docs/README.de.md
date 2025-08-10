@@ -24,13 +24,16 @@ Eine moderne Webanwendung zum Anzeigen und Analysieren von Tesla Dashcam-Aufnahm
 ### Video-Verbesserung
 - **Kennzeichen-Optimierung**: Drücken Sie `F` um erweiterten Kontrast und Schärfung umzuschalten
 - **Video-Filter**: Helligkeit, Kontrast, Sättigungsanpassungen
-- **Vollbildmodus**: Klicken Sie auf eine beliebige Kamera oder verwenden Sie Zifferntasten (1-4)
+- **Video-Anpassungsmodi**: Cover/Contain-Modus-Auswahl
+- **Vollbildmodus**: Klicken Sie auf eine beliebige Kamera oder verwenden Sie Zifferntasten (1-6)
 
 ### Benutzererfahrung
 - **Drag & Drop**: Ziehen Sie einfach Ihren Tesla-Aufnahmenordner in den Browser
 - **10-Sprachen-Unterstützung**: Deutsch, Koreanisch, Englisch und 7 weitere Sprachoberflächen
 - **Dunkles Theme**: Optimiert für die Videowiedergabe
 - **Responsive Design**: Funktioniert auf allen Bildschirmgrößen
+- **PWA-Unterstützung**: Offline-fähig, als App installierbar
+- **Echtzeit-Zeitstempel**: Zeigt exakte Wiedergabezeit an
 
 ## 🎯 Schnellstart
 
@@ -43,11 +46,23 @@ Keine Installation erforderlich, direkt im Browser verwenden!
 ## 📁 Tesla Dashcam Dateistruktur
 
 Ihre Tesla Dashcam-Dateien sollten dieser Namenskonvention folgen:
+
+### HW3 Fahrzeuge (4-Kanal)
 ```
 2024-01-15_14-30-25-front.mp4
 2024-01-15_14-30-25-back.mp4
 2024-01-15_14-30-25-left_repeater.mp4
 2024-01-15_14-30-25-right_repeater.mp4
+```
+
+### HW4 Fahrzeuge (6-Kanal)
+```
+2024-01-15_14-30-25-front.mp4
+2024-01-15_14-30-25-back.mp4
+2024-01-15_14-30-25-left_repeater.mp4
+2024-01-15_14-30-25-right_repeater.mp4
+2024-01-15_14-30-25-left_pillar.mp4    # HW4 zusätzliche Kamera
+2024-01-15_14-30-25-right_pillar.mp4   # HW4 zusätzliche Kamera
 ```
 
 Die App gruppiert automatisch Dateien nach Zeitstempel und zeigt sie als synchronisierte Clips an.
@@ -76,6 +91,8 @@ Die App gruppiert automatisch Dateien nach Zeitstempel und zeigt sie als synchro
 - `2` - Rückkamera Vollbild
 - `3` - Rechter Repeater Vollbild
 - `4` - Linker Repeater Vollbild
+- `5` - Linke Säule Vollbild (nur HW4)
+- `6` - Rechte Säule Vollbild (nur HW4)
 
 #### Video-Verbesserung
 - `F` - Kennzeichenerkennungsfilter umschalten (hoher Kontrast + Graustufen)
@@ -95,9 +112,10 @@ Optimierte Einstellungen zum Lesen von Kennzeichen:
 3. Perfekt für die Analyse von Vorfällen oder das Aufnehmen bestimmter Momente
 
 #### Multi-Kamera-Analyse
-- Alle vier Kamerawinkel gleichzeitig anzeigen
+- 4-6 Kamerawinkel gleichzeitig anzeigen (HW3: 4-Kanal, HW4: 6-Kanal)
 - Klicken Sie auf eine beliebige Kamera, um sie im Vollbild anzuzeigen
 - Alle Kameras bleiben perfekt synchronisiert
+- Echtzeit-Zeitstempel für genaue Ereigniszeiten
 
 ## 🛠️ Technische Details
 
@@ -108,6 +126,7 @@ Optimierte Einstellungen zum Lesen von Kennzeichen:
 - **Mantine** - UI-Komponentenbibliothek
 - **Tailwind CSS** - Utility-First-Styling
 - **i18next** - Internationalisierung
+- **PWA (Progressive Web App)** - Offline-Unterstützung und App-Installation
 
 ### Browser-Anforderungen
 - Moderne Browser mit ES6+ und HTML5-Video-Unterstützung
@@ -118,7 +137,9 @@ Optimierte Einstellungen zum Lesen von Kennzeichen:
 ### Leistungshinweise
 - Videos werden als Objekt-URLs für optimale Leistung geladen
 - Speicher wird automatisch beim Wechseln von Clips bereinigt
-- Empfohlen: 8GB+ RAM für flüssige 4-Kamera-Wiedergabe
+- Empfohlen:
+  - HW3 (4-Kamera): 8GB+ RAM
+  - HW4 (6-Kamera): 16GB+ RAM
 
 ## 🐛 Fehlerbehebung
 

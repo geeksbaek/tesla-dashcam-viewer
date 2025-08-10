@@ -24,13 +24,16 @@ Une application web moderne pour visualiser et analyser les enregistrements de d
 ### Amélioration vidéo
 - **Optimisation plaque d'immatriculation**: Appuyez sur `F` pour basculer le contraste amélioré et la netteté
 - **Filtres vidéo**: Ajustements de luminosité, contraste, saturation
-- **Mode plein écran**: Cliquez sur n'importe quelle caméra ou utilisez les touches numériques (1-4)
+- **Modes d'ajustement vidéo**: Sélection du mode Cover/Contain
+- **Mode plein écran**: Cliquez sur n'importe quelle caméra ou utilisez les touches numériques (1-6)
 
 ### Expérience utilisateur
 - **Glisser-déposer**: Glissez simplement votre dossier d'enregistrements Tesla dans le navigateur
 - **Support 10 langues**: Français, coréen, anglais et 7 autres interfaces linguistiques
 - **Thème sombre**: Optimisé pour le visionnage vidéo
 - **Design réactif**: Fonctionne sur toutes les tailles d'écran
+- **Support PWA**: Capable hors ligne, installable comme application
+- **Horodatage en temps réel**: Affiche le temps de lecture exact
 
 ## 🎯 Démarrage rapide
 
@@ -43,11 +46,23 @@ Aucune installation requise, utilisez directement dans le navigateur!
 ## 📁 Structure des fichiers Tesla Dashcam
 
 Vos fichiers dashcam Tesla doivent suivre cette convention de nommage:
+
+### Véhicules HW3 (4 canaux)
 ```
 2024-01-15_14-30-25-front.mp4
 2024-01-15_14-30-25-back.mp4
 2024-01-15_14-30-25-left_repeater.mp4
 2024-01-15_14-30-25-right_repeater.mp4
+```
+
+### Véhicules HW4 (6 canaux)
+```
+2024-01-15_14-30-25-front.mp4
+2024-01-15_14-30-25-back.mp4
+2024-01-15_14-30-25-left_repeater.mp4
+2024-01-15_14-30-25-right_repeater.mp4
+2024-01-15_14-30-25-left_pillar.mp4    # Caméra supplémentaire HW4
+2024-01-15_14-30-25-right_pillar.mp4   # Caméra supplémentaire HW4
 ```
 
 L'application groupe automatiquement les fichiers par horodatage et les affiche comme des clips synchronisés.
@@ -76,6 +91,8 @@ L'application groupe automatiquement les fichiers par horodatage et les affiche 
 - `2` - Caméra arrière plein écran
 - `3` - Répéteur droit plein écran
 - `4` - Répéteur gauche plein écran
+- `5` - Pilier gauche plein écran (HW4 uniquement)
+- `6` - Pilier droit plein écran (HW4 uniquement)
 
 #### Amélioration vidéo
 - `F` - Basculer le filtre de reconnaissance de plaque d'immatriculation (contraste élevé + niveaux de gris)
@@ -95,9 +112,10 @@ Paramètres optimisés pour lire les plaques d'immatriculation:
 3. Parfait pour analyser les incidents ou capturer des moments spécifiques
 
 #### Analyse multi-caméra
-- Voir les quatre angles de caméra simultanément
+- Voir 4-6 angles de caméra simultanément (HW3: 4 canaux, HW4: 6 canaux)
 - Cliquez sur n'importe quelle caméra pour voir en plein écran
 - Toutes les caméras restent parfaitement synchronisées
+- Horodatage en temps réel pour des timings d'incident précis
 
 ## 🛠️ Détails techniques
 
@@ -108,6 +126,7 @@ Paramètres optimisés pour lire les plaques d'immatriculation:
 - **Mantine** - Bibliothèque de composants UI
 - **Tailwind CSS** - Styling utility-first
 - **i18next** - Internationalisation
+- **PWA (Progressive Web App)** - Support hors ligne et installation d'application
 
 ### Exigences navigateur
 - Navigateurs modernes supportant ES6+ et vidéo HTML5
@@ -118,7 +137,9 @@ Paramètres optimisés pour lire les plaques d'immatriculation:
 ### Notes de performance
 - Les vidéos sont chargées comme URLs d'objet pour une performance optimale
 - La mémoire est automatiquement nettoyée lors du changement de clips
-- Recommandé: 8GB+ RAM pour une lecture fluide 4-caméras
+- Recommandé:
+  - HW3 (4-caméras): 8GB+ RAM
+  - HW4 (6-caméras): 16GB+ RAM
 
 ## 🐛 Dépannage
 

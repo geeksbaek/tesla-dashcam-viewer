@@ -24,13 +24,16 @@ Een moderne webapplicatie voor het bekijken en analyseren van Tesla dashcam beel
 ### Video verbetering
 - **Nummerplaat optimalisatie**: Druk op `F` om verbeterd contrast en verscherping te schakelen
 - **Video filters**: Helderheid, contrast, verzadiging aanpassingen
-- **Volledig scherm modus**: Klik op elke camera of gebruik nummer toetsen (1-4)
+- **Video aanpassingsmodi**: Cover/Contain modus selectie
+- **Volledig scherm modus**: Klik op elke camera of gebruik nummer toetsen (1-6)
 
 ### Gebruikerservaring
 - **Slepen en neerzetten**: Sleep gewoon je Tesla opname map naar de browser
 - **10-talen ondersteuning**: Nederlands, Koreaans, Engels en 7 andere taal interfaces
 - **Donker thema**: Geoptimaliseerd voor video bekijken
 - **Responsief ontwerp**: Werkt op alle schermformaten
+- **PWA ondersteuning**: Offline geschikt, installeerbaar als app
+- **Real-time tijdstempel**: Toont exacte afspeeltijd
 
 ## 🎯 Snel starten
 
@@ -43,11 +46,23 @@ Geen installatie vereist, gebruik direct in de browser!
 ## 📁 Tesla Dashcam bestandsstructuur
 
 Je Tesla dashcam bestanden moeten deze naamgevingsconventie volgen:
+
+### HW3 Voertuigen (4-kanaals)
 ```
 2024-01-15_14-30-25-front.mp4
 2024-01-15_14-30-25-back.mp4
 2024-01-15_14-30-25-left_repeater.mp4
 2024-01-15_14-30-25-right_repeater.mp4
+```
+
+### HW4 Voertuigen (6-kanaals)
+```
+2024-01-15_14-30-25-front.mp4
+2024-01-15_14-30-25-back.mp4
+2024-01-15_14-30-25-left_repeater.mp4
+2024-01-15_14-30-25-right_repeater.mp4
+2024-01-15_14-30-25-left_pillar.mp4    # HW4 extra camera
+2024-01-15_14-30-25-right_pillar.mp4   # HW4 extra camera
 ```
 
 De app groepeert automatisch bestanden op tijdstempel en toont ze als gesynchroniseerde clips.
@@ -76,6 +91,8 @@ De app groepeert automatisch bestanden op tijdstempel en toont ze als gesynchron
 - `2` - Achtercamera volledig scherm
 - `3` - Rechter repeater volledig scherm
 - `4` - Linker repeater volledig scherm
+- `5` - Linker pilaar volledig scherm (alleen HW4)
+- `6` - Rechter pilaar volledig scherm (alleen HW4)
 
 #### Video verbetering
 - `F` - Schakel nummerplaat herkenningsfilter (hoog contrast + grijstinten)
@@ -95,9 +112,10 @@ Geoptimaliseerde instellingen voor het lezen van nummerplaten:
 3. Perfect voor het analyseren van incidenten of het vastleggen van specifieke momenten
 
 #### Multi-camera analyse
-- Bekijk alle vier camera hoeken tegelijkertijd
+- Bekijk 4-6 camera hoeken tegelijkertijd (HW3: 4-kanaals, HW4: 6-kanaals)
 - Klik op elke camera om in volledig scherm te bekijken
 - Alle camera's blijven perfect gesynchroniseerd
+- Real-time tijdstempel voor nauwkeurige incident tijden
 
 ## 🛠️ Technische details
 
@@ -108,6 +126,7 @@ Geoptimaliseerde instellingen voor het lezen van nummerplaten:
 - **Mantine** - UI component bibliotheek
 - **Tailwind CSS** - Utility-first styling
 - **i18next** - Internationalisatie
+- **PWA (Progressive Web App)** - Offline ondersteuning en app installatie
 
 ### Browser vereisten
 - Moderne browsers die ES6+ en HTML5 video ondersteunen
@@ -118,7 +137,9 @@ Geoptimaliseerde instellingen voor het lezen van nummerplaten:
 ### Prestatie opmerkingen
 - Video's worden geladen als object URL's voor optimale prestaties
 - Geheugen wordt automatisch opgeruimd bij het wisselen van clips
-- Aanbevolen: 8GB+ RAM voor soepele 4-camera weergave
+- Aanbevolen:
+  - HW3 (4-camera): 8GB+ RAM
+  - HW4 (6-camera): 16GB+ RAM
 
 ## 🐛 Probleemoplossing
 

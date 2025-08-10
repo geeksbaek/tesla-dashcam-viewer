@@ -24,13 +24,16 @@ Una aplicación web moderna para ver y analizar grabaciones de dashcam Tesla con
 ### Mejora de video
 - **Optimización de matrícula**: Presiona `F` para alternar contraste mejorado y nitidez
 - **Filtros de video**: Ajustes de brillo, contraste, saturación
-- **Modo pantalla completa**: Haz clic en cualquier cámara o usa teclas numéricas (1-4)
+- **Modos de ajuste de video**: Selección de modo Cover/Contain
+- **Modo pantalla completa**: Haz clic en cualquier cámara o usa teclas numéricas (1-6)
 
 ### Experiencia de usuario
 - **Arrastrar y soltar**: Simplemente arrastra tu carpeta de grabaciones Tesla al navegador
 - **Soporte de 10 idiomas**: Español, coreano, inglés y 7 interfaces de idiomas más
 - **Tema oscuro**: Optimizado para visualización de video
 - **Diseño responsivo**: Funciona en todos los tamaños de pantalla
+- **Soporte PWA**: Capaz de funcionar sin conexión, instalable como aplicación
+- **Marca de tiempo en tiempo real**: Muestra el tiempo de reproducción exacto
 
 ## 🎯 Inicio rápido
 
@@ -43,11 +46,23 @@ Una aplicación web moderna para ver y analizar grabaciones de dashcam Tesla con
 ## 📁 Estructura de archivos Tesla Dashcam
 
 Tus archivos de dashcam Tesla deben seguir esta convención de nomenclatura:
+
+### Vehículos HW3 (4 canales)
 ```
 2024-01-15_14-30-25-front.mp4
 2024-01-15_14-30-25-back.mp4
 2024-01-15_14-30-25-left_repeater.mp4
 2024-01-15_14-30-25-right_repeater.mp4
+```
+
+### Vehículos HW4 (6 canales)
+```
+2024-01-15_14-30-25-front.mp4
+2024-01-15_14-30-25-back.mp4
+2024-01-15_14-30-25-left_repeater.mp4
+2024-01-15_14-30-25-right_repeater.mp4
+2024-01-15_14-30-25-left_pillar.mp4    # Cámara adicional HW4
+2024-01-15_14-30-25-right_pillar.mp4   # Cámara adicional HW4
 ```
 
 La aplicación agrupa automáticamente los archivos por marca de tiempo y los muestra como clips sincronizados.
@@ -76,6 +91,8 @@ La aplicación agrupa automáticamente los archivos por marca de tiempo y los mu
 - `2` - Cámara trasera pantalla completa
 - `3` - Repetidor derecho pantalla completa
 - `4` - Repetidor izquierdo pantalla completa
+- `5` - Pilar izquierdo pantalla completa (solo HW4)
+- `6` - Pilar derecho pantalla completa (solo HW4)
 
 #### Mejora de video
 - `F` - Alternar filtro de reconocimiento de matrícula (alto contraste + escala de grises)
@@ -95,9 +112,10 @@ Configuraciones optimizadas para leer matrículas:
 3. Perfecto para analizar incidentes o capturar momentos específicos
 
 #### Análisis multi-cámara
-- Ver los cuatro ángulos de cámara simultáneamente
+- Ver 4-6 ángulos de cámara simultáneamente (HW3: 4 canales, HW4: 6 canales)
 - Haz clic en cualquier cámara para ver en pantalla completa
 - Todas las cámaras se mantienen perfectamente sincronizadas
+- Marca de tiempo en tiempo real para tiempos de incidente precisos
 
 ## 🛠️ Detalles técnicos
 
@@ -108,6 +126,7 @@ Configuraciones optimizadas para leer matrículas:
 - **Mantine** - Biblioteca de componentes UI
 - **Tailwind CSS** - Estilizado utility-first
 - **i18next** - Internacionalización
+- **PWA (Progressive Web App)** - Soporte sin conexión e instalación de aplicación
 
 ### Requisitos del navegador
 - Navegadores modernos que soporten ES6+ y video HTML5
@@ -118,7 +137,9 @@ Configuraciones optimizadas para leer matrículas:
 ### Notas de rendimiento
 - Los videos se cargan como URLs de objeto para rendimiento óptimo
 - La memoria se limpia automáticamente al cambiar clips
-- Recomendado: 8GB+ RAM para reproducción fluida de 4 cámaras
+- Recomendado:
+  - HW3 (4 cámaras): 8GB+ RAM
+  - HW4 (6 cámaras): 16GB+ RAM
 
 ## 🐛 Solución de problemas
 

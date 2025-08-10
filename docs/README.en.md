@@ -24,13 +24,16 @@ A modern web application for viewing and analyzing Tesla dashcam footage with sy
 ### Video Enhancement
 - **License plate optimization**: Press `F` to toggle enhanced contrast and sharpening
 - **Video filters**: Brightness, contrast, saturation adjustments
-- **Fullscreen mode**: Click any camera or use number keys (1-4)
+- **Video fit modes**: Cover/Contain mode selection
+- **Fullscreen mode**: Click any camera or use number keys (1-6)
 
 ### User Experience
 - **Drag & drop**: Simply drag your Tesla footage folder into the browser
 - **10-language support**: Korean, English, Chinese and 7 other language interfaces
 - **Dark theme**: Optimized for video viewing
 - **Responsive design**: Works on all screen sizes
+- **PWA support**: Offline capable, installable as an app
+- **Real-time timestamp**: Shows exact playback time
 
 ## 🎯 Online Usage
 
@@ -41,11 +44,23 @@ No installation required, use directly in browser!
 ## 📁 Tesla Dashcam File Structure
 
 Your Tesla dashcam files should follow this naming convention:
+
+### HW3 Vehicles (4-channel)
 ```
 2024-01-15_14-30-25-front.mp4
 2024-01-15_14-30-25-back.mp4
 2024-01-15_14-30-25-left_repeater.mp4
 2024-01-15_14-30-25-right_repeater.mp4
+```
+
+### HW4 Vehicles (6-channel)
+```
+2024-01-15_14-30-25-front.mp4
+2024-01-15_14-30-25-back.mp4
+2024-01-15_14-30-25-left_repeater.mp4
+2024-01-15_14-30-25-right_repeater.mp4
+2024-01-15_14-30-25-left_pillar.mp4    # HW4 additional camera
+2024-01-15_14-30-25-right_pillar.mp4   # HW4 additional camera
 ```
 
 The app automatically groups files by timestamp and displays them as synchronized clips.
@@ -74,6 +89,8 @@ The app automatically groups files by timestamp and displays them as synchronize
 - `2` - Fullscreen back camera  
 - `3` - Fullscreen right repeater
 - `4` - Fullscreen left repeater
+- `5` - Fullscreen left pillar (HW4 only)
+- `6` - Fullscreen right pillar (HW4 only)
 
 #### Video Enhancement
 - `F` - Toggle license plate recognition filter (high contrast + grayscale)
@@ -93,9 +110,10 @@ Optimized settings for reading license plates:
 3. Perfect for analyzing incidents or capturing specific moments
 
 #### Multi-Camera Analysis
-- View all four camera angles simultaneously
+- View 4-6 camera angles simultaneously (HW3: 4-channel, HW4: 6-channel)
 - Click any camera to view in fullscreen
 - All cameras remain perfectly synchronized
+- Real-time timestamp for accurate incident timing
 
 ## 🛠️ Technical Details
 
@@ -106,6 +124,7 @@ Optimized settings for reading license plates:
 - **Mantine** - UI component library
 - **Tailwind CSS** - Utility-first styling
 - **i18next** - Internationalization
+- **PWA (Progressive Web App)** - Offline support and app installation
 
 ### Browser Requirements
 - Modern browsers supporting ES6+ and HTML5 video
@@ -116,7 +135,9 @@ Optimized settings for reading license plates:
 ### Performance Notes
 - Videos are loaded as object URLs for optimal performance
 - Memory is automatically cleaned up when switching clips
-- Recommended: 8GB+ RAM for smooth 4-camera playback
+- Recommended:
+  - HW3 (4-camera): 8GB+ RAM
+  - HW4 (6-camera): 16GB+ RAM
 
 
 ## 🐛 Troubleshooting
