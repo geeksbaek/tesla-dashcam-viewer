@@ -128,7 +128,7 @@ function App() {
   }, [currentVideoIndex, videoFiles.length, videoDurations])
 
   // 비디오 선택
-  const handleVideoSelect = (index: number) => {
+  const handleVideoSelect = useCallback((index: number) => {
     setCurrentVideoIndex(index)
     setCurrentTime(0)
     // 선택한 비디오까지의 누적 시간 계산
@@ -138,7 +138,7 @@ function App() {
     } else {
       setGlobalTime(index * 60)
     }
-  }
+  }, [videoDurations])
 
   // 재생 속도 변경
   const handlePlaybackRateChange = (rate: number) => {

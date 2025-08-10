@@ -1,0 +1,11 @@
+#!/usr/bin/env sh
+
+# push 전에 빌드 테스트
+echo "🔨 빌드 테스트 중..."
+npm run build
+if [ $? -ne 0 ]; then
+  echo "❌ 빌드 실패! 먼저 오류를 수정해주세요."
+  exit 1
+fi
+
+echo "✅ 빌드 성공! Push를 진행합니다."

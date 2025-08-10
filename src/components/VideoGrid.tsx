@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState, useMemo } from 'react'
+import React, { useRef, useEffect, useState, useMemo, useCallback } from 'react'
 import { Paper, Box, Text } from '@mantine/core'
 import { useTranslation } from 'react-i18next'
 import type { VideoFilters } from './VideoFilterControls'
@@ -70,7 +70,7 @@ export default function VideoGrid({
   }
   
   // 실시간 타임스탬프 계산 및 포맷 (국제화 적용)
-  const getCurrentTimestamp = (baseTimestamp: string, offsetSeconds: number): string => {
+  const getCurrentTimestamp = useCallback((baseTimestamp: string, offsetSeconds: number): string => {
     const baseDate = parseTimestamp(baseTimestamp)
     const currentDate = new Date(baseDate.getTime() + offsetSeconds * 1000)
     
@@ -86,9 +86,9 @@ export default function VideoGrid({
     })
     
     return formatter.format(currentDate)
-  }
+  }, [i18n.language])
 
-  const videoRefs = [frontRef, backRef, leftRef, rightRef, leftPillarRef, rightPillarRef]
+  const videoRefs = useMemo(() => [frontRef, backRef, leftRef, rightRef, leftPillarRef, rightPillarRef], [])
   
   // 전체화면 모드 상태
   const [fullscreenCamera, setFullscreenCamera] = useState<string | null>(null)
@@ -152,7 +152,7 @@ export default function VideoGrid({
   const prevVideoIndexRef = useRef(currentVideoIndex)
 
   // 브라우저 전체화면 진입
-  const enterFullscreen = async (camera: string) => {
+  const enterFullscreen = useCallback(async (camera: string) => {
     setFullscreenCamera(camera)
     
     setTimeout(async () => {
@@ -164,10 +164,10 @@ export default function VideoGrid({
         }
       }
     }, 100)
-  }
+  }, [])
 
   // 브라우저 전체화면 종료
-  const exitFullscreen = async () => {
+  const exitFullscreen = useCallback(async () => {
     try {
       if (document.fullscreenElement) {
         await document.exitFullscreen()
@@ -177,16 +177,16 @@ export default function VideoGrid({
       console.log('전체화면 종료 실패:', error)
       setFullscreenCamera(null)
     }
-  }
+  }, [])
 
   // 카메라 전체화면 토글 함수
-  const toggleFullscreen = (camera: string) => {
+  const toggleFullscreen = useCallback((camera: string) => {
     if (fullscreenCamera === camera) {
       exitFullscreen()
     } else {
       enterFullscreen(camera)
     }
-  }
+  }, [fullscreenCamera, enterFullscreen, exitFullscreen])
 
 
   // 실시간 타임스탬프 업데이트
