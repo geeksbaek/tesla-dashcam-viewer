@@ -330,7 +330,7 @@ function App() {
 
     window.addEventListener('keydown', handleKeyPress)
     return () => window.removeEventListener('keydown', handleKeyPress)
-  }, [isPlaying, globalTime, totalDuration, handleSeek, seekMode, currentVideoIndex, videoFilters, handleVideoSelect, videoFiles.length, videoFitMode])
+  }, [isPlaying, globalTime, totalDuration, handleSeek, seekMode, currentVideoIndex, videoFilters, handleVideoSelect, videoFiles, videoFitMode, videoFrameRate])
 
   return (
     <MantineProvider theme={theme} defaultColorScheme="dark">
