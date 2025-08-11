@@ -291,14 +291,18 @@ export default function ControlPanel({
       let canvasWidth = cols * minWidth;
       let canvasHeight = rows * minHeight;
       
+      // Track resolution scaling factor for bitrate adjustment
+      let resolutionScale = 1.0;
+      
       // Scale down if needed to fit within limits
       if (canvasWidth > maxCanvasWidth || canvasHeight > maxCanvasHeight) {
         const scale = Math.min(maxCanvasWidth / canvasWidth, maxCanvasHeight / canvasHeight);
+        resolutionScale = scale; // Store scale factor for bitrate adjustment
         minWidth = Math.floor(minWidth * scale);
         minHeight = Math.floor(minHeight * scale);
         canvasWidth = cols * minWidth;
         canvasHeight = rows * minHeight;
-        console.log(`Scaled down to ${minWidth}x${minHeight} per cell to fit within limits`);
+        console.log(`Scaled down to ${minWidth}x${minHeight} per cell to fit within limits (scale: ${scale.toFixed(3)})`);
       }
       
       // Create canvas with the calculated size
@@ -330,6 +334,11 @@ export default function ControlPanel({
       // 2x2 = 4 cameras, 3x2 = 6 cameras
       let totalBitrate = baseVideoBitrate * numCameras;
       
+      // Apply resolution scaling to bitrate - if resolution is scaled down, reduce bitrate proportionally
+      // Bitrate scales roughly with pixel count (width × height)
+      const bitrateScale = resolutionScale * resolutionScale; // Square of resolution scale
+      totalBitrate = Math.floor(totalBitrate * bitrateScale);
+      
       // Cap at reasonable maximum to prevent issues
       totalBitrate = Math.min(totalBitrate, 100000000); // Cap at 100 Mbps
       
@@ -343,7 +352,8 @@ export default function ControlPanel({
       const megaPixels = canvasPixels / 1000000;
       
       console.log(`Canvas: ${canvas.width}x${canvas.height} (${megaPixels.toFixed(1)} MP)`);
-      console.log(`Encoding settings: ${(totalBitrate / 1000000).toFixed(1)} Mbps (${numCameras} cameras × ${(baseVideoBitrate / 1000000).toFixed(1)} Mbps each), ${estimatedFPS} FPS`);
+      console.log(`Resolution scaling: ${(resolutionScale * 100).toFixed(1)}% (bitrate scaled by ${(bitrateScale * 100).toFixed(1)}%)`);
+      console.log(`Encoding settings: ${(totalBitrate / 1000000).toFixed(1)} Mbps (${numCameras} cameras × ${(baseVideoBitrate / 1000000).toFixed(1)} Mbps base), ${estimatedFPS} FPS`);
       console.log(`Video info: duration=${duration}s, file size=${(frontSource.file.size / 1024 / 1024).toFixed(1)}MB, original resolution=${width}x${height}`);
       
       // Setup MediaRecorder with conservative settings
@@ -561,7 +571,7 @@ export default function ControlPanel({
         const roundedProgress = Math.round(Math.min(100, Math.max(0, weightedProgress)) * 10) / 10;
         
         // Debug logging for progress tracking
-        if (frameNumber % 30 === 0 || roundedProgress > 90) { // Log every 30 frames or when near completion
+        if (frameNumber % 30 === 0) { // Log every 30 frames consistently
           console.log(`Progress: ${roundedProgress}% (time: ${timeProgress.toFixed(1)}%, frames: ${frameProgress.toFixed(1)}%, currentTime: ${currentTime.toFixed(1)}s/${duration.toFixed(1)}s, frames: ${frameNumber}/${expectedFrames})`);
         }
         
@@ -761,8 +771,12 @@ export default function ControlPanel({
             children: (
               <Text size="sm">
                 {encodingProgress > 0 
-                  ? t('download.cancelConfirm', { defaultValue: 'Are you sure you want to cancel the ongoing encoding?' })
-                  : t('download.close', { defaultValue: 'Are you sure you want to close?' })}
+                  ? t('download.cancelConfirmDetail', { 
+                      defaultValue: '비디오 인코딩이 진행 중입니다. 취소하면 지금까지의 작업이 모두 사라집니다. 정말로 취소하시겠습니까?' 
+                    })
+                  : t('download.closeDetail', { 
+                      defaultValue: '다운로드 대화상자를 닫으시겠습니까? 아직 인코딩을 시작하지 않았으므로 언제든지 다시 다운로드를 시작할 수 있습니다.' 
+                    })}
               </Text>
             ),
             labels: { 
