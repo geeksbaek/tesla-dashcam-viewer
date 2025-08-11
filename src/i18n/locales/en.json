@@ -66,6 +66,8 @@
     "explanation": "This will merge all Tesla dashcam footage into a single video file with the same layout as the viewer",
     "qualityNote": "⚠️ Resolution, bitrate, and FPS may be reduced from original due to browser encoding limitations",
     "note": "Note: The encoding process may take a few minutes depending on video length.",
+    "browserWarning": "⚠️ This feature uses MediaRecorder API, Canvas API, and advanced video codecs. Browser support is limited and unexpected issues like frame drops may occur.",
+    "unsupportedBrowser": "❌ Your browser does not support the required encoding technologies (MediaRecorder API, Canvas API, or video codecs). Please use a modern browser like Chrome, Firefox, or Edge.",
     "start": "Start Download"
   }
 }

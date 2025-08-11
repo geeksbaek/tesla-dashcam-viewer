@@ -66,6 +66,8 @@
     "explanation": "Dies wird alle Tesla Dashcam-Aufnahmen zu einer einzigen Videodatei mit dem gleichen Layout wie im Viewer zusammenfassen",
     "qualityNote": "⚠️ Auflösung, Bitrate und FPS können aufgrund von Browser-Kodierungsbeschränkungen geringer sein als das Original",
     "note": "Hinweis: Der Kodierungsprozess kann je nach Videolänge einige Minuten dauern.",
+    "browserWarning": "⚠️ Diese Funktion verwendet MediaRecorder API, Canvas API und erweiterte Video-Codecs. Browser-Unterstützung ist begrenzt und unerwartete Probleme wie Frame-Drops können auftreten.",
+    "unsupportedBrowser": "❌ Ihr Browser unterstützt die erforderlichen Kodierungstechnologien (MediaRecorder API, Canvas API oder Video-Codecs) nicht. Bitte verwenden Sie einen modernen Browser wie Chrome, Firefox oder Edge.",
     "start": "Download starten"
   }
 }

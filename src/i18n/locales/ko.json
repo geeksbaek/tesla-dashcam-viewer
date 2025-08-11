@@ -66,6 +66,8 @@
     "explanation": "모든 Tesla 대시캠 영상을 뷰어와 동일한 배치로 하나의 비디오 파일에 합칩니다",
     "qualityNote": "⚠️ 브라우저 인코딩 제한으로 해상도, 비트레이트, FPS가 원본보다 저하될 수 있습니다",
     "note": "참고: 비디오 길이에 따라 인코딩에 몇 분이 소요될 수 있습니다.",
+    "browserWarning": "⚠️ 이 기능은 MediaRecorder API, Canvas API, 고급 비디오 코덱을 사용합니다. 브라우저 지원이 제한적이며 프레임 드랍 등 예상치 못한 문제가 발생할 수 있습니다.",
+    "unsupportedBrowser": "❌ 브라우저가 필수 인코딩 기술(MediaRecorder API, Canvas API, 비디오 코덱)을 지원하지 않습니다. Chrome, Firefox, Edge 등 최신 브라우저를 사용해 주세요.",
     "start": "다운로드 시작"
   }
 }

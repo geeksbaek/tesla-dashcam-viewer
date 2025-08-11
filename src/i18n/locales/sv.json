@@ -66,6 +66,8 @@
     "explanation": "Detta kommer att slå samman alla Tesla dashcam inspelningar till en enda videofil med samma layout som viewern",
     "qualityNote": "⚠️ Upplösning, bithastighet och FPS kan reduceras från originalet på grund av webbläsare kodningsbegränsningar",
     "note": "Notera: Kodningsprocessen kan ta några minuter beroende på videolängden.",
+    "browserWarning": "⚠️ Denna funktion använder MediaRecorder API, Canvas API och avancerade video-kodeker. Webbläsarestöd är begränsat och oväntade problem som ramtapp kan uppstå.",
+    "unsupportedBrowser": "❌ Din webbläsare stöder inte de kodningsteknologier som krävs (MediaRecorder API, Canvas API eller video-kodeker). Använd en modern webbläsare som Chrome, Firefox eller Edge.",
     "start": "Starta nedladdning"
   }
 }

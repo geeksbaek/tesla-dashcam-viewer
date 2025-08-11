@@ -66,6 +66,8 @@
     "explanation": "Esto fusionará todas las secuencias de dashcam Tesla en un solo archivo de video con el mismo diseño que el visor",
     "qualityNote": "⚠️ La resolución, tasa de bits y FPS pueden reducirse respecto al original debido a limitaciones de codificación del navegador",
     "note": "Nota: El proceso de codificación puede tomar algunos minutos dependiendo de la duración del video.",
+    "browserWarning": "⚠️ Esta característica utiliza MediaRecorder API, Canvas API y códecs de video avanzados. El soporte del navegador es limitado y pueden ocurrir problemas inesperados como pérdida de fotogramas.",
+    "unsupportedBrowser": "❌ Su navegador no soporta las tecnologías de codificación requeridas (MediaRecorder API, Canvas API o códecs de video). Por favor use un navegador moderno como Chrome, Firefox o Edge.",
     "start": "Iniciar Descarga"
   }
 }
