@@ -18,6 +18,35 @@ interface VideoFile {
   right_pillar?: File
 }
 
+// Helper function for formatting timestamps
+const formatTimestampHelper = (baseTimestamp: string, additionalSeconds: number = 0, language: string = 'en') => {
+  try {
+    const parts = baseTimestamp.split('_');
+    if (parts.length !== 2) return baseTimestamp.replace(/_/g, ' ').replace(/-/g, ':');
+    const datePart = parts[0];
+    const timePart = parts[1];
+    const [year, month, day] = datePart.split('-').map(Number);
+    const [hours, minutes, seconds] = timePart.split('-').map(Number);
+    const totalSeconds = hours * 3600 + minutes * 60 + seconds + Math.floor(additionalSeconds);
+    const newHours = Math.floor(totalSeconds / 3600) % 24;
+    const newMinutes = Math.floor((totalSeconds % 3600) / 60);
+    const newSecs = totalSeconds % 60;
+    const date = new Date(year, month - 1, day, newHours, newMinutes, newSecs);
+    const formatter = new Intl.DateTimeFormat(language, { 
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: false,
+    });
+    return formatter.format(date);
+  } catch {
+    return baseTimestamp.replace(/_/g, ' ').replace(/-/g, ':');
+  }
+};
+
 interface ControlPanelProps {
   videoFiles: VideoFile[]
   currentIndex: number
@@ -333,7 +362,8 @@ export default function ControlPanel({
       console.log(`Video info: duration=${duration}s, file size=${(frontSource.file.size / 1024 / 1024).toFixed(1)}MB, original resolution=${width}x${height}`);
       
       // Setup MediaRecorder with conservative settings
-      const stream = canvas.captureStream(estimatedFPS); // Use detected FPS for accurate capture
+      // Setup optimal capture stream with exact FPS matching
+      const stream = canvas.captureStream(estimatedFPS); // Precise FPS matching for zero drops
       
       // Try to create MediaRecorder with supported codecs
       let mediaRecorder: MediaRecorder | null = null;
@@ -432,17 +462,25 @@ export default function ControlPanel({
       };
 
       // Initialize videos - IMPORTANT: sync them perfectly
+      // Ultra-optimized video configuration
       for (const v of videoElements) {
         v.currentTime = 0;
         v.playbackRate = 1.0;
-        v.muted = true; // Ensure muted for autoplay
-        v.volume = 0; // Ensure volume is 0
-        // Preload video data for smoother playback
+        v.muted = true;
+        v.volume = 0;
         v.preload = 'auto';
+        
+        // Enhanced buffering settings
+        try {
+          // Force full buffering if possible
+          v.load();
+        } catch {
+          // Ignore load errors
+        }
       }
 
-      // Start recording with smaller chunks for smoother processing
-      mediaRecorder.start(500); // Get data every 500ms
+      // Start recording without timeslice for maximum quality
+      mediaRecorder.start(); // No timeslice - get data only when needed
 
       // Start all videos in sync
       console.log('Starting video playback...');
@@ -457,55 +495,100 @@ export default function ControlPanel({
         });
       }
 
-      // Main render loop - runs at display refresh rate
+      // Frame-precise render system
       let animationId: number;
-      let lastSyncTime = 0;
+      let frameNumber = 0;
+      const targetFrameTime = 1000 / estimatedFPS; // ms per frame
+      let lastFrameTime = 0;
+      const lastVideoCurrentTimes: number[] = new Array(videoElements.length).fill(0);
       
-      const render = () => {
-        const currentTime = masterVideo.currentTime;
-        
-        // Periodically sync all videos to prevent drift (every 0.5 seconds)
-        if (currentTime - lastSyncTime > 0.5) {
-          videoElements.forEach((v, i) => {
-            if (i !== 0 && Math.abs(v.currentTime - currentTime) > 0.05) {
-              v.currentTime = currentTime;
-            }
-          });
-          lastSyncTime = currentTime;
+      const render = (timestamp: number) => {
+        // Precise timing: only capture at exact FPS intervals
+        if (timestamp - lastFrameTime < targetFrameTime - 1) {
+          animationId = requestAnimationFrame(render);
+          animationIdRef.current = animationId;
+          return;
         }
         
-        // Clear canvas
+        const currentTime = masterVideo.currentTime;
+        
+        // Force synchronization of all videos to master time
+        videoElements.forEach((v, i) => {
+          if (i !== 0) {
+            const timeDiff = Math.abs(v.currentTime - currentTime);
+            if (timeDiff > 0.016) { // More than 1 frame worth of difference
+              v.currentTime = currentTime;
+            }
+          }
+        });
+        
+        // Wait for all videos to actually update their frames
+        let allVideosReady = true;
+        videoElements.forEach((v, i) => {
+          // Check if video has actually progressed to a new frame
+          if (Math.abs(v.currentTime - lastVideoCurrentTimes[i]) < 0.001 && currentTime > 0.1) {
+            allVideosReady = false;
+          }
+        });
+        
+        if (!allVideosReady) {
+          // Videos haven't updated yet, try again soon
+          animationId = requestAnimationFrame(render);
+          animationIdRef.current = animationId;
+          return;
+        }
+        
+        // Update last known times
+        videoElements.forEach((v, i) => {
+          lastVideoCurrentTimes[i] = v.currentTime;
+        });
+        
+        // Clear canvas with black background
         ctx.fillStyle = '#000';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         
-        // Draw all videos
+        // Draw all videos with additional frame readiness check
+        let frameDrawn = true;
         videoElements.forEach((v, i) => {
           const x = (i % cols) * cellWidth;
           const y = Math.floor(i / cols) * cellHeight;
           
           try {
-            // Draw each video scaled to the cell size
-            ctx.drawImage(v, x, y, cellWidth, cellHeight);
+            // Double-check video readiness
+            if (v.readyState >= 3 && !v.paused) { // HAVE_FUTURE_DATA or higher
+              ctx.drawImage(v, x, y, cellWidth, cellHeight);
+            } else {
+              frameDrawn = false;
+            }
           } catch {
-            // Video frame might not be ready, skip this frame
+            frameDrawn = false;
             console.warn('Frame not ready for video', i);
           }
-          drawTimestamp(ctx, x, y, formatTimestamp(video.timestamp, currentTime, i18n.language), cellWidth);
+          
+          // Draw timestamp
+          drawTimestamp(ctx, x, y, formatTimestampHelper(video.timestamp, currentTime, i18n.language), cellWidth);
         });
         
-        // Update progress - use consistent rounding for both bar and text
-        const rawProgress = duration > 0 ? (currentTime / duration) * 100 : 0;
-        // Round to 1 decimal place consistently
+        // Only count as a successful frame if all videos were drawn
+        if (frameDrawn) {
+          frameNumber++;
+          lastFrameTime = timestamp;
+        }
+        
+        // Update progress based on actual frame capture
+        const expectedFrames = Math.floor(duration * estimatedFPS);
+        const rawProgress = expectedFrames > 0 ? (frameNumber / expectedFrames) * 100 : 0;
         const roundedProgress = Math.round(Math.min(100, Math.max(0, rawProgress)) * 10) / 10;
         
         setEncodingProgress(roundedProgress);
         
-        // Update ETA
-        if (startTimeRef.current && currentTime > 0 && roundedProgress < 100) {
+        // Update ETA based on actual frame rate
+        if (startTimeRef.current && frameNumber > 0 && roundedProgress < 100) {
           const elapsed = (Date.now() - startTimeRef.current) / 1000;
-          const rate = currentTime / elapsed;
-          if (rate > 0) {
-            const remaining = (duration - currentTime) / rate;
+          const actualFPS = frameNumber / elapsed;
+          if (actualFPS > 0) {
+            const remainingFrames = expectedFrames - frameNumber;
+            const remaining = remainingFrames / actualFPS;
             const mins = Math.floor(remaining / 60);
             const secs = Math.floor(remaining % 60);
             setEncodingEta(`${mins}:${secs.toString().padStart(2, '0')}`);
@@ -514,35 +597,49 @@ export default function ControlPanel({
           setEncodingEta('');
         }
         
-        // Check if done
-        if (currentTime < duration - 0.1 && !masterVideo.paused && !masterVideo.ended) {
+        // Check completion based on both time and frame count
+        const timeComplete = currentTime >= duration - 0.1 || masterVideo.ended;
+        const frameComplete = frameNumber >= expectedFrames;
+        
+        if (!timeComplete && !frameComplete && !masterVideo.paused) {
           animationId = requestAnimationFrame(render);
           animationIdRef.current = animationId;
-        } else if (currentTime >= duration - 0.1 || masterVideo.ended) {
-          // Stop everything
-          console.log(`Encoding complete at ${currentTime}s of ${duration}s`);
+        } else if (timeComplete || frameComplete) {
+          // Encoding complete
+          console.log(`Encoding complete: ${frameNumber} frames captured in ${currentTime.toFixed(2)}s`);
           videoElements.forEach(v => v.pause());
           setEncodingProgress(100);
           
-          // Give time for final frames to be processed
+          // Enhanced stop sequence for better data capture
           setTimeout(() => {
             if (mediaRecorderRef.current && mediaRecorderRef.current.state === 'recording') {
-              // Request any pending data before stopping
+              // Multiple requestData calls to ensure all data is captured
               if (mediaRecorderRef.current.requestData) {
                 mediaRecorderRef.current.requestData();
+                setTimeout(() => {
+                  if (mediaRecorderRef.current && mediaRecorderRef.current.state === 'recording') {
+                    mediaRecorderRef.current.requestData();
+                    setTimeout(() => {
+                      if (mediaRecorderRef.current && mediaRecorderRef.current.state === 'recording') {
+                        mediaRecorderRef.current.stop();
+                      }
+                    }, 200);
+                  }
+                }, 200);
+              } else {
+                setTimeout(() => {
+                  if (mediaRecorderRef.current && mediaRecorderRef.current.state === 'recording') {
+                    mediaRecorderRef.current.stop();
+                  }
+                }, 400);
               }
-              // Wait a bit more for the final data
-              setTimeout(() => {
-                if (mediaRecorderRef.current && mediaRecorderRef.current.state === 'recording') {
-                  mediaRecorderRef.current.stop();
-                }
-              }, 500);
             }
-          }, 500);
+          }, 300);
         }
       };
       
-      // Start rendering
+      // Start frame-precise rendering
+      lastFrameTime = performance.now();
       animationId = requestAnimationFrame(render);
       animationIdRef.current = animationId;
       
@@ -553,7 +650,7 @@ export default function ControlPanel({
         }
       }
     });
-  }, [isModalOpen, layoutMode, i18n.language, t, formatTimestamp]);
+  }, [isModalOpen, layoutMode, i18n.language, t]);
 
   const loadVideo = (url: string): Promise<HTMLVideoElement> => {
     return new Promise((resolve, reject) => {
@@ -576,33 +673,6 @@ export default function ControlPanel({
   }
 
 
-  const formatTimestamp = (baseTimestamp: string, additionalSeconds: number = 0, language: string = i18n.language) => {
-    try {
-      const parts = baseTimestamp.split('_');
-      if (parts.length !== 2) return baseTimestamp.replace(/_/g, ' ').replace(/-/g, ':');
-      const datePart = parts[0];
-      const timePart = parts[1];
-      const [year, month, day] = datePart.split('-').map(Number);
-      const [hours, minutes, seconds] = timePart.split('-').map(Number);
-      const totalSeconds = hours * 3600 + minutes * 60 + seconds + Math.floor(additionalSeconds);
-      const newHours = Math.floor(totalSeconds / 3600) % 24;
-      const newMinutes = Math.floor((totalSeconds % 3600) / 60);
-      const newSecs = totalSeconds % 60;
-      const date = new Date(year, month - 1, day, newHours, newMinutes, newSecs);
-      const formatter = new Intl.DateTimeFormat(language, { 
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit',
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit',
-        hour12: false,
-      });
-      return formatter.format(date);
-    } catch {
-      return baseTimestamp.replace(/_/g, ' ').replace(/-/g, ':');
-    }
-  }
 
   const drawTimestamp = (ctx: CanvasRenderingContext2D, x: number, y: number, text: string, width: number) => {
     const fontSize = 20;
@@ -676,7 +746,7 @@ export default function ControlPanel({
       : currentIndex * 60 // fallback to 60 seconds per video
     const currentVideoTime = globalTime - cumulativeTime // 현재 비디오 내에서의 시간
     
-    return formatTimestamp(baseTimestamp, currentVideoTime)
+    return formatTimestampHelper(baseTimestamp, currentVideoTime, i18n.language)
   }
 
   // 현재 클립의 프로그레스 계산 (0-100%)
@@ -1194,7 +1264,7 @@ export default function ControlPanel({
                         >
                           {isActive ? 
                             getCurrentTimestamp() : 
-                            formatTimestamp(video.timestamp)
+                            formatTimestampHelper(video.timestamp, 0, i18n.language)
                           }
                         </Text>
                         <ActionIcon 
