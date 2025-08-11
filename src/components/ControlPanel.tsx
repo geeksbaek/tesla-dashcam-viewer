@@ -105,8 +105,28 @@ export default function ControlPanel({
   const animationIdRef = useRef<number | null>(null);
   const isCancelledRef = useRef<boolean>(false);
 
+  // Check browser support for video encoding technologies
+  const checkBrowserSupport = useCallback(() => {
+    const support = {
+      mediaRecorder: typeof MediaRecorder !== 'undefined',
+      canvas: typeof document !== 'undefined' && document.createElement('canvas').getContext('2d') !== null,
+      webm: MediaRecorder?.isTypeSupported?.('video/webm;codecs=vp9') || false,
+      mp4: MediaRecorder?.isTypeSupported?.('video/mp4;codecs=h264') || false,
+      requestAnimationFrame: typeof requestAnimationFrame !== 'undefined'
+    };
+
+    const isSupported = support.mediaRecorder && support.canvas && support.requestAnimationFrame && (support.webm || support.mp4);
+    
+    return {
+      isSupported,
+      details: support
+    };
+  }, []);
+
   const handleDownload = useCallback(async (video: VideoFile) => {
     if (isModalOpen) return;
+
+    const browserSupport = checkBrowserSupport();
 
     // Show explanation modal first
     modals.openConfirmModal({
@@ -133,18 +153,51 @@ export default function ControlPanel({
               })}
             </Text>
           </Box>
+          <Box
+            style={{
+              backgroundColor: 'var(--mantine-color-red-light)',
+              borderLeft: '4px solid var(--mantine-color-red-filled)',
+              padding: '8px 12px',
+              borderRadius: '4px'
+            }}
+          >
+            <Text size="xs" c="red" fw={500}>
+              {t('download.browserWarning', { 
+                defaultValue: '⚠️ This feature uses MediaRecorder API, Canvas API, and advanced video codecs. Browser support is limited and unexpected issues like frame drops may occur.' 
+              })}
+            </Text>
+          </Box>
           <Text size="xs" c="dimmed">
             {t('download.note', { 
               defaultValue: 'Note: The encoding process may take a few minutes depending on video length.' 
             })}
           </Text>
+          {!browserSupport.isSupported && (
+            <Box
+              style={{
+                backgroundColor: 'var(--mantine-color-gray-light)',
+                borderLeft: '4px solid var(--mantine-color-gray-filled)',
+                padding: '8px 12px',
+                borderRadius: '4px'
+              }}
+            >
+              <Text size="xs" c="red" fw={500}>
+                {t('download.unsupportedBrowser', { 
+                  defaultValue: '❌ Your browser does not support the required encoding technologies (MediaRecorder API, Canvas API, or video codecs). Please use a modern browser like Chrome, Firefox, or Edge.' 
+                })}
+              </Text>
+            </Box>
+          )}
         </Stack>
       ),
       labels: { 
         confirm: t('download.start', { defaultValue: 'Start Download' }), 
         cancel: t('controlPanel.cancel', { defaultValue: 'Cancel' }) 
       },
-      confirmProps: { color: 'blue' },
+      confirmProps: { 
+        color: 'blue',
+        disabled: !browserSupport.isSupported
+      },
       cancelProps: { variant: 'default' },
       groupProps: { gap: 8 },
       onConfirm: async () => {
