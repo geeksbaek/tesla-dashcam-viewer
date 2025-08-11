@@ -56,10 +56,12 @@
     "viewOnGitHub": "Voir sur GitHub"
   },
   "download": {
-    "title": "Téléchargement de la vidéo",
+    "title": "Encodage de la vidéo",
     "eta": "ETA : {{time}}",
     "cancelConfirm": "Annuler l'encodage en cours ?",
+    "cancelConfirmDetail": "L'encodage vidéo est en cours. L'annulation fera perdre tous les progrès réalisés jusqu'à présent. Êtes-vous sûr de vouloir annuler ?",
     "close": "Fermer ?",
+    "closeDetail": "Êtes-vous sûr de vouloir fermer la boîte de dialogue de téléchargement ? Comme l'encodage n'a pas encore commencé, vous pouvez redémarrer le téléchargement à tout moment.",
     "confirmTitle": "Téléchargement vidéo",
     "explanation": "Ceci fusionnera toutes les séquences de dashcam Tesla en un seul fichier vidéo avec la même disposition que le visualiseur",
     "qualityNote": "⚠️ La résolution, le débit et les FPS peuvent être réduits par rapport à l'original en raison des limitations d'encodage du navigateur",

@@ -56,10 +56,12 @@
     "viewOnGitHub": "在GitHub上查看"
   },
   "download": {
-    "title": "正在下载视频",
+    "title": "正在编码视频",
     "eta": "预计时间：{{time}}",
     "cancelConfirm": "取消正在进行的编码？",
+    "cancelConfirmDetail": "视频编码正在进行中。取消将丢失到目前为止所做的所有进度。您确定要取消吗？",
     "close": "关闭？",
+    "closeDetail": "您确定要关闭下载对话框吗？由于编码尚未开始，您可以随时重新开始下载。",
     "confirmTitle": "视频下载",
     "explanation": "这将把所有特斯拉行车记录仪录像合并为一个与查看器相同布局的视频文件",
     "qualityNote": "⚠️ 由于浏览器编码限制，分辨率、比特率和FPS可能会低于原始文件",

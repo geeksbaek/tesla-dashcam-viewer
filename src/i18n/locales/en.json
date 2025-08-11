@@ -56,10 +56,12 @@
     "viewOnGitHub": "View on GitHub"
   },
   "download": {
-    "title": "Downloading Video",
+    "title": "Encoding Video",
     "eta": "ETA: {{time}}",
     "cancelConfirm": "Cancel encoding in progress?",
+    "cancelConfirmDetail": "Video encoding is currently in progress. Canceling will lose all progress made so far. Are you sure you want to cancel?",
     "close": "Close?",
+    "closeDetail": "Are you sure you want to close the download dialog? Since encoding hasn't started yet, you can restart the download at any time.",
     "confirmTitle": "Video Download",
     "explanation": "This will merge all Tesla dashcam footage into a single video file with the same layout as the viewer",
     "qualityNote": "⚠️ Resolution, bitrate, and FPS may be reduced from original due to browser encoding limitations",

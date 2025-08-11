@@ -56,10 +56,12 @@
     "viewOnGitHub": "Ver en GitHub"
   },
   "download": {
-    "title": "Descargando Video",
+    "title": "Codificando Video",
     "eta": "TER: {{time}}",
     "cancelConfirm": "¿Cancelar codificación en progreso?",
+    "cancelConfirmDetail": "La codificación de video está en progreso. Cancelar perderá todo el progreso realizado hasta ahora. ¿ Está seguro de que desea cancelar?",
     "close": "¿Cerrar?",
+    "closeDetail": "¿ Está seguro de que desea cerrar el diálogo de descarga? Dado que la codificación no ha comenzado aún, puede reiniciar la descarga en cualquier momento.",
     "confirmTitle": "Descarga de Video",
     "explanation": "Esto fusionará todas las secuencias de dashcam Tesla en un solo archivo de video con el mismo diseño que el visor",
     "qualityNote": "⚠️ La resolución, tasa de bits y FPS pueden reducirse respecto al original debido a limitaciones de codificación del navegador",

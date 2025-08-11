@@ -56,10 +56,12 @@
     "viewOnGitHub": "Se på GitHub"
   },
   "download": {
-    "title": "Laster ned video",
+    "title": "Koder video",
     "eta": "Estimert tid: {{time}}",
     "cancelConfirm": "Avbryte pågående koding?",
+    "cancelConfirmDetail": "Videokoding pågår. Avbrytelse vil føre til tap av all fremgang gjort så langt. Er du sikker på at du vil avbryte?",
     "close": "Lukke?",
+    "closeDetail": "Er du sikker på at du vil lukke nedlastingsdialogen? Siden koding ikke har startet ennå, kan du starte nedlastingen på nytt når som helst.",
     "confirmTitle": "Video nedlasting",
     "explanation": "Dette vil slå sammen alle Tesla dashcam opptak til en enkelt videofil med samme layout som vieweren",
     "qualityNote": "⚠️ Oppløsning, bitrate og FPS kan reduseres fra original på grunn av nettleser kodingsbegrensninger",
