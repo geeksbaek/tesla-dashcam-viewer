@@ -597,44 +597,25 @@ export default function ControlPanel({
           setEncodingEta('');
         }
         
-        // Check completion based on both time and frame count
-        const timeComplete = currentTime >= duration - 0.1 || masterVideo.ended;
-        const frameComplete = frameNumber >= expectedFrames;
+        // Check completion with more lenient conditions
+        const timeComplete = currentTime >= duration * 0.98 || masterVideo.ended; // Use 98% instead of exact timing
+        const frameComplete = frameNumber >= expectedFrames * 0.98; // Use 98% of expected frames
         
         if (!timeComplete && !frameComplete && !masterVideo.paused) {
           animationId = requestAnimationFrame(render);
           animationIdRef.current = animationId;
-        } else if (timeComplete || frameComplete) {
-          // Encoding complete
+        } else {
+          // Encoding complete - use simple completion logic
           console.log(`Encoding complete: ${frameNumber} frames captured in ${currentTime.toFixed(2)}s`);
           videoElements.forEach(v => v.pause());
           setEncodingProgress(100);
           
-          // Enhanced stop sequence for better data capture
+          // Simple stop sequence - just stop recording after a short delay
           setTimeout(() => {
             if (mediaRecorderRef.current && mediaRecorderRef.current.state === 'recording') {
-              // Multiple requestData calls to ensure all data is captured
-              if (mediaRecorderRef.current.requestData) {
-                mediaRecorderRef.current.requestData();
-                setTimeout(() => {
-                  if (mediaRecorderRef.current && mediaRecorderRef.current.state === 'recording') {
-                    mediaRecorderRef.current.requestData();
-                    setTimeout(() => {
-                      if (mediaRecorderRef.current && mediaRecorderRef.current.state === 'recording') {
-                        mediaRecorderRef.current.stop();
-                      }
-                    }, 200);
-                  }
-                }, 200);
-              } else {
-                setTimeout(() => {
-                  if (mediaRecorderRef.current && mediaRecorderRef.current.state === 'recording') {
-                    mediaRecorderRef.current.stop();
-                  }
-                }, 400);
-              }
+              mediaRecorderRef.current.stop();
             }
-          }, 300);
+          }, 200);
         }
       };
       
@@ -643,11 +624,11 @@ export default function ControlPanel({
       animationId = requestAnimationFrame(render);
       animationIdRef.current = animationId;
       
-        } catch (error) {
-          console.error('Error during video encoding setup:', error);
-          alert(`Video encoding failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
-          setIsModalOpen(false);
-        }
+      } catch (error) {
+        console.error('Error during video encoding setup:', error);
+        alert(`Video encoding failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+        setIsModalOpen(false);
+      }
       }
     });
   }, [isModalOpen, layoutMode, i18n.language, t]);
