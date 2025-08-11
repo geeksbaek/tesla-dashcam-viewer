@@ -447,10 +447,11 @@ export default function ControlPanel({
       };
 
       // Initialize videos - IMPORTANT: sync them perfectly
-      // Ultra-optimized video configuration
+      // Slow down video playback to ensure frame capture can keep up
+      const playbackRate = 0.5; // Even slower playback for more reliable frame capture
       for (const v of videoElements) {
         v.currentTime = 0;
-        v.playbackRate = 1.0;
+        v.playbackRate = playbackRate; // Slower playback
         v.muted = true;
         v.volume = 0;
         v.preload = 'auto';
@@ -464,32 +465,34 @@ export default function ControlPanel({
         }
       }
 
-      // Start recording without timeslice for maximum quality
-      mediaRecorder.start(); // No timeslice - get data only when needed
+      // Start recording with corrected timeslice to compensate for slower playback
+      const correctedTimeslice = Math.floor((1000 / estimatedFPS) / playbackRate); // Adjust for slower playback
+      console.log(`MediaRecorder timeslice: ${correctedTimeslice}ms (compensated for ${playbackRate}x playback)`);
+      mediaRecorder.start(correctedTimeslice);
 
-      // Start all videos in sync
-      console.log('Starting video playback...');
+      // Start all videos in sync for automatic playback
+      console.log('Starting video playback for capture...');
       try {
         await Promise.all(videoElements.map(v => v.play()));
         console.log('All videos started successfully');
       } catch (error) {
         console.error('Failed to start video playback:', error);
-        // Try playing without promise
         videoElements.forEach(v => {
           v.play().catch(e => console.error('Play error:', e));
         });
       }
 
-      // Frame-precise render system
+      // Frame-precise render system - back to automatic playback
       let animationId: number;
       let frameNumber = 0;
       const targetFrameTime = 1000 / estimatedFPS; // ms per frame
       let lastFrameTime = 0;
-      const lastVideoCurrentTimes: number[] = new Array(videoElements.length).fill(0);
+      const expectedFrames = Math.floor(duration * estimatedFPS); // Calculate expected frames upfront
       
       const render = (timestamp: number) => {
-        // Precise timing: only capture at exact FPS intervals
-        if (timestamp - lastFrameTime < targetFrameTime - 1) {
+        // More lenient timing to capture more frames
+        const adjustedFrameTime = targetFrameTime * 0.8; // Capture frames more frequently
+        if (timestamp - lastFrameTime < adjustedFrameTime) {
           animationId = requestAnimationFrame(render);
           animationIdRef.current = animationId;
           return;
@@ -507,104 +510,114 @@ export default function ControlPanel({
           }
         });
         
-        // Wait for all videos to actually update their frames
-        let allVideosReady = true;
-        videoElements.forEach((v, i) => {
-          // Check if video has actually progressed to a new frame
-          if (Math.abs(v.currentTime - lastVideoCurrentTimes[i]) < 0.001 && currentTime > 0.1) {
-            allVideosReady = false;
-          }
-        });
-        
-        if (!allVideosReady) {
-          // Videos haven't updated yet, try again soon
-          animationId = requestAnimationFrame(render);
-          animationIdRef.current = animationId;
-          return;
-        }
-        
-        // Update last known times
-        videoElements.forEach((v, i) => {
-          lastVideoCurrentTimes[i] = v.currentTime;
-        });
-        
         // Clear canvas with black background
         ctx.fillStyle = '#000';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         
-        // Draw all videos with additional frame readiness check
+        // Draw all videos
         let frameDrawn = true;
         videoElements.forEach((v, i) => {
           const x = (i % cols) * cellWidth;
           const y = Math.floor(i / cols) * cellHeight;
           
           try {
-            // Double-check video readiness
-            if (v.readyState >= 3 && !v.paused) { // HAVE_FUTURE_DATA or higher
+            // More lenient video readiness check
+            if (v.readyState >= 2 && !v.paused) { // HAVE_CURRENT_DATA or higher
               ctx.drawImage(v, x, y, cellWidth, cellHeight);
             } else {
               frameDrawn = false;
             }
-          } catch {
+          } catch (e) {
             frameDrawn = false;
-            console.warn('Frame not ready for video', i);
+            if (frameNumber % 30 === 0) {
+              console.warn(`Frame not ready for video ${i}:`, e);
+            }
           }
           
           // Draw timestamp
           drawTimestamp(ctx, x, y, formatTimestampHelper(video.timestamp, currentTime, i18n.language), cellWidth);
         });
         
-        // Only count as a successful frame if all videos were drawn
+        // Capture frame if successful
         if (frameDrawn) {
           frameNumber++;
           lastFrameTime = timestamp;
+          
+          // Log detailed progress for monitoring
+          if (frameNumber % 120 === 0) { // Every 4 seconds at 30fps
+            console.log(`Frame capture progress: ${frameNumber}/${expectedFrames} frames (${(frameNumber/expectedFrames*100).toFixed(1)}%) at time ${currentTime.toFixed(2)}s/${duration.toFixed(1)}s`);
+          }
+        } else if (frameNumber % 60 === 0) {
+          console.log(`Frame ${frameNumber} skipped - videos not ready`);
         }
         
-        // Update progress based on actual frame capture
-        const expectedFrames = Math.floor(duration * estimatedFPS);
-        const rawProgress = expectedFrames > 0 ? (frameNumber / expectedFrames) * 100 : 0;
-        const roundedProgress = Math.round(Math.min(100, Math.max(0, rawProgress)) * 10) / 10;
+        // Update progress based on actual video time (more accurate than frame counting)
+        const timeProgress = duration > 0 ? (currentTime / duration) * 100 : 0;
+        const frameProgress = expectedFrames > 0 ? (frameNumber / expectedFrames) * 100 : 0;
+        
+        // Use weighted average of time and frame progress for smoother progression
+        // Time progress is more reliable, so weight it more heavily
+        const weightedProgress = (timeProgress * 0.7) + (frameProgress * 0.3);
+        const roundedProgress = Math.round(Math.min(100, Math.max(0, weightedProgress)) * 10) / 10;
+        
+        // Debug logging for progress tracking
+        if (frameNumber % 30 === 0 || roundedProgress > 90) { // Log every 30 frames or when near completion
+          console.log(`Progress: ${roundedProgress}% (time: ${timeProgress.toFixed(1)}%, frames: ${frameProgress.toFixed(1)}%, currentTime: ${currentTime.toFixed(1)}s/${duration.toFixed(1)}s, frames: ${frameNumber}/${expectedFrames})`);
+        }
         
         setEncodingProgress(roundedProgress);
         
-        // Update ETA based on actual frame rate
-        if (startTimeRef.current && frameNumber > 0 && roundedProgress < 100) {
+        // Update ETA based on time progress (more reliable than frame rate)
+        if (startTimeRef.current && roundedProgress > 0 && roundedProgress < 100) {
           const elapsed = (Date.now() - startTimeRef.current) / 1000;
-          const actualFPS = frameNumber / elapsed;
-          if (actualFPS > 0) {
-            const remainingFrames = expectedFrames - frameNumber;
-            const remaining = remainingFrames / actualFPS;
-            const mins = Math.floor(remaining / 60);
-            const secs = Math.floor(remaining % 60);
-            setEncodingEta(`${mins}:${secs.toString().padStart(2, '0')}`);
+          const progressRatio = roundedProgress / 100;
+          if (progressRatio > 0.01) { // Only calculate after 1% to avoid wild estimates
+            const estimatedTotal = elapsed / progressRatio;
+            const remaining = estimatedTotal - elapsed;
+            if (remaining > 0) {
+              const mins = Math.floor(remaining / 60);
+              const secs = Math.floor(remaining % 60);
+              setEncodingEta(`${mins}:${secs.toString().padStart(2, '0')}`);
+            }
           }
         } else if (roundedProgress >= 100) {
           setEncodingEta('');
         }
         
-        // Check completion with more lenient conditions
-        const timeComplete = currentTime >= duration * 0.98 || masterVideo.ended; // Use 98% instead of exact timing
-        const frameComplete = frameNumber >= expectedFrames * 0.98; // Use 98% of expected frames
+        // Check completion - be more strict to ensure all frames are captured
+        const timeComplete = currentTime >= duration * 0.995 || masterVideo.ended;
+        const frameComplete = frameNumber >= expectedFrames * 0.99; // Still allow 1% margin for frame counting
+        // Only complete when BOTH conditions are close to completion
+        const shouldComplete = timeComplete && (frameComplete || masterVideo.ended);
         
-        if (!timeComplete && !frameComplete && !masterVideo.paused) {
+        if (!shouldComplete && !masterVideo.paused) {
           animationId = requestAnimationFrame(render);
           animationIdRef.current = animationId;
         } else {
-          // Encoding complete - use simple completion logic
+          // Encoding complete - let the progress naturally reach 100%
           console.log(`Encoding complete: ${frameNumber} frames captured in ${currentTime.toFixed(2)}s`);
+          console.log(`Completion reason - timeComplete: ${timeComplete}, frameComplete: ${frameComplete}, currentTime: ${currentTime.toFixed(2)}, duration: ${duration.toFixed(2)}`);
+          console.log(`Final progress - time: ${timeProgress.toFixed(1)}%, frames: ${frameProgress.toFixed(1)}%, captured: ${frameNumber}/${expectedFrames} frames`);
           videoElements.forEach(v => v.pause());
-          setEncodingProgress(100);
           
-          // Simple stop sequence - just stop recording after a short delay
+          // Only set to 100% if we're very close to avoid sudden jumps
+          if (roundedProgress >= 95) {
+            setEncodingProgress(100);
+          }
+          
+          // Enhanced stop sequence - ensure all frames are processed
+          // Wait longer to ensure MediaRecorder has processed all frames
           setTimeout(() => {
+            console.log('Stopping MediaRecorder after final frame processing...');
             if (mediaRecorderRef.current && mediaRecorderRef.current.state === 'recording') {
               mediaRecorderRef.current.stop();
             }
-          }, 200);
+          }, 500); // Increased delay to ensure all frames are encoded
         }
       };
       
       // Start frame-precise rendering
+      console.log('Starting frame capture...');
       lastFrameTime = performance.now();
       animationId = requestAnimationFrame(render);
       animationIdRef.current = animationId;
