@@ -180,9 +180,18 @@ export default function ControlPanel({
         isCancelledRef.current = false;
 
         try {
-      const sources = Object.entries(video)
-        .filter(([key, value]) => key !== 'timestamp' && value instanceof File)
-        .map(([camera, file]) => ({ camera, file: file as File }));
+      // Define camera order to match viewer layout
+      const cameraOrder6Channel = ['front', 'right_pillar', 'left_pillar', 'back', 'right_repeater', 'left_repeater'];
+      const cameraOrder4Channel = ['front', 'back', 'right_repeater', 'left_repeater'];
+      
+      // Check if we have pillar cameras
+      const hasPillarCameras = video.left_pillar || video.right_pillar;
+      const cameraOrder = hasPillarCameras ? cameraOrder6Channel : cameraOrder4Channel;
+      
+      // Create sources in the correct order to match viewer layout
+      const sources = cameraOrder
+        .filter(camera => video[camera as keyof typeof video] instanceof File)
+        .map(camera => ({ camera, file: video[camera as keyof typeof video] as File }));
 
       // Find front camera for reference (use it for FPS and bitrate)
       const frontSource = sources.find(s => s.camera === 'front') || sources[0];
