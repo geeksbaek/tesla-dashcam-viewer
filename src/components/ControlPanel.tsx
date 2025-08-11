@@ -113,36 +113,12 @@ export default function ControlPanel({
       title: t('download.confirmTitle', { defaultValue: 'Video Download' }),
       centered: true,
       size: 'md',
+      style: { '--modal-size': '540px' },
       children: (
         <Stack gap="md">
           <Text size="sm">
-            {t('download.explanation', { 
-              defaultValue: 'This will merge all camera views into a single video file with the following layout:' 
-            })}
+            {t('download.explanation')}
           </Text>
-          <Box style={{ 
-            padding: '12px', 
-            backgroundColor: 'rgba(0, 0, 0, 0.2)', 
-            borderRadius: '8px',
-            border: '1px solid rgba(255, 255, 255, 0.1)'
-          }}>
-            <Stack gap="xs">
-              <Text size="xs" c="dimmed">
-                {layoutMode === '2x2' 
-                  ? t('download.layout2x2', { defaultValue: '• 2x2 Grid: Front, Back, Left, Right cameras' })
-                  : t('download.layout3x2', { defaultValue: '• 3x2 Grid: All 6 cameras including pillar cameras' })}
-              </Text>
-              <Text size="xs" c="dimmed">
-                {t('download.timestamp', { defaultValue: '• Timestamp overlay on each camera view' })}
-              </Text>
-              <Text size="xs" c="dimmed">
-                {t('download.format', { defaultValue: '• Output format: WebM (H.264 codec)' })}
-              </Text>
-              <Text size="xs" c="dimmed">
-                {t('download.realtime', { defaultValue: '• Processing: Real-time encoding' })}
-              </Text>
-            </Stack>
-          </Box>
           <Box
             style={{
               backgroundColor: 'var(--mantine-color-yellow-light)',
