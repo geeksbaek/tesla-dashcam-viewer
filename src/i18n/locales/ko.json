@@ -1,47 +1,29 @@
 {
   "app": {
-    "title": "테슬라 블랙박스 뷰어",
-    "description": "다중 카메라 블랙박스 영상 동기화 뷰어"
+    "title": "테슬라 블랙박스 뷰어"
   },
   "fileSelect": {
-    "title": "테슬라 블랙박스 파일 선택",
-    "description": "시청할 테슬라 블랙박스 영상 파일을 선택하세요",
     "dragDrop": "영상 파일을 여기에 드래그 앤 드롭하세요",
     "dropHere": "파일을 여기에 놓으세요!",
     "browse": "파일 찾기",
-    "loadDemo": "데모 데이터 로드",
     "supportedFormats": "지원 형식: MP4, MOV",
-    "multipleFiles": "여러 파일을 선택할 수 있습니다",
     "features": {
-      "tesla": "테슬라",
-      "teslaCompatible": "테슬라 4채널, 6채널 블랙박스 호환",
       "synchronizedPlayback": "4채널, 6채널 블랙박스 동기화 재생",
       "noUploadRequired": "업로드 없이 브라우저에서 즉시 재생",
-      "offlineCapable": "오프라인 환경에서도 사용 가능",
-      "4kSupport": "4K 지원",
-      "multiCamera": "멀티 카메라"
+      "offlineCapable": "오프라인 환경에서도 사용 가능"
     }
   },
   "videoGrid": {
-    "front": "전면",
-    "back": "후면",
-    "leftRepeater": "좌측",
-    "rightRepeater": "우측",
-    "clickToFullscreen": "클릭하여 전체화면",
-    "noVideo": "영상이 없습니다"
+    "noVideo": "영상이 없습니다",
+    "loading": "로딩 중..."
   },
   "controlPanel": {
-    "timeline": "타임라인",
     "videos": "영상",
-    "controls": "컨트롤",
-    "expand": "확장",
-    "collapse": "축소",
     "home": "홈",
     "play": "재생",
     "pause": "일시정지",
     "playbackSpeed": "재생 속도",
     "seekMode": "이동 모드",
-    "seekModeShortcut": "좌우 방향키로 이동",
     "timeMode": "5초",
     "frameMode": "프레임",
     "videoFitting": "비디오 피팅",
@@ -52,22 +34,13 @@
     "confirm": "확인",
     "cancel": "취소"
   },
-  "shortcuts": {
-    "title": "키보드 단축키",
-    "space": "스페이스: 재생/일시정지",
-    "leftArrow": "← : 이전 5초 / 프레임",
-    "rightArrow": "→ : 다음 5초 / 프레임"
-  },
   "time": {
-    "duration": "재생 시간",
-    "current": "현재",
     "total": "전체"
   },
   "filters": {
     "licensePlate": "번호판 인식 최적화"
   },
   "language": {
-    "select": "언어",
     "english": "English",
     "korean": "한국어",
     "chinese": "中文",
@@ -88,13 +61,7 @@
     "cancelConfirm": "진행 중인 인코딩을 취소하시겠습니까?",
     "close": "닫으시겠습니까?",
     "confirmTitle": "비디오 다운로드",
-    "explanation": "모든 Tesla 대시캠 영상을 뷰어와 동일한 배치로 하나의 비디오 파일에 합칩니다:",
-    "layout2x2": "• 2x2 격자: [전면-후면] / [우측리피터-좌측리피터]",
-    "layout3x2": "• 3x2 격자: [전면-우측필러-좌측필러] / [후면-우측리피터-좌측리피터]",
-    "timestamp": "• 실시간 타임스탬프 오버레이 표시",
-    "format": "• 출력 형식: MP4 (H.264 코덱, 브라우저 호환)",
-    "encoding": "• 인코딩: 원본 비트레이트 기반 고품질 처리",
-    "sync": "• 동기화: 프레임 단위 정밀 동기화",
+    "explanation": "모든 Tesla 대시캠 영상을 뷰어와 동일한 배치로 하나의 비디오 파일에 합칩니다",
     "qualityNote": "⚠️ 브라우저 인코딩 제한으로 해상도, 비트레이트, FPS가 원본보다 저하될 수 있습니다",
     "note": "참고: 비디오 길이에 따라 인코딩에 몇 분이 소요될 수 있습니다.",
     "start": "다운로드 시작"

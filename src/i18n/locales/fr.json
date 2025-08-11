@@ -1,68 +1,46 @@
 {
   "app": {
-    "title": "Tesla Dashcam Viewer",
-    "description": "Visionneuse de synchronisation vidéo dashcam multi-caméra"
+    "title": "Tesla Dashcam Viewer"
   },
   "fileSelect": {
-    "title": "Sélectionner les fichiers Tesla Dashcam",
-    "description": "Choisissez vos fichiers vidéo Tesla dashcam pour commencer à regarder",
     "dragDrop": "Glissez-déposez vos fichiers vidéo ici",
     "dropHere": "Déposez vos fichiers ici !",
     "browse": "Parcourir les fichiers",
-    "loadDemo": "Charger les données de démonstration",
     "supportedFormats": "Formats supportés : MP4, MOV",
-    "multipleFiles": "Vous pouvez sélectionner plusieurs fichiers",
     "features": {
-      "tesla": "Tesla",
-      "teslaCompatible": "Compatible dashcam Tesla 4 canaux, 6 canaux",
       "synchronizedPlayback": "Lecture synchronisée dashcam 4 canaux, 6 canaux",
-      "noUploadRequired": "Aucun téléchargement requis, lecture instantanée dans le navigateur",
-      "offlineCapable": "Fonctionne entièrement hors ligne",
-      "4kSupport": "Support 4K",
-      "multiCamera": "Multi-caméra"
+      "noUploadRequired": "Lecture instantanée sans téléchargement",
+      "offlineCapable": "Fonctionne entièrement hors ligne"
     }
   },
   "videoGrid": {
-    "front": "Avant",
-    "back": "Arrière",
-    "leftRepeater": "Gauche",
-    "rightRepeater": "Droite",
-    "clickToFullscreen": "Cliquer pour plein écran",
-    "noVideo": "Aucune vidéo disponible"
+    "noVideo": "Aucune vidéo disponible",
+    "loading": "Chargement..."
   },
   "controlPanel": {
-    "timeline": "Chronologie",
     "videos": "Vidéos",
-    "controls": "Contrôles",
-    "expand": "Étendre",
-    "collapse": "Réduire",
     "home": "Accueil",
     "play": "Lire",
     "pause": "Pause",
     "playbackSpeed": "Vitesse",
     "seekMode": "Mode de recherche",
-    "seekModeShortcut": "Naviguer avec les flèches",
     "timeMode": "5 Sec",
     "frameMode": "Image",
     "videoFitting": "Ajustement vidéo",
     "fitModes": {
       "cover": "Remplir l'écran",
-      "contain": "Ne pas rogner"
-    }
-  },
-  "shortcuts": {
-    "title": "Raccourcis clavier",
-    "space": "Espace : Lire/Pause",
-    "leftArrow": "← : Précédent 5 secondes / image",
-    "rightArrow": "→ : Suivant 5 secondes / image"
+      "contain": "Ajuster à l'écran"
+    },
+    "confirm": "Confirmer",
+    "cancel": "Annuler"
   },
   "time": {
-    "duration": "Durée",
-    "current": "Actuel",
     "total": "Total"
   },
+  "filters": {
+    "licensePlate": "Amélioration de plaque d'immatriculation"
+  },
   "language": {
-    "select": "Langue",
     "english": "English",
     "korean": "한국어",
     "chinese": "中文",
@@ -74,10 +52,18 @@
     "danish": "Dansk",
     "spanish": "Español"
   },
-  "filters": {
-    "licensePlate": "Amélioration de plaque d'immatriculation"
-  },
   "github": {
     "viewOnGitHub": "Voir sur GitHub"
+  },
+  "download": {
+    "title": "Téléchargement de la vidéo",
+    "eta": "ETA : {{time}}",
+    "cancelConfirm": "Annuler l'encodage en cours ?",
+    "close": "Fermer ?",
+    "confirmTitle": "Téléchargement vidéo",
+    "explanation": "Ceci fusionnera toutes les séquences de dashcam Tesla en un seul fichier vidéo avec la même disposition que le visualiseur",
+    "qualityNote": "⚠️ La résolution, le débit et les FPS peuvent être réduits par rapport à l'original en raison des limitations d'encodage du navigateur",
+    "note": "Remarque : Le processus d'encodage peut prendre quelques minutes selon la durée de la vidéo.",
+    "start": "Commencer le téléchargement"
   }
 }

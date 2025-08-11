@@ -1,68 +1,46 @@
 {
   "app": {
-    "title": "Tesla Dashcam Viewer",
-    "description": "Multi-kamera dashcam video synkronisering viewer"
+    "title": "Tesla Dashcam Viewer"
   },
   "fileSelect": {
-    "title": "Vælg Tesla Dashcam filer",
-    "description": "Vælg dine Tesla dashcam videofiler for at begynde at se",
     "dragDrop": "Træk og slip dine videofiler her",
     "dropHere": "Slip dine filer her!",
     "browse": "Gennemse filer",
-    "loadDemo": "Indlæs demo data",
     "supportedFormats": "Understøttede formater: MP4, MOV",
-    "multipleFiles": "Du kan vælge flere filer",
     "features": {
-      "tesla": "Tesla",
-      "teslaCompatible": "Tesla 4-kanals, 6-kanals dashcam kompatibel",
       "synchronizedPlayback": "4-kanals, 6-kanals dashcam synkroniseret afspilning",
-      "noUploadRequired": "Ingen upload påkrævet, øjeblikkelig afspilning i browser",
-      "offlineCapable": "Fungerer helt offline",
-      "4kSupport": "4K Support",
-      "multiCamera": "Multi-Kamera"
+      "noUploadRequired": "Øjeblikkelig afspilning uden upload",
+      "offlineCapable": "Fungerer helt offline"
     }
   },
   "videoGrid": {
-    "front": "Foran",
-    "back": "Bag",
-    "leftRepeater": "Venstre",
-    "rightRepeater": "Højre",
-    "clickToFullscreen": "Klik for fuldskærm",
-    "noVideo": "Ingen video tilgængelig"
+    "noVideo": "Ingen video tilgængelig",
+    "loading": "Indlæser..."
   },
   "controlPanel": {
-    "timeline": "Tidslinje",
     "videos": "Videoer",
-    "controls": "Kontroller",
-    "expand": "Udvid",
-    "collapse": "Kollaps",
     "home": "Hjem",
     "play": "Afspil",
     "pause": "Pause",
     "playbackSpeed": "Hastighed",
     "seekMode": "Søg tilstand",
-    "seekModeShortcut": "Naviger med piletaster",
-    "timeMode": "5 Sek",
+    "timeMode": "5 sek",
     "frameMode": "Ramme",
     "videoFitting": "Video tilpasning",
     "fitModes": {
       "cover": "Udfyld skærm",
-      "contain": "Beskær ikke"
-    }
-  },
-  "shortcuts": {
-    "title": "Tastaturgenveje",
-    "space": "Mellemrum: Afspil/Pause",
-    "leftArrow": "← : Forrige 5 sekunder / ramme",
-    "rightArrow": "→ : Næste 5 sekunder / ramme"
+      "contain": "Tilpas til skærm"
+    },
+    "confirm": "Bekræft",
+    "cancel": "Annuller"
   },
   "time": {
-    "duration": "Varighed",
-    "current": "Nuværende",
     "total": "Total"
   },
+  "filters": {
+    "licensePlate": "Nummerplade forbedring"
+  },
   "language": {
-    "select": "Sprog",
     "english": "English",
     "korean": "한국어",
     "chinese": "中文",
@@ -74,10 +52,18 @@
     "danish": "Dansk",
     "spanish": "Español"
   },
-  "filters": {
-    "licensePlate": "Nummerplade forbedring"
-  },
   "github": {
     "viewOnGitHub": "Se på GitHub"
+  },
+  "download": {
+    "title": "Downloader video",
+    "eta": "Estimeret tid: {{time}}",
+    "cancelConfirm": "Afbryd igangværende kodning?",
+    "close": "Lukke?",
+    "confirmTitle": "Video download",
+    "explanation": "Dette vil slå alle Tesla dashcam optagelser sammen til en enkelt videofil med samme layout som vieweren",
+    "qualityNote": "⚠️ Oppløsning, bitrate og FPS kan være reduceret fra originalen på grund af browser kodningsbegrænsninger",
+    "note": "Bemærk: Kodningsprocessen kan tage nogle minutter afhængigt af videolængden.",
+    "start": "Start download"
   }
 }

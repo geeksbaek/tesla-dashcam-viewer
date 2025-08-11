@@ -1,83 +1,69 @@
 {
   "app": {
-    "title": "特斯拉行车记录仪查看器",
-    "description": "多摄像头行车记录仪视频同步查看器"
+    "title": "特斯拉行车记录仪查看器"
   },
   "fileSelect": {
-    "title": "选择特斯拉行车记录仪文件",
-    "description": "选择您要查看的特斯拉行车记录仪视频文件",
-    "dragDrop": "将视频文件拖放到此处",
-    "dropHere": "将文件放到这里！",
+    "dragDrop": "将视频文件拖拽到这里",
+    "dropHere": "将文件放在这里！",
     "browse": "浏览文件",
-    "loadDemo": "加载演示数据",
-    "supportedFormats": "支持格式：MP4, MOV",
-    "multipleFiles": "您可以选择多个文件",
+    "supportedFormats": "支持格式：MP4、MOV",
     "features": {
-      "tesla": "特斯拉",
-      "teslaCompatible": "特斯拉4通道、6通道行车记录仪兼容",
       "synchronizedPlayback": "4通道、6通道行车记录仪同步播放",
-      "noUploadRequired": "无需上传，浏览器内即时播放",
-      "offlineCapable": "完全离线使用",
-      "4kSupport": "4K支持",
-      "multiCamera": "多摄像头"
+      "noUploadRequired": "无需上传 - 浏览器即时播放",
+      "offlineCapable": "完全离线工作"
     }
   },
   "videoGrid": {
-    "front": "前方",
-    "back": "后方",
-    "leftRepeater": "左侧",
-    "rightRepeater": "右侧",
-    "clickToFullscreen": "点击全屏",
-    "noVideo": "无视频"
+    "noVideo": "无视频",
+    "loading": "加载中..."
   },
   "controlPanel": {
-    "timeline": "时间轴",
     "videos": "视频",
-    "controls": "控制",
-    "expand": "展开",
-    "collapse": "收起",
     "home": "主页",
     "play": "播放",
     "pause": "暂停",
     "playbackSpeed": "播放速度",
     "seekMode": "跳转模式",
-    "seekModeShortcut": "使用方向键导航",
     "timeMode": "5秒",
     "frameMode": "帧",
     "videoFitting": "视频适配",
     "fitModes": {
-      "cover": "填满屏幕",
+      "cover": "填充屏幕",
       "contain": "适应屏幕"
-    }
-  },
-  "shortcuts": {
-    "title": "键盘快捷键",
-    "space": "空格键：播放/暂停",
-    "leftArrow": "← ：后退5秒/帧",
-    "rightArrow": "→ ：前进5秒/帧"
+    },
+    "confirm": "确认",
+    "cancel": "取消"
   },
   "time": {
-    "duration": "时长",
-    "current": "当前",
     "total": "总计"
   },
+  "filters": {
+    "licensePlate": "车牌增强"
+  },
   "language": {
-    "select": "语言",
     "english": "English",
     "korean": "한국어",
     "chinese": "中文",
     "german": "Deutsch",
-    "norwegian": "Norsk",
+    "norwegian": "Norsk", 
     "dutch": "Nederlands",
     "french": "Français",
     "swedish": "Svenska",
     "danish": "Dansk",
     "spanish": "Español"
   },
-  "filters": {
-    "licensePlate": "车牌增强"
-  },
   "github": {
-    "viewOnGitHub": "在 GitHub 上查看"
+    "viewOnGitHub": "在GitHub上查看"
+  },
+  "download": {
+    "title": "正在下载视频",
+    "eta": "预计时间：{{time}}",
+    "cancelConfirm": "取消正在进行的编码？",
+    "close": "关闭？",
+    "confirmTitle": "视频下载",
+    "explanation": "这将把所有特斯拉行车记录仪录像合并为一个与查看器相同布局的视频文件",
+    "qualityNote": "⚠️ 由于浏览器编码限制，分辨率、比特率和FPS可能会低于原始文件",
+    "note": "注意：编码过程可能需要几分钟，取决于视频长度。",
+    "start": "开始下载"
   }
 }

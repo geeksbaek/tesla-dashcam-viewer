@@ -1,68 +1,46 @@
 {
   "app": {
-    "title": "Tesla Dashcam Viewer",
-    "description": "Multi-camera dashcam video synchronisatie viewer"
+    "title": "Tesla Dashcam Viewer"
   },
   "fileSelect": {
-    "title": "Selecteer Tesla Dashcam bestanden",
-    "description": "Kies uw Tesla dashcam videobestanden om te bekijken",
     "dragDrop": "Sleep uw videobestanden hier naartoe",
     "dropHere": "Zet uw bestanden hier neer!",
     "browse": "Bestanden bladeren",
-    "loadDemo": "Demo data laden",
     "supportedFormats": "Ondersteunde formaten: MP4, MOV",
-    "multipleFiles": "U kunt meerdere bestanden selecteren",
     "features": {
-      "tesla": "Tesla",
-      "teslaCompatible": "Tesla 4-kanaals, 6-kanaals dashcam compatibel",
       "synchronizedPlayback": "4-kanaals, 6-kanaals dashcam gesynchroniseerde weergave",
-      "noUploadRequired": "Geen upload vereist, directe weergave in browser",
-      "offlineCapable": "Werkt volledig offline",
-      "4kSupport": "4K Ondersteuning",
-      "multiCamera": "Multi-Camera"
+      "noUploadRequired": "Directe weergave zonder upload",
+      "offlineCapable": "Werkt volledig offline"
     }
   },
   "videoGrid": {
-    "front": "Voorkant",
-    "back": "Achterkant",
-    "leftRepeater": "Links",
-    "rightRepeater": "Rechts",
-    "clickToFullscreen": "Klik voor volledig scherm",
-    "noVideo": "Geen video beschikbaar"
+    "noVideo": "Geen video beschikbaar",
+    "loading": "Laden..."
   },
   "controlPanel": {
-    "timeline": "Tijdlijn",
     "videos": "Video's",
-    "controls": "Besturing",
-    "expand": "Uitklappen",
-    "collapse": "Inklappen",
     "home": "Home",
     "play": "Afspelen",
     "pause": "Pauzeren",
     "playbackSpeed": "Snelheid",
     "seekMode": "Zoek modus",
-    "seekModeShortcut": "Navigeren met pijltjestoetsen",
-    "timeMode": "5 Sec",
+    "timeMode": "5 sec",
     "frameMode": "Frame",
     "videoFitting": "Video aanpassing",
     "fitModes": {
       "cover": "Scherm vullen",
-      "contain": "Niet bijsnijden"
-    }
-  },
-  "shortcuts": {
-    "title": "Toetsenbord snelkoppelingen",
-    "space": "Spatiebalk: Afspelen/Pauzeren",
-    "leftArrow": "← : Vorige 5 seconden / frame",
-    "rightArrow": "→ : Volgende 5 seconden / frame"
+      "contain": "Aanpassen aan scherm"
+    },
+    "confirm": "Bevestigen",
+    "cancel": "Annuleren"
   },
   "time": {
-    "duration": "Duur",
-    "current": "Huidige",
     "total": "Totaal"
   },
+  "filters": {
+    "licensePlate": "Kentekenplaat verbetering"
+  },
   "language": {
-    "select": "Taal",
     "english": "English",
     "korean": "한국어",
     "chinese": "中文",
@@ -74,10 +52,18 @@
     "danish": "Dansk",
     "spanish": "Español"
   },
-  "filters": {
-    "licensePlate": "Kentekenplaat verbetering"
-  },
   "github": {
     "viewOnGitHub": "Bekijk op GitHub"
+  },
+  "download": {
+    "title": "Video downloaden",
+    "eta": "Geschatte tijd: {{time}}",
+    "cancelConfirm": "Lopende codering annuleren?",
+    "close": "Sluiten?",
+    "confirmTitle": "Video download",
+    "explanation": "Dit zal alle Tesla dashcam beelden samenvoegen tot één videobestand met dezelfde indeling als de viewer",
+    "qualityNote": "⚠️ Resolutie, bitrate en FPS kunnen lager zijn dan het origineel vanwege browser coderingsbeperkingen",
+    "note": "Opmerking: Het coderingsproces kan enkele minuten duren, afhankelijk van de lengte van de video.",
+    "start": "Download starten"
   }
 }
