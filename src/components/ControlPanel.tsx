@@ -1,10 +1,12 @@
-import { Button, Paper, Text, Title, Group, Stack, Box, ActionIcon, SegmentedControl, Tooltip } from '@mantine/core'
-import { IconChevronLeft, IconChevronRight, IconVideo, IconPlayerTrackNext, IconBrandGithub, IconVideoFilled, IconPlayerPlayFilled, IconPlayerPauseFilled, IconSettingsFilled, IconHomeFilled } from '@tabler/icons-react'
-import { useRef, useEffect } from 'react'
+import { Button, Paper, Text, Title, Group, Stack, Box, ActionIcon, SegmentedControl, Tooltip, Modal, Progress } from '@mantine/core'
+import { modals } from '@mantine/modals'
+import { IconChevronLeft, IconChevronRight, IconVideo, IconPlayerTrackNext, IconBrandGithub, IconVideoFilled, IconPlayerPlayFilled, IconPlayerPauseFilled, IconSettingsFilled, IconHomeFilled, IconDownload } from '@tabler/icons-react'
+import { useRef, useEffect, useState, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import LanguageSelect from './LanguageSelect'
 import VideoFilterControls from './VideoFilterControls'
 import type { VideoFilters } from './VideoFilterControls'
+
 
 interface VideoFile {
   timestamp: string
@@ -32,10 +34,11 @@ interface ControlPanelProps {
   videoDurations: number[]
   videoFilters: VideoFilters
   onVideoFiltersChange: (filters: VideoFilters) => void
-  videoFitMode: 'cover' | 'contain'
+  videoFitMode: 'cover' | 'contain',
   onVideoFitModeChange: (mode: 'cover' | 'contain') => void
   playbackRate: number
   onPlaybackRateChange: (rate: number) => void
+  layoutMode: '2x2' | '3x2' // 현재 레이아웃 모드
 }
 
 export default function ControlPanel({
@@ -56,13 +59,571 @@ export default function ControlPanel({
   videoFitMode,
   onVideoFitModeChange,
   playbackRate,
-  onPlaybackRateChange
+  onPlaybackRateChange,
+  layoutMode
 }: ControlPanelProps) {
   const { t, i18n } = useTranslation();
   const videoListRef = useRef<HTMLDivElement>(null);
   const expandedVideoListRef = useRef<HTMLDivElement>(null);
   const currentButtonRef = useRef<HTMLButtonElement>(null);
   const currentExpandedItemRef = useRef<HTMLDivElement>(null);
+  const [encodingProgress, setEncodingProgress] = useState<number>(0);
+  const [encodingEta, setEncodingEta] = useState<string>('');
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const startTimeRef = useRef<number | null>(null);
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const videoElementsRef = useRef<HTMLVideoElement[]>([]);
+  const animationIdRef = useRef<number | null>(null);
+  const isCancelledRef = useRef<boolean>(false);
+
+  const handleDownload = useCallback(async (video: VideoFile) => {
+    if (isModalOpen) return;
+
+    // Show explanation modal first
+    modals.openConfirmModal({
+      title: t('download.confirmTitle', { defaultValue: 'Video Download' }),
+      centered: true,
+      size: 'md',
+      children: (
+        <Stack gap="md">
+          <Text size="sm">
+            {t('download.explanation', { 
+              defaultValue: 'This will merge all camera views into a single video file with the following layout:' 
+            })}
+          </Text>
+          <Box style={{ 
+            padding: '12px', 
+            backgroundColor: 'rgba(0, 0, 0, 0.2)', 
+            borderRadius: '8px',
+            border: '1px solid rgba(255, 255, 255, 0.1)'
+          }}>
+            <Stack gap="xs">
+              <Text size="xs" c="dimmed">
+                {layoutMode === '2x2' 
+                  ? t('download.layout2x2', { defaultValue: '• 2x2 Grid: Front, Back, Left, Right cameras' })
+                  : t('download.layout3x2', { defaultValue: '• 3x2 Grid: All 6 cameras including pillar cameras' })}
+              </Text>
+              <Text size="xs" c="dimmed">
+                {t('download.timestamp', { defaultValue: '• Timestamp overlay on each camera view' })}
+              </Text>
+              <Text size="xs" c="dimmed">
+                {t('download.format', { defaultValue: '• Output format: WebM (H.264 codec)' })}
+              </Text>
+              <Text size="xs" c="dimmed">
+                {t('download.realtime', { defaultValue: '• Processing: Real-time encoding' })}
+              </Text>
+            </Stack>
+          </Box>
+          <Box
+            style={{
+              backgroundColor: 'var(--mantine-color-yellow-light)',
+              borderLeft: '4px solid var(--mantine-color-yellow-filled)',
+              padding: '8px 12px',
+              borderRadius: '4px'
+            }}
+          >
+            <Text size="xs" c="yellow" fw={500}>
+              {t('download.qualityNote', { 
+                defaultValue: '⚠️ Quality may be reduced from original due to browser encoding limitations' 
+              })}
+            </Text>
+          </Box>
+          <Text size="xs" c="dimmed">
+            {t('download.note', { 
+              defaultValue: 'Note: The encoding process may take a few minutes depending on video length.' 
+            })}
+          </Text>
+        </Stack>
+      ),
+      labels: { 
+        confirm: t('download.start', { defaultValue: 'Start Download' }), 
+        cancel: t('controlPanel.cancel', { defaultValue: 'Cancel' }) 
+      },
+      confirmProps: { color: 'blue' },
+      cancelProps: { variant: 'default' },
+      groupProps: { gap: 8 },
+      onConfirm: async () => {
+        // Start the actual download process
+        setIsModalOpen(true);
+        setEncodingProgress(0);
+        setEncodingEta('');
+        startTimeRef.current = Date.now();
+        isCancelledRef.current = false;
+
+        try {
+      const sources = Object.entries(video)
+        .filter(([key, value]) => key !== 'timestamp' && value instanceof File)
+        .map(([camera, file]) => ({ camera, file: file as File }));
+
+      // Find front camera for reference (use it for FPS and bitrate)
+      const frontSource = sources.find(s => s.camera === 'front') || sources[0];
+      
+      const videoElements = await Promise.all(sources.map(s => loadVideo(URL.createObjectURL(s.file))));
+      videoElementsRef.current = videoElements;
+      
+      // Get each video's resolution
+      const videoResolutions = videoElements.map(video => ({
+        width: video.videoWidth,
+        height: video.videoHeight
+      }));
+      
+      // Use front camera as master reference
+      const frontIndex = sources.findIndex(s => s.camera === 'front');
+      const masterVideo = frontIndex >= 0 ? videoElements[frontIndex] : videoElements[0];
+      const duration = masterVideo.duration;
+      const width = masterVideo.videoWidth;
+      const height = masterVideo.videoHeight;
+
+      // Try to get actual FPS by analyzing video frames
+      let estimatedFPS = 30; // Default fallback
+      
+      // Method 1: Try to detect FPS by measuring frame changes
+      const detectFPS = async (): Promise<number> => {
+        return new Promise((resolve) => {
+          const testVideo = document.createElement('video');
+          testVideo.src = URL.createObjectURL(frontSource.file);
+          testVideo.muted = true;
+          testVideo.playbackRate = 1.0;
+          
+          let frameCount = 0;
+          let lastTime = 0;
+          
+          const countFrames = () => {
+            if (testVideo.currentTime !== lastTime) {
+              frameCount++;
+              lastTime = testVideo.currentTime;
+            }
+            
+            if (testVideo.currentTime >= 1.0) {
+              // Stop after 1 second
+              testVideo.pause();
+              const fps = Math.round(frameCount);
+              URL.revokeObjectURL(testVideo.src);
+              resolve(fps);
+            } else if (testVideo.paused || testVideo.ended) {
+              // Fallback
+              URL.revokeObjectURL(testVideo.src);
+              resolve(30);
+            } else {
+              requestAnimationFrame(countFrames);
+            }
+          };
+          
+          testVideo.onloadeddata = () => {
+            testVideo.play().then(() => {
+              requestAnimationFrame(countFrames);
+            }).catch(() => {
+              resolve(30); // Fallback if can't play
+            });
+          };
+          
+          testVideo.onerror = () => {
+            resolve(30); // Fallback on error
+          };
+          
+          // Timeout after 3 seconds
+          setTimeout(() => {
+            if (testVideo) {
+              testVideo.pause();
+              URL.revokeObjectURL(testVideo.src);
+            }
+            resolve(30);
+          }, 3000);
+        });
+      };
+      
+      // Try to detect actual FPS
+      try {
+        console.log('Detecting FPS from video...');
+        estimatedFPS = await detectFPS();
+        
+        // Validate detected FPS (Tesla typically uses 24, 30, 33, or 36 FPS)
+        const validFPS = [24, 30, 33, 36];
+        if (!validFPS.includes(estimatedFPS)) {
+          // Round to nearest valid FPS
+          const nearest = validFPS.reduce((prev, curr) => 
+            Math.abs(curr - estimatedFPS) < Math.abs(prev - estimatedFPS) ? curr : prev
+          );
+          console.log(`Detected FPS ${estimatedFPS} rounded to ${nearest}`);
+          estimatedFPS = nearest;
+        }
+      } catch (e) {
+        console.warn('FPS detection failed, using fallback', e);
+        // Fallback based on resolution
+        if (width === 1280 && height === 960) {
+          estimatedFPS = 36; // HW2.5/HW3
+        } else if (width >= 2880) {
+          estimatedFPS = 30; // HW4
+        }
+      }
+      
+      console.log(`Using FPS: ${estimatedFPS}`);
+
+      // Create canvas for combining videos
+      const [cols, rows] = layoutMode === '2x2' ? [2, 2] : [3, 2];
+      const numCameras = videoElements.length;
+      
+      // Find the smallest video resolution (usually 1448x938 for HW4)
+      // Use this as the base size for all videos in the grid
+      let minWidth = Math.min(...videoResolutions.map(r => r.width));
+      let minHeight = Math.min(...videoResolutions.map(r => r.height));
+      
+      console.log(`Base resolution: ${minWidth}x${minHeight}`);
+      
+      // Check if the total canvas size would exceed limits
+      const maxCanvasWidth = 3840;  // 4K width limit
+      const maxCanvasHeight = 2160; // 4K height limit
+      
+      let canvasWidth = cols * minWidth;
+      let canvasHeight = rows * minHeight;
+      
+      // Scale down if needed to fit within limits
+      if (canvasWidth > maxCanvasWidth || canvasHeight > maxCanvasHeight) {
+        const scale = Math.min(maxCanvasWidth / canvasWidth, maxCanvasHeight / canvasHeight);
+        minWidth = Math.floor(minWidth * scale);
+        minHeight = Math.floor(minHeight * scale);
+        canvasWidth = cols * minWidth;
+        canvasHeight = rows * minHeight;
+        console.log(`Scaled down to ${minWidth}x${minHeight} per cell to fit within limits`);
+      }
+      
+      // Create canvas with the calculated size
+      const canvas = document.createElement('canvas');
+      canvas.width = canvasWidth;
+      canvas.height = canvasHeight;
+      
+      // All videos will be scaled to this size
+      const cellWidth = minWidth;
+      const cellHeight = minHeight;
+      const ctx = canvas.getContext('2d', { alpha: false })!;
+      
+      console.log(`Canvas size: ${canvas.width}x${canvas.height} (${cols}x${rows} grid, ${cellWidth}x${cellHeight} per cell)`);
+      
+      // Final safety check
+      if (canvas.width > 3840 || canvas.height > 2160) {
+        console.error(`Warning: Canvas size ${canvas.width}x${canvas.height} may cause encoder issues`);
+      }
+
+      // Estimate original video bitrate based on front camera file size and duration
+      const fileSizeInBits = frontSource.file.size * 8;
+      const estimatedBitrate = duration > 0 ? Math.floor(fileSizeInBits / duration) : 0;
+      
+      // Use estimated bitrate or fallback to 50 Mbps / number of cameras
+      const fallbackBitratePerCamera = Math.floor(50000000 / numCameras);
+      const baseVideoBitrate = estimatedBitrate > 0 ? estimatedBitrate : fallbackBitratePerCamera;
+      
+      // Calculate total bitrate based on front camera bitrate × number of cameras
+      // 2x2 = 4 cameras, 3x2 = 6 cameras
+      let totalBitrate = baseVideoBitrate * numCameras;
+      
+      // Cap at reasonable maximum to prevent issues
+      totalBitrate = Math.min(totalBitrate, 100000000); // Cap at 100 Mbps
+      
+      // If calculation seems unreasonable (too low or too high), use 50 Mbps fallback
+      if (totalBitrate < 5000000 || isNaN(totalBitrate)) {
+        console.log('Bitrate calculation failed or too low, using 50 Mbps fallback');
+        totalBitrate = 50000000;
+      }
+      
+      const canvasPixels = canvas.width * canvas.height;
+      const megaPixels = canvasPixels / 1000000;
+      
+      console.log(`Canvas: ${canvas.width}x${canvas.height} (${megaPixels.toFixed(1)} MP)`);
+      console.log(`Encoding settings: ${(totalBitrate / 1000000).toFixed(1)} Mbps (${numCameras} cameras × ${(baseVideoBitrate / 1000000).toFixed(1)} Mbps each), ${estimatedFPS} FPS`);
+      console.log(`Video info: duration=${duration}s, file size=${(frontSource.file.size / 1024 / 1024).toFixed(1)}MB, original resolution=${width}x${height}`);
+      
+      // Setup MediaRecorder with conservative settings
+      const stream = canvas.captureStream(estimatedFPS); // Use detected FPS for accurate capture
+      
+      // Try to create MediaRecorder with supported codecs
+      let mediaRecorder: MediaRecorder | null = null;
+      
+      // Check codec support first (MP4 prioritized, WebM as fallback)
+      const supportedCodecs = [
+        'video/mp4;codecs=h264',     // MP4 with H.264 (Safari, Chrome)
+        'video/mp4',                  // MP4 default
+        'video/webm;codecs=h264',     // WebM with H.264
+        'video/webm;codecs=vp9',      // WebM with VP9
+        'video/webm;codecs=vp8',      // WebM with VP8
+        'video/webm'                  // WebM default
+      ];
+      
+      let selectedCodec = 'video/webm';
+      for (const codec of supportedCodecs) {
+        if (MediaRecorder.isTypeSupported(codec)) {
+          selectedCodec = codec;
+          console.log(`Using codec: ${codec}`);
+          break;
+        }
+      }
+      
+      try {
+        mediaRecorder = new MediaRecorder(stream, {
+          mimeType: selectedCodec,
+          videoBitsPerSecond: totalBitrate
+        });
+      } catch {
+        console.warn(`Failed with calculated bitrate ${(totalBitrate / 1000000).toFixed(1)} Mbps, trying default`);
+        // Try with default bitrate (2.5 Mbps)
+        try {
+          mediaRecorder = new MediaRecorder(stream, {
+            mimeType: selectedCodec
+          });
+          console.log('Using default bitrate (2.5 Mbps)');
+        } catch (e2) {
+          throw new Error(`Failed to initialize MediaRecorder: ${e2}`);
+        }
+      }
+      
+      if (!mediaRecorder) {
+        throw new Error('Failed to initialize MediaRecorder');
+      }
+      mediaRecorderRef.current = mediaRecorder;
+
+      const chunks: Blob[] = [];
+      mediaRecorder.ondataavailable = (e) => {
+        if (e.data.size > 0) {
+          chunks.push(e.data);
+        }
+      };
+      
+      mediaRecorder.onstart = () => {
+        // MediaRecorder started
+      };
+      
+      mediaRecorder.onerror = (event: Event) => {
+        const error = (event as ErrorEvent).error;
+        console.error('MediaRecorder error:', error || event);
+        alert(`Recording error: ${error?.message || 'Unknown error'}`);
+      };
+
+      mediaRecorder.onstop = () => {
+        // Only save if we have data AND not cancelled
+        if (chunks.length > 0 && !isCancelledRef.current) {
+          // Use the selected codec type for the blob
+          const mimeType = selectedCodec.split(';')[0]; // Get base mime type (video/mp4 or video/webm)
+          const blob = new Blob(chunks, { type: mimeType });
+          
+          // Determine file extension based on codec
+          const extension = selectedCodec.includes('mp4') ? 'mp4' : 'webm';
+          
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `${video.timestamp}.${extension}`;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+        }
+        
+        // Cleanup
+        videoElements.forEach(v => {
+          v.pause();
+          URL.revokeObjectURL(v.src);
+        });
+        videoElementsRef.current = [];
+        mediaRecorderRef.current = null;
+        
+        // Close modal after cleanup
+        if (!isCancelledRef.current) {
+          setIsModalOpen(false);
+        }
+      };
+
+      // Initialize videos - IMPORTANT: sync them perfectly
+      for (const v of videoElements) {
+        v.currentTime = 0;
+        v.playbackRate = 1.0;
+        v.muted = true; // Ensure muted for autoplay
+        v.volume = 0; // Ensure volume is 0
+        // Preload video data for smoother playback
+        v.preload = 'auto';
+      }
+
+      // Start recording with smaller chunks for smoother processing
+      mediaRecorder.start(500); // Get data every 500ms
+
+      // Start all videos in sync
+      console.log('Starting video playback...');
+      try {
+        await Promise.all(videoElements.map(v => v.play()));
+        console.log('All videos started successfully');
+      } catch (error) {
+        console.error('Failed to start video playback:', error);
+        // Try playing without promise
+        videoElements.forEach(v => {
+          v.play().catch(e => console.error('Play error:', e));
+        });
+      }
+
+      // Main render loop - runs at display refresh rate
+      let animationId: number;
+      let lastSyncTime = 0;
+      
+      const render = () => {
+        const currentTime = masterVideo.currentTime;
+        
+        // Periodically sync all videos to prevent drift (every 0.5 seconds)
+        if (currentTime - lastSyncTime > 0.5) {
+          videoElements.forEach((v, i) => {
+            if (i !== 0 && Math.abs(v.currentTime - currentTime) > 0.05) {
+              v.currentTime = currentTime;
+            }
+          });
+          lastSyncTime = currentTime;
+        }
+        
+        // Clear canvas
+        ctx.fillStyle = '#000';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        
+        // Draw all videos
+        videoElements.forEach((v, i) => {
+          const x = (i % cols) * cellWidth;
+          const y = Math.floor(i / cols) * cellHeight;
+          
+          try {
+            // Draw each video scaled to the cell size
+            ctx.drawImage(v, x, y, cellWidth, cellHeight);
+          } catch {
+            // Video frame might not be ready, skip this frame
+            console.warn('Frame not ready for video', i);
+          }
+          drawTimestamp(ctx, x, y, formatTimestamp(video.timestamp, currentTime, i18n.language), cellWidth);
+        });
+        
+        // Update progress - use consistent rounding for both bar and text
+        const rawProgress = duration > 0 ? (currentTime / duration) * 100 : 0;
+        // Round to 1 decimal place consistently
+        const roundedProgress = Math.round(Math.min(100, Math.max(0, rawProgress)) * 10) / 10;
+        
+        setEncodingProgress(roundedProgress);
+        
+        // Update ETA
+        if (startTimeRef.current && currentTime > 0 && roundedProgress < 100) {
+          const elapsed = (Date.now() - startTimeRef.current) / 1000;
+          const rate = currentTime / elapsed;
+          if (rate > 0) {
+            const remaining = (duration - currentTime) / rate;
+            const mins = Math.floor(remaining / 60);
+            const secs = Math.floor(remaining % 60);
+            setEncodingEta(`${mins}:${secs.toString().padStart(2, '0')}`);
+          }
+        } else if (roundedProgress >= 100) {
+          setEncodingEta('');
+        }
+        
+        // Check if done
+        if (currentTime < duration - 0.1 && !masterVideo.paused && !masterVideo.ended) {
+          animationId = requestAnimationFrame(render);
+          animationIdRef.current = animationId;
+        } else if (currentTime >= duration - 0.1 || masterVideo.ended) {
+          // Stop everything
+          console.log(`Encoding complete at ${currentTime}s of ${duration}s`);
+          videoElements.forEach(v => v.pause());
+          setEncodingProgress(100);
+          
+          // Give time for final frames to be processed
+          setTimeout(() => {
+            if (mediaRecorderRef.current && mediaRecorderRef.current.state === 'recording') {
+              // Request any pending data before stopping
+              if (mediaRecorderRef.current.requestData) {
+                mediaRecorderRef.current.requestData();
+              }
+              // Wait a bit more for the final data
+              setTimeout(() => {
+                if (mediaRecorderRef.current && mediaRecorderRef.current.state === 'recording') {
+                  mediaRecorderRef.current.stop();
+                }
+              }, 500);
+            }
+          }, 500);
+        }
+      };
+      
+      // Start rendering
+      animationId = requestAnimationFrame(render);
+      animationIdRef.current = animationId;
+      
+        } catch (error) {
+          console.error('Error during video encoding setup:', error);
+          alert(`Video encoding failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+          setIsModalOpen(false);
+        }
+      }
+    });
+  }, [isModalOpen, layoutMode, i18n.language, t, formatTimestamp]);
+
+  const loadVideo = (url: string): Promise<HTMLVideoElement> => {
+    return new Promise((resolve, reject) => {
+      const video = document.createElement('video');
+      video.src = url;
+      video.muted = true;
+      video.volume = 0;
+      video.preload = 'auto';
+      video.crossOrigin = 'anonymous';
+      
+      video.onloadeddata = () => {
+        resolve(video);
+      };
+      
+      video.onerror = (e) => {
+        console.error('Video load error:', e);
+        reject(e);
+      };
+    });
+  }
+
+
+  const formatTimestamp = (baseTimestamp: string, additionalSeconds: number = 0, language: string = i18n.language) => {
+    try {
+      const parts = baseTimestamp.split('_');
+      if (parts.length !== 2) return baseTimestamp.replace(/_/g, ' ').replace(/-/g, ':');
+      const datePart = parts[0];
+      const timePart = parts[1];
+      const [year, month, day] = datePart.split('-').map(Number);
+      const [hours, minutes, seconds] = timePart.split('-').map(Number);
+      const totalSeconds = hours * 3600 + minutes * 60 + seconds + Math.floor(additionalSeconds);
+      const newHours = Math.floor(totalSeconds / 3600) % 24;
+      const newMinutes = Math.floor((totalSeconds % 3600) / 60);
+      const newSecs = totalSeconds % 60;
+      const date = new Date(year, month - 1, day, newHours, newMinutes, newSecs);
+      const formatter = new Intl.DateTimeFormat(language, { 
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false,
+      });
+      return formatter.format(date);
+    } catch {
+      return baseTimestamp.replace(/_/g, ' ').replace(/-/g, ':');
+    }
+  }
+
+  const drawTimestamp = (ctx: CanvasRenderingContext2D, x: number, y: number, text: string, width: number) => {
+    const fontSize = 20;
+    ctx.font = `${fontSize}px Arial`;
+    const textMetrics = ctx.measureText(text);
+    const padding = 10;
+    const boxWidth = textMetrics.width + padding * 2;
+    const boxHeight = fontSize + padding;
+    
+    // Position at top-right corner of each video
+    const boxX = x + width - boxWidth - 10;
+    const boxY = y + 10;
+    
+    // Draw background
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+    ctx.fillRect(boxX, boxY, boxWidth, boxHeight);
+    
+    // Draw text
+    ctx.fillStyle = 'white';
+    ctx.fillText(text, boxX + padding, boxY + fontSize);
+  }
   
   // 현재 재생 중인 클립이 보이도록 스크롤 (축소된 사이드바)
   useEffect(() => {
@@ -118,47 +679,6 @@ export default function ControlPanel({
     return formatTimestamp(baseTimestamp, currentVideoTime)
   }
 
-  // 타임스탬프 포맷팅 함수
-  const formatTimestamp = (baseTimestamp: string, additionalSeconds: number = 0) => {
-    try {
-      // 타임스탬프 파싱: "2024-01-15_14-30-25" 형식
-      const parts = baseTimestamp.split('_')
-      if (parts.length !== 2) return baseTimestamp.replace(/_/g, ' ').replace(/-/g, ':')
-      
-      const datePart = parts[0] // "2024-01-15"
-      const timePart = parts[1] // "14-30-25"
-      
-      const [year, month, day] = datePart.split('-').map(Number)
-      const [hours, minutes, seconds] = timePart.split('-').map(Number)
-      
-      // 기준 시간에 추가 시간을 더함
-      const totalSeconds = hours * 3600 + minutes * 60 + seconds + Math.floor(additionalSeconds)
-      
-      const newHours = Math.floor(totalSeconds / 3600) % 24
-      const newMinutes = Math.floor((totalSeconds % 3600) / 60)
-      const newSecs = totalSeconds % 60
-      
-      // Date 객체 생성
-      const date = new Date(year, month - 1, day, newHours, newMinutes, newSecs)
-      
-      // Intl.DateTimeFormat을 사용한 국제화 포맷팅
-      const formatter = new Intl.DateTimeFormat(i18n.language, {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit',
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit',
-        hour12: false // 24시간 형식 사용
-      })
-      
-      return formatter.format(date)
-    } catch {
-      // 파싱 실패 시 기본 포맷 반환
-      return baseTimestamp.replace(/_/g, ' ').replace(/-/g, ':')
-    }
-  }
-
   // 현재 클립의 프로그레스 계산 (0-100%)
   const getCurrentClipProgress = () => {
     if (!videoFiles[currentIndex]) return 0
@@ -178,6 +698,95 @@ export default function ControlPanel({
 
   return (
     <>
+      <Modal
+        opened={isModalOpen}
+        onClose={() => {
+          // Confirm before closing using Mantine modals
+          // const confirmMessage = encodingProgress > 0 
+          //   ? t('download.cancelConfirm', { defaultValue: 'Cancel encoding in progress?' })
+          //   : t('download.close', { defaultValue: 'Close?' });
+            
+          modals.openConfirmModal({
+            title: encodingProgress > 0 ? t('download.cancelConfirm', { defaultValue: 'Cancel encoding?' }) : t('download.close', { defaultValue: 'Close?' }),
+            centered: true,
+            children: (
+              <Text size="sm">
+                {encodingProgress > 0 
+                  ? t('download.cancelConfirm', { defaultValue: 'Are you sure you want to cancel the ongoing encoding?' })
+                  : t('download.close', { defaultValue: 'Are you sure you want to close?' })}
+              </Text>
+            ),
+            labels: { 
+              confirm: t('controlPanel.confirm', { defaultValue: 'Confirm' }), 
+              cancel: t('controlPanel.cancel', { defaultValue: 'Cancel' }) 
+            },
+            confirmProps: { color: 'red' },
+            cancelProps: { variant: 'default' },
+            groupProps: { gap: 8 },
+            onConfirm: () => {
+              // Mark as cancelled
+              isCancelledRef.current = true;
+              
+              // Cancel encoding
+              if (animationIdRef.current) {
+                cancelAnimationFrame(animationIdRef.current);
+                animationIdRef.current = null;
+              }
+              
+              // Stop all videos
+              videoElementsRef.current.forEach(v => {
+                v.pause();
+                URL.revokeObjectURL(v.src);
+              });
+              videoElementsRef.current = [];
+              
+              // Stop recording if active (this will trigger onstop but won't download due to isCancelledRef)
+              if (mediaRecorderRef.current && mediaRecorderRef.current.state === 'recording') {
+                mediaRecorderRef.current.stop();
+              }
+              mediaRecorderRef.current = null;
+              
+              setIsModalOpen(false);
+              setEncodingProgress(0);
+              setEncodingEta('');
+            }
+          });
+        }}
+        title={t('download.title')}
+        centered
+        size="sm"
+        closeOnClickOutside={false}
+        closeOnEscape={false}
+        styles={{
+          title: {
+            fontSize: '16px',
+            fontWeight: 600,
+          },
+          body: {
+            padding: '20px',
+          }
+        }}
+      >
+        <Stack gap="md">
+          <Progress 
+            value={encodingProgress} 
+            striped 
+            animated 
+            size="lg"
+            styles={{
+              root: { height: 8 }
+            }}
+          />
+          <Group justify="space-between">
+            <Text size="sm" fw={500} c="dimmed">
+              {`${encodingProgress.toFixed(1)}%`}
+            </Text>
+            <Text size="sm" fw={500} c="dimmed">
+              {encodingEta && t('download.eta', { time: encodingEta })}
+            </Text>
+          </Group>
+        </Stack>
+      </Modal>
       {/* 축소된 사이드바 */}
       {!isExpanded && (
         <Paper
@@ -574,8 +1183,8 @@ export default function ControlPanel({
                         />
                       )}
                       
-                      {/* 텍스트 컨테이너 - 상대 위치로 위에 표시 */}
-                      <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+                      {/* 텍스트 및 다운로드 버튼 컨테이너 */}
+                      <div style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
                         <Text 
                           size="xs" 
                           fw={500} 
@@ -588,6 +1197,17 @@ export default function ControlPanel({
                             formatTimestamp(video.timestamp)
                           }
                         </Text>
+                        <ActionIcon 
+                          size="sm" 
+                          variant="subtle"
+                          onClick={(e) => {
+                            e.stopPropagation(); // 이벤트 버블링 방지
+                            handleDownload(video);
+                          }}
+                          disabled={isModalOpen}
+                        >
+                          <IconDownload size={16} />
+                        </ActionIcon>
                       </div>
                     </div>
                   )

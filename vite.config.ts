@@ -78,5 +78,13 @@ export default defineConfig({
   },
   define: {
     'import.meta.env.VITE_APP_VERSION': JSON.stringify(packageJson.version)
+  },
+  build: {
+    rollupOptions: {
+      input: {
+        main: path.resolve(__dirname, 'index.html'),
+        encoder: path.resolve(__dirname, 'src/workers/encoder.ts')
+      }
+    }
   }
 })

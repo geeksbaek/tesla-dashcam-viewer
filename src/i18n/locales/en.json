@@ -48,7 +48,9 @@
     "fitModes": {
       "cover": "Fill Screen",
       "contain": "Fit Screen"
-    }
+    },
+    "confirm": "Confirm",
+    "cancel": "Cancel"
   },
   "shortcuts": {
     "title": "Keyboard Shortcuts",
@@ -79,5 +81,21 @@
   },
   "github": {
     "viewOnGitHub": "View on GitHub"
+  },
+  "download": {
+    "title": "Downloading Video",
+    "eta": "ETA: {{time}}",
+    "cancelConfirm": "Cancel encoding in progress?",
+    "close": "Close?",
+    "confirmTitle": "Video Download",
+    "explanation": "This will merge all camera views into a single video file with the following layout:",
+    "layout2x2": "• 2x2 Grid: Front, Back, Left, Right cameras",
+    "layout3x2": "• 3x2 Grid: All 6 cameras including pillar cameras",
+    "timestamp": "• Timestamp overlay on each camera view",
+    "format": "• Output format: MP4/WebM (H.264 codec)",
+    "realtime": "• Processing: Real-time encoding",
+    "qualityNote": "⚠️ Quality may be reduced from original due to browser encoding limitations",
+    "note": "Note: The encoding process may take a few minutes depending on video length.",
+    "start": "Start Download"
   }
 }

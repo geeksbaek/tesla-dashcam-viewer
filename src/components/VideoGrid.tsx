@@ -34,6 +34,8 @@ interface VideoGridProps {
   onFrameRateUpdate: (frameRate: number) => void
   onVideoDurationUpdate: (duration: number) => void
   sidebarExpanded?: boolean
+  layoutMode: '2x2' | '3x2'
+  onLayoutModeChange: (mode: '2x2' | '3x2') => void
 }
 
 export default function VideoGrid({ 
@@ -50,7 +52,8 @@ export default function VideoGrid({
   onVideoSelect,
   onFrameRateUpdate,
   onVideoDurationUpdate,
-  sidebarExpanded = true
+  sidebarExpanded = true,
+  onLayoutModeChange
 }: VideoGridProps) {
   const { t, i18n } = useTranslation();
   const frontRef = useRef<HTMLVideoElement>(null)
@@ -220,6 +223,13 @@ export default function VideoGrid({
     }
     
     setVideoUrls(newUrls)
+
+    // 레이아웃 모드 업데이트
+    if (videoFile?.left_pillar || videoFile?.right_pillar) {
+      onLayoutModeChange('3x2');
+    } else {
+      onLayoutModeChange('2x2');
+    }
     
     // 비디오 URL이 변경되면 즉시 currentTime 설정을 위한 플래그 설정
     // 이렇게 하면 비디오가 로드되자마자 올바른 시간으로 이동
@@ -233,7 +243,7 @@ export default function VideoGrid({
         if (url) URL.revokeObjectURL(url as string)
       })
     }
-  }, [videoFile, currentVideoIndex])
+  }, [videoFile, currentVideoIndex, onLayoutModeChange])
 
   // 비디오 초기화 및 실제 프레임레이트 감지
   useEffect(() => {

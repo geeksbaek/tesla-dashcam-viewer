@@ -48,7 +48,9 @@
     "fitModes": {
       "cover": "꽉 채우기",
       "contain": "잘리지 않게"
-    }
+    },
+    "confirm": "확인",
+    "cancel": "취소"
   },
   "shortcuts": {
     "title": "키보드 단축키",
@@ -79,5 +81,21 @@
   },
   "github": {
     "viewOnGitHub": "GitHub에서 보기"
+  },
+  "download": {
+    "title": "비디오 다운로드 중",
+    "eta": "남은 시간: {{time}}",
+    "cancelConfirm": "진행 중인 인코딩을 취소하시겠습니까?",
+    "close": "닫으시겠습니까?",
+    "confirmTitle": "비디오 다운로드",
+    "explanation": "모든 카메라 영상을 하나의 비디오 파일로 합칩니다:",
+    "layout2x2": "• 2x2 격자: 전면, 후면, 좌측, 우측 카메라",
+    "layout3x2": "• 3x2 격자: 필러 카메라를 포함한 6개 카메라",
+    "timestamp": "• 각 카메라 화면에 타임스탬프 표시",
+    "format": "• 출력 형식: MP4/WebM (H.264 코덱)",
+    "realtime": "• 처리: 실시간 인코딩",
+    "qualityNote": "⚠️ 브라우저 인코딩 제한으로 원본보다 화질이 저하될 수 있습니다",
+    "note": "참고: 비디오 길이에 따라 인코딩에 몇 분이 소요될 수 있습니다.",
+    "start": "다운로드 시작"
   }
 }

@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { flushSync } from 'react-dom'
 import { MantineProvider } from '@mantine/core'
+import { Notifications } from '@mantine/notifications'
 import VideoGrid from './components/VideoGrid'
 import FileSelect from './components/FileSelect'
 import ControlPanel from './components/ControlPanel'
@@ -39,6 +40,7 @@ function App() {
     grayscale: false,
   })
   const [videoFitMode, setVideoFitMode] = useState<'cover' | 'contain'>('contain') // 비디오 피팅 모드
+  const [layoutMode, setLayoutMode] = useState<'2x2' | '3x2'>('2x2'); // 비디오 그리드 레이아웃 모드
 
   const handleFilesLoaded = (files: VideoFile[]) => {
     setVideoFiles(files)
@@ -334,6 +336,7 @@ function App() {
 
   return (
     <MantineProvider theme={theme} defaultColorScheme="dark">
+      <Notifications />
       <UpdatePrompt />
       <div className="font-apple" style={{ 
         height: '100vh', 
@@ -367,6 +370,8 @@ function App() {
               onSeekModeChange={handleSeekModeChange}
               onFrameRateUpdate={handleFrameRateUpdate}
               onVideoDurationUpdate={handleVideoDurationUpdate}
+              layoutMode={layoutMode}
+              onLayoutModeChange={setLayoutMode}
             />
             <ControlPanel
               videoFiles={videoFiles}
@@ -388,6 +393,7 @@ function App() {
               onVideoFitModeChange={setVideoFitMode}
               playbackRate={playbackRate}
               onPlaybackRateChange={handlePlaybackRateChange}
+              layoutMode={layoutMode}
             />
           </>
         )}
