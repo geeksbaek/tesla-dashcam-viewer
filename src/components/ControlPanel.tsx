@@ -715,7 +715,7 @@ export default function ControlPanel({
       }
       }
     });
-  }, [isModalOpen, layoutMode, i18n.language, t, videoFiles, currentLayout, videoFilters, checkBrowserSupport, customLayout]);
+  }, [isModalOpen, layoutMode, i18n.language, t, checkBrowserSupport, customLayout]);
 
   const loadVideo = (url: string): Promise<HTMLVideoElement> => {
     return new Promise((resolve, reject) => {
