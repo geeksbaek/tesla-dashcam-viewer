@@ -69,5 +69,25 @@
     "browserWarning": "⚠️ Denne funksjonen bruker MediaRecorder API, Canvas API og avanserte video-kodeker. Nettleserststøtte er begrenset og uventede problemer som rammetap kan oppstå.",
     "unsupportedBrowser": "❌ Nettleseren din støtter ikke de nødvendige kodingsteknologiene (MediaRecorder API, Canvas API eller video-kodeker). Vennligst bruk en moderne nettleser som Chrome, Firefox eller Edge.",
     "start": "Start nedlasting"
+  },
+  "layout": {
+    "title": "Videooppsett-konfigurasjon",
+    "editButton": "Rediger oppsett",
+    "instructions": "Dra og slipp kameraer for å omorganisere videooppsettet",
+    "reset": "Tilbakestill til standard",
+    "dropHere": "Slipp kamera her",
+    "notAvailable": "Ikke tilgjengelig"
+  },
+  "camera": {
+    "front": "Front",
+    "back": "Bak",
+    "leftRepeater": "Venstre blinklys",
+    "rightRepeater": "Høyre blinklys",
+    "leftPillar": "Venstre stolpe",
+    "rightPillar": "Høyre stolpe"
+  },
+  "common": {
+    "save": "Lagre",
+    "cancel": "Avbryt"
   }
 }

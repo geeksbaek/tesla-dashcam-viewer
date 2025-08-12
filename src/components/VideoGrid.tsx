@@ -2,6 +2,7 @@ import React, { useRef, useEffect, useState, useMemo, useCallback } from 'react'
 import { Paper, Box, Text } from '@mantine/core'
 import { useTranslation } from 'react-i18next'
 import type { VideoFilters } from './VideoFilterControls'
+import type { LayoutConfig } from '@/types/layout'
 
 interface VideoFile {
   timestamp: string
@@ -36,6 +37,7 @@ interface VideoGridProps {
   sidebarExpanded?: boolean
   layoutMode: '2x2' | '3x2'
   onLayoutModeChange: (mode: '2x2' | '3x2') => void
+  customLayout?: LayoutConfig
 }
 
 export default function VideoGrid({ 
@@ -53,7 +55,8 @@ export default function VideoGrid({
   onFrameRateUpdate,
   onVideoDurationUpdate,
   sidebarExpanded = true,
-  onLayoutModeChange
+  onLayoutModeChange,
+  customLayout
 }: VideoGridProps) {
   const { t, i18n } = useTranslation();
   const frontRef = useRef<HTMLVideoElement>(null)
@@ -488,6 +491,25 @@ export default function VideoGrid({
     return () => window.removeEventListener('toggleFullscreen', handleToggleFullscreen as EventListener)
   }, [toggleFullscreen])
 
+  // 카메라 타입을 ref와 hoverKey로 매핑
+  const cameraRefMap: Record<string, React.RefObject<HTMLVideoElement>> = {
+    'front': frontRef,
+    'back': backRef,
+    'left_repeater': leftRef,
+    'right_repeater': rightRef,
+    'left_pillar': leftPillarRef,
+    'right_pillar': rightPillarRef
+  }
+
+  const cameraHoverKeyMap: Record<string, string> = {
+    'front': 'front',
+    'back': 'back',
+    'left_repeater': 'left',
+    'right_repeater': 'right',
+    'left_pillar': 'leftPillar',
+    'right_pillar': 'rightPillar'
+  }
+
   // 비디오 컴포넌트 생성 함수
   const createVideoComponent = (
     cameraType: 'front' | 'back' | 'left_repeater' | 'right_repeater' | 'left_pillar' | 'right_pillar',
@@ -756,124 +778,163 @@ export default function VideoGrid({
         </Box>
       )}
 
-      {/* 비디오 그리드 - 6채널이면 3x2, 4채널이면 2x2 */}
+      {/* 비디오 그리드 - 커스텀 레이아웃 또는 기본 레이아웃 */}
       <Box style={{ flex: 1, width: '100%', display: 'flex', flexDirection: 'column' }}>
-        {(videoFile.left_pillar || videoFile.right_pillar) ? (
-          <>
-            {/* 6채널 레이아웃 - 상단 행: 전방, 우측 B필러, 좌측 B필러 */}
-            <Box style={{ display: 'flex', height: '50%' }}>
-              {/* 전방 카메라 */}
-              {createVideoComponent(
-                'front',
-                frontRef,
-                'front',
-                { borderRight: '1px solid rgba(255,255,255,0.1)' }
-              )}
-              
-              {/* 우측 B필러 카메라 */}
-              {createVideoComponent(
-                'right_pillar',
-                rightPillarRef,
-                'rightPillar',
-                { 
-                  borderLeft: '1px solid rgba(255,255,255,0.1)',
-                  borderRight: '1px solid rgba(255,255,255,0.1)'
-                }
-              )}
-              
-              {/* 좌측 B필러 카메라 */}
-              {createVideoComponent(
-                'left_pillar',
-                leftPillarRef,
-                'leftPillar',
-                { borderLeft: '1px solid rgba(255,255,255,0.1)' }
-              )}
-            </Box>
+        {(() => {
+          // 레이아웃 모드 결정
+          const has6Channels = videoFile.left_pillar || videoFile.right_pillar
+          const layoutMode = has6Channels ? '3x2' : '2x2'
+          
+          // 커스텀 레이아웃 사용 또는 기본 레이아웃
+          if (customLayout && customLayout.mode === layoutMode) {
+            // 커스텀 레이아웃 렌더링
+            const rows = layoutMode === '3x2' ? 2 : 2
+            const cols = layoutMode === '3x2' ? 3 : 2
             
-            {/* 6채널 레이아웃 - 하단 행: 후방, 우측 리피터, 좌측 리피터 */}
-            <Box style={{ display: 'flex', height: '50%' }}>
-              {/* 후방 카메라 */}
-              {createVideoComponent(
-                'back',
-                backRef,
-                'back',
-                { 
-                  borderRight: '1px solid rgba(255,255,255,0.1)',
-                  borderTop: '1px solid rgba(255,255,255,0.1)'
-                }
-              )}
+            const renderRows = []
+            for (let row = 0; row < rows; row++) {
+              const rowCameras = customLayout.positions
+                .filter(p => p.row === row)
+                .sort((a, b) => a.col - b.col)
               
-              {/* 우측 리피터 카메라 */}
-              {createVideoComponent(
-                'right_repeater',
-                rightRef,
-                'right',
-                { 
-                  borderLeft: '1px solid rgba(255,255,255,0.1)',
-                  borderRight: '1px solid rgba(255,255,255,0.1)',
-                  borderTop: '1px solid rgba(255,255,255,0.1)'
-                }
-              )}
-              
-              {/* 좌측 리피터 카메라 */}
-              {createVideoComponent(
-                'left_repeater',
-                leftRef,
-                'left',
-                { 
-                  borderLeft: '1px solid rgba(255,255,255,0.1)',
-                  borderTop: '1px solid rgba(255,255,255,0.1)'
-                }
-              )}
-            </Box>
-          </>
-        ) : (
-          <>
-            {/* 4채널 레이아웃 - 상단 행: 전방, 후방 */}
-            <Box style={{ display: 'flex', height: '50%' }}>
-              {/* 전방 카메라 */}
-              {createVideoComponent(
-                'front',
-                frontRef,
-                'front',
-                { borderRight: '1px solid rgba(255,255,255,0.1)' }
-              )}
-              
-              {/* 후방 카메라 */}
-              {createVideoComponent(
-                'back',
-                backRef,
-                'back',
-                { borderLeft: '1px solid rgba(255,255,255,0.1)' }
-              )}
-            </Box>
+              renderRows.push(
+                <Box key={row} style={{ display: 'flex', height: `${100 / rows}%` }}>
+                  {rowCameras.map((position) => {
+                    if (!position.camera) {
+                      return (
+                        <Box key={`${row}-${position.col}`} style={{ flex: 1, backgroundColor: 'black' }} />
+                      )
+                    }
+                    
+                    const camera = position.camera
+                    const ref = cameraRefMap[camera]
+                    const hoverKey = cameraHoverKeyMap[camera]
+                    
+                    // 테두리 스타일 결정
+                    const borderStyle: React.CSSProperties = {}
+                    if (position.col > 0) borderStyle.borderLeft = '1px solid rgba(255,255,255,0.1)'
+                    if (position.col < cols - 1) borderStyle.borderRight = '1px solid rgba(255,255,255,0.1)'
+                    if (row > 0) borderStyle.borderTop = '1px solid rgba(255,255,255,0.1)'
+                    
+                    return (
+                      <React.Fragment key={`${row}-${position.col}`}>
+                        {createVideoComponent(camera, ref, hoverKey, borderStyle)}
+                      </React.Fragment>
+                    )
+                  })}
+                </Box>
+              )
+            }
             
-            {/* 4채널 레이아웃 - 하단 행: 우측 리피터, 좌측 리피터 */}
-            <Box style={{ display: 'flex', height: '50%' }}>
-              {/* 우측 리피터 카메라 */}
-              {createVideoComponent(
-                'right_repeater',
-                rightRef,
-                'right',
-                { 
-                  borderRight: '1px solid rgba(255,255,255,0.1)',
-                  borderTop: '1px solid rgba(255,255,255,0.1)'
-                }
-              )}
-              
-              {/* 좌측 리피터 카메라 */}
-              {createVideoComponent(
-                'left_repeater',
-                leftRef,
-                'left',
-                { 
-                  borderLeft: '1px solid rgba(255,255,255,0.1)',
-                  borderTop: '1px solid rgba(255,255,255,0.1)'
-                }
-              )}
-            </Box>
-          </>
-        )}
+            return <>{renderRows}</>
+          } else {
+            // 기본 레이아웃
+            if (has6Channels) {
+              return (
+                <>
+                  {/* 6채널 레이아웃 - 상단 행: 전방, 우측 B필러, 좌측 B필러 */}
+                  <Box style={{ display: 'flex', height: '50%' }}>
+                    {createVideoComponent(
+                      'front',
+                      frontRef,
+                      'front',
+                      { borderRight: '1px solid rgba(255,255,255,0.1)' }
+                    )}
+                    {createVideoComponent(
+                      'right_pillar',
+                      rightPillarRef,
+                      'rightPillar',
+                      { 
+                        borderLeft: '1px solid rgba(255,255,255,0.1)',
+                        borderRight: '1px solid rgba(255,255,255,0.1)'
+                      }
+                    )}
+                    {createVideoComponent(
+                      'left_pillar',
+                      leftPillarRef,
+                      'leftPillar',
+                      { borderLeft: '1px solid rgba(255,255,255,0.1)' }
+                    )}
+                  </Box>
+                  
+                  {/* 6채널 레이아웃 - 하단 행: 후방, 우측 리피터, 좌측 리피터 */}
+                  <Box style={{ display: 'flex', height: '50%' }}>
+                    {createVideoComponent(
+                      'back',
+                      backRef,
+                      'back',
+                      { 
+                        borderRight: '1px solid rgba(255,255,255,0.1)',
+                        borderTop: '1px solid rgba(255,255,255,0.1)'
+                      }
+                    )}
+                    {createVideoComponent(
+                      'right_repeater',
+                      rightRef,
+                      'right',
+                      { 
+                        borderLeft: '1px solid rgba(255,255,255,0.1)',
+                        borderRight: '1px solid rgba(255,255,255,0.1)',
+                        borderTop: '1px solid rgba(255,255,255,0.1)'
+                      }
+                    )}
+                    {createVideoComponent(
+                      'left_repeater',
+                      leftRef,
+                      'left',
+                      { 
+                        borderLeft: '1px solid rgba(255,255,255,0.1)',
+                        borderTop: '1px solid rgba(255,255,255,0.1)'
+                      }
+                    )}
+                  </Box>
+                </>
+              )
+            } else {
+              return (
+                <>
+                  {/* 4채널 레이아웃 - 상단 행: 전방, 후방 */}
+                  <Box style={{ display: 'flex', height: '50%' }}>
+                    {createVideoComponent(
+                      'front',
+                      frontRef,
+                      'front',
+                      { borderRight: '1px solid rgba(255,255,255,0.1)' }
+                    )}
+                    {createVideoComponent(
+                      'back',
+                      backRef,
+                      'back',
+                      { borderLeft: '1px solid rgba(255,255,255,0.1)' }
+                    )}
+                  </Box>
+                  
+                  {/* 4채널 레이아웃 - 하단 행: 우측 리피터, 좌측 리피터 */}
+                  <Box style={{ display: 'flex', height: '50%' }}>
+                    {createVideoComponent(
+                      'right_repeater',
+                      rightRef,
+                      'right',
+                      { 
+                        borderRight: '1px solid rgba(255,255,255,0.1)',
+                        borderTop: '1px solid rgba(255,255,255,0.1)'
+                      }
+                    )}
+                    {createVideoComponent(
+                      'left_repeater',
+                      leftRef,
+                      'left',
+                      { 
+                        borderLeft: '1px solid rgba(255,255,255,0.1)',
+                        borderTop: '1px solid rgba(255,255,255,0.1)'
+                      }
+                    )}
+                  </Box>
+                </>
+              )
+            }
+          }
+        })()}
       </Box>
     </Box>
   )

@@ -69,5 +69,25 @@
     "browserWarning": "⚠️ Diese Funktion verwendet MediaRecorder API, Canvas API und erweiterte Video-Codecs. Browser-Unterstützung ist begrenzt und unerwartete Probleme wie Frame-Drops können auftreten.",
     "unsupportedBrowser": "❌ Ihr Browser unterstützt die erforderlichen Kodierungstechnologien (MediaRecorder API, Canvas API oder Video-Codecs) nicht. Bitte verwenden Sie einen modernen Browser wie Chrome, Firefox oder Edge.",
     "start": "Download starten"
+  },
+  "layout": {
+    "title": "Video-Layout-Konfiguration",
+    "editButton": "Layout bearbeiten",
+    "instructions": "Ziehen und ablegen Sie Kameras, um das Video-Layout neu anzuordnen",
+    "reset": "Auf Standard zurücksetzen",
+    "dropHere": "Kamera hier ablegen",
+    "notAvailable": "Nicht verfügbar"
+  },
+  "camera": {
+    "front": "Vorne",
+    "back": "Hinten",
+    "leftRepeater": "Linker Blinker",
+    "rightRepeater": "Rechter Blinker",
+    "leftPillar": "Linke Säule",
+    "rightPillar": "Rechte Säule"
+  },
+  "common": {
+    "save": "Speichern",
+    "cancel": "Abbrechen"
   }
 }

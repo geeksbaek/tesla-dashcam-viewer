@@ -1,11 +1,13 @@
 import { Button, Paper, Text, Title, Group, Stack, Box, ActionIcon, SegmentedControl, Tooltip, Modal, Progress } from '@mantine/core'
 import { modals } from '@mantine/modals'
-import { IconChevronLeft, IconChevronRight, IconVideo, IconPlayerTrackNext, IconBrandGithub, IconVideoFilled, IconPlayerPlayFilled, IconPlayerPauseFilled, IconSettingsFilled, IconHomeFilled, IconDownload } from '@tabler/icons-react'
+import { IconChevronLeft, IconChevronRight, IconVideo, IconPlayerTrackNext, IconBrandGithub, IconVideoFilled, IconPlayerPlayFilled, IconPlayerPauseFilled, IconSettingsFilled, IconHomeFilled, IconDownload, IconLayout } from '@tabler/icons-react'
 import { useRef, useEffect, useState, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import LanguageSelect from './LanguageSelect'
 import VideoFilterControls from './VideoFilterControls'
 import type { VideoFilters } from './VideoFilterControls'
+import { LayoutEditor } from './LayoutEditor'
+import type { LayoutConfig } from '@/types/layout'
 
 
 interface VideoFile {
@@ -68,6 +70,8 @@ interface ControlPanelProps {
   playbackRate: number
   onPlaybackRateChange: (rate: number) => void
   layoutMode: '2x2' | '3x2' // 현재 레이아웃 모드
+  onLayoutChange?: (config: LayoutConfig) => void
+  customLayout?: LayoutConfig // 커스텀 레이아웃 설정
 }
 
 export default function ControlPanel({
@@ -89,7 +93,9 @@ export default function ControlPanel({
   onVideoFitModeChange,
   playbackRate,
   onPlaybackRateChange,
-  layoutMode
+  layoutMode,
+  onLayoutChange,
+  customLayout
 }: ControlPanelProps) {
   const { t, i18n } = useTranslation();
   const videoListRef = useRef<HTMLDivElement>(null);
@@ -99,6 +105,7 @@ export default function ControlPanel({
   const [encodingProgress, setEncodingProgress] = useState<number>(0);
   const [encodingEta, setEncodingEta] = useState<string>('');
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [layoutEditorOpened, setLayoutEditorOpened] = useState(false);
   const startTimeRef = useRef<number | null>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const videoElementsRef = useRef<HTMLVideoElement[]>([]);
@@ -209,13 +216,29 @@ export default function ControlPanel({
         isCancelledRef.current = false;
 
         try {
-      // Define camera order to match viewer layout
-      const cameraOrder6Channel = ['front', 'right_pillar', 'left_pillar', 'back', 'right_repeater', 'left_repeater'];
-      const cameraOrder4Channel = ['front', 'back', 'right_repeater', 'left_repeater'];
+      // Use custom layout if available, otherwise use default order
+      let cameraOrder: string[];
       
       // Check if we have pillar cameras
       const hasPillarCameras = video.left_pillar || video.right_pillar;
-      const cameraOrder = hasPillarCameras ? cameraOrder6Channel : cameraOrder4Channel;
+      const currentLayoutMode = hasPillarCameras ? '3x2' : '2x2';
+      
+      if (customLayout && customLayout.mode === currentLayoutMode) {
+        // Use custom layout order
+        cameraOrder = customLayout.positions
+          .filter(p => p.camera)
+          .sort((a, b) => {
+            // Sort by row first, then by column
+            if (a.row !== b.row) return a.row - b.row;
+            return a.col - b.col;
+          })
+          .map(p => p.camera!)
+      } else {
+        // Use default camera order
+        const defaultOrder6Channel = ['front', 'right_pillar', 'left_pillar', 'back', 'right_repeater', 'left_repeater'];
+        const defaultOrder4Channel = ['front', 'back', 'right_repeater', 'left_repeater'];
+        cameraOrder = hasPillarCameras ? defaultOrder6Channel : defaultOrder4Channel;
+      }
       
       // Create sources in the correct order to match viewer layout
       const sources = cameraOrder
@@ -692,7 +715,7 @@ export default function ControlPanel({
       }
       }
     });
-  }, [isModalOpen, layoutMode, i18n.language, t]);
+  }, [isModalOpen, layoutMode, i18n.language, t, videoFiles, currentLayout, videoFilters, checkBrowserSupport, customLayout]);
 
   const loadVideo = (url: string): Promise<HTMLVideoElement> => {
     return new Promise((resolve, reject) => {
@@ -1341,6 +1364,20 @@ export default function ControlPanel({
             />
           </Box>
           
+          {/* 레이아웃 편집 버튼 */}
+          <Box>
+            <Button
+              onClick={() => setLayoutEditorOpened(true)}
+              size="sm"
+              variant="light"
+              fullWidth
+              leftSection={<IconLayout size={16} />}
+              onFocus={(e) => e.target.blur()}
+            >
+              {t('layout.editButton')}
+            </Button>
+          </Box>
+          
           {/* 비디오 피팅 모드 컨트롤 */}
           <Box>
             <Stack gap="xs">
@@ -1420,6 +1457,14 @@ export default function ControlPanel({
       </Box>
         </Paper>
       )}
+      
+      {/* 레이아웃 편집 다이얼로그 */}
+      <LayoutEditor
+        opened={layoutEditorOpened}
+        onClose={() => setLayoutEditorOpened(false)}
+        videoFiles={videoFiles}
+        onLayoutChange={onLayoutChange}
+      />
     </>
   )
 }

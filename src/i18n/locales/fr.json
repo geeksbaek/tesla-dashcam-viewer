@@ -69,5 +69,25 @@
     "browserWarning": "⚠️ Cette fonctionnalité utilise l'API MediaRecorder, l'API Canvas et des codecs vidéo avancés. Le support des navigateurs est limité et des problèmes inattendus comme la perte d'images peuvent se produire.",
     "unsupportedBrowser": "❌ Votre navigateur ne prend pas en charge les technologies d'encodage requises (API MediaRecorder, API Canvas ou codecs vidéo). Veuillez utiliser un navigateur moderne comme Chrome, Firefox ou Edge.",
     "start": "Commencer le téléchargement"
+  },
+  "layout": {
+    "title": "Configuration de la disposition vidéo",
+    "editButton": "Éditer la disposition",
+    "instructions": "Glissez et déposez les caméras pour réorganiser la disposition vidéo",
+    "reset": "Réinitialiser par défaut",
+    "dropHere": "Déposer la caméra ici",
+    "notAvailable": "Non disponible"
+  },
+  "camera": {
+    "front": "Avant",
+    "back": "Arrière",
+    "leftRepeater": "Clignotant gauche",
+    "rightRepeater": "Clignotant droit",
+    "leftPillar": "Montant gauche",
+    "rightPillar": "Montant droit"
+  },
+  "common": {
+    "save": "Enregistrer",
+    "cancel": "Annuler"
   }
 }

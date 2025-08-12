@@ -69,5 +69,25 @@
     "browserWarning": "⚠️ 此功能使用MediaRecorder API、Canvas API和高级视频编解码器。浏览器支持有限，可能出现丢帧等意外问题。",
     "unsupportedBrowser": "❌ 您的浏览器不支持所需的编码技术（MediaRecorder API、Canvas API或视频编解码器）。请使用Chrome、Firefox或Edge等现代浏览器。",
     "start": "开始下载"
+  },
+  "layout": {
+    "title": "视频布局配置",
+    "editButton": "编辑布局",
+    "instructions": "拖放摄像头以重新排列视频布局",
+    "reset": "恢复默认",
+    "dropHere": "将摄像头放在这里",
+    "notAvailable": "不可用"
+  },
+  "camera": {
+    "front": "前方",
+    "back": "后方",
+    "leftRepeater": "左转向灯",
+    "rightRepeater": "右转向灯",
+    "leftPillar": "左柱",
+    "rightPillar": "右柱"
+  },
+  "common": {
+    "save": "保存",
+    "cancel": "取消"
   }
 }

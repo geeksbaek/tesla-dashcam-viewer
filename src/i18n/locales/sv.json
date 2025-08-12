@@ -69,5 +69,25 @@
     "browserWarning": "⚠️ Denna funktion använder MediaRecorder API, Canvas API och avancerade video-kodeker. Webbläsarestöd är begränsat och oväntade problem som ramtapp kan uppstå.",
     "unsupportedBrowser": "❌ Din webbläsare stöder inte de kodningsteknologier som krävs (MediaRecorder API, Canvas API eller video-kodeker). Använd en modern webbläsare som Chrome, Firefox eller Edge.",
     "start": "Starta nedladdning"
+  },
+  "layout": {
+    "title": "Videolayout-konfiguration",
+    "editButton": "Redigera layout",
+    "instructions": "Dra och släpp kameror för att omorganisera videolayouten",
+    "reset": "Återställ till standard",
+    "dropHere": "Släpp kamera här",
+    "notAvailable": "Inte tillgänglig"
+  },
+  "camera": {
+    "front": "Fram",
+    "back": "Bak",
+    "leftRepeater": "Vänster blinkers",
+    "rightRepeater": "Höger blinkers",
+    "leftPillar": "Vänster stolpe",
+    "rightPillar": "Höger stolpe"
+  },
+  "common": {
+    "save": "Spara",
+    "cancel": "Avbryt"
   }
 }

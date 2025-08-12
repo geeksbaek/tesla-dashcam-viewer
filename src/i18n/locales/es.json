@@ -69,5 +69,25 @@
     "browserWarning": "⚠️ Esta característica utiliza MediaRecorder API, Canvas API y códecs de video avanzados. El soporte del navegador es limitado y pueden ocurrir problemas inesperados como pérdida de fotogramas.",
     "unsupportedBrowser": "❌ Su navegador no soporta las tecnologías de codificación requeridas (MediaRecorder API, Canvas API o códecs de video). Por favor use un navegador moderno como Chrome, Firefox o Edge.",
     "start": "Iniciar Descarga"
+  },
+  "layout": {
+    "title": "Configuración del diseño de video",
+    "editButton": "Editar diseño",
+    "instructions": "Arrastra y suelta las cámaras para reorganizar el diseño del video",
+    "reset": "Restablecer a predeterminado",
+    "dropHere": "Soltar cámara aquí",
+    "notAvailable": "No disponible"
+  },
+  "camera": {
+    "front": "Frontal",
+    "back": "Trasera",
+    "leftRepeater": "Intermitente izquierdo",
+    "rightRepeater": "Intermitente derecho",
+    "leftPillar": "Pilar izquierdo",
+    "rightPillar": "Pilar derecho"
+  },
+  "common": {
+    "save": "Guardar",
+    "cancel": "Cancelar"
   }
 }

@@ -7,6 +7,8 @@ import FileSelect from './components/FileSelect'
 import ControlPanel from './components/ControlPanel'
 import { UpdatePrompt } from './components/UpdatePrompt'
 import type { VideoFilters } from './components/VideoFilterControls'
+import type { LayoutConfig } from './types/layout'
+import { loadLayoutConfig } from './utils/layoutStorage'
 import { theme } from './theme'
 
 export interface VideoFile {
@@ -41,6 +43,7 @@ function App() {
   })
   const [videoFitMode, setVideoFitMode] = useState<'cover' | 'contain'>('contain') // 비디오 피팅 모드
   const [layoutMode, setLayoutMode] = useState<'2x2' | '3x2'>('2x2'); // 비디오 그리드 레이아웃 모드
+  const [customLayout, setCustomLayout] = useState<LayoutConfig | undefined>(undefined) // 커스텀 레이아웃 설정
 
   const handleFilesLoaded = (files: VideoFile[]) => {
     setVideoFiles(files)
@@ -50,6 +53,15 @@ function App() {
     // 초기에는 각 비디오를 60초로 가정
     setTotalDuration(files.length * 60)
     setVideoDurations(new Array(files.length).fill(60))
+    
+    // 레이아웃 모드 결정 및 커스텀 레이아웃 로드
+    if (files.length > 0) {
+      const has6Channels = !!(files[0].left_pillar || files[0].right_pillar)
+      const mode = has6Channels ? '3x2' : '2x2'
+      setLayoutMode(mode)
+      const layout = loadLayoutConfig(mode)
+      setCustomLayout(layout)
+    }
   }
 
   // 테스트용 더미 데이터 (개발 중에만 사용)
@@ -168,6 +180,11 @@ function App() {
       const newTotalDuration = newDurations.reduce((sum, dur) => sum + dur, 0)
       setTotalDuration(newTotalDuration)
     }
+  }
+
+  // 레이아웃 변경 핸들러
+  const handleLayoutChange = (config: LayoutConfig) => {
+    setCustomLayout(config)
   }
 
   // 첫 페이지로 이동
@@ -362,6 +379,7 @@ function App() {
               sidebarExpanded={sidebarExpanded}
               videoFilters={videoFilters}
               videoFitMode={videoFitMode}
+              customLayout={customLayout}
               onTimeUpdate={handleTimeUpdate}
               onSeek={handleSeek}
               onPlayPause={() => setIsPlaying(!isPlaying)}
@@ -394,6 +412,8 @@ function App() {
               playbackRate={playbackRate}
               onPlaybackRateChange={handlePlaybackRateChange}
               layoutMode={layoutMode}
+              onLayoutChange={handleLayoutChange}
+              customLayout={customLayout}
             />
           </>
         )}

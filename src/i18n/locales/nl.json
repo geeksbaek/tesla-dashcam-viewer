@@ -69,5 +69,25 @@
     "browserWarning": "⚠️ Deze functie gebruikt MediaRecorder API, Canvas API en geavanceerde video codecs. Browserondersteuning is beperkt en onverwachte problemen zoals frame drops kunnen optreden.",
     "unsupportedBrowser": "❌ Uw browser ondersteunt de vereiste coderingstechnologieën (MediaRecorder API, Canvas API of video codecs) niet. Gebruik alstublieft een moderne browser zoals Chrome, Firefox of Edge.",
     "start": "Download starten"
+  },
+  "layout": {
+    "title": "Video-indeling configuratie",
+    "editButton": "Indeling bewerken",
+    "instructions": "Sleep en zet camera's neer om de video-indeling te herschikken",
+    "reset": "Herstellen naar standaard",
+    "dropHere": "Zet camera hier neer",
+    "notAvailable": "Niet beschikbaar"
+  },
+  "camera": {
+    "front": "Voor",
+    "back": "Achter",
+    "leftRepeater": "Linker richtingaanwijzer",
+    "rightRepeater": "Rechter richtingaanwijzer",
+    "leftPillar": "Linker stijl",
+    "rightPillar": "Rechter stijl"
+  },
+  "common": {
+    "save": "Opslaan",
+    "cancel": "Annuleren"
   }
 }
