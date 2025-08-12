@@ -45,7 +45,12 @@ export default function LanguageSelect() {
         shadow: 'md',
         radius: 'md',
         dropdownPadding: 0,
-        withinPortal: false,
+        withinPortal: true,
+        position: 'top',
+        middlewares: {
+          flip: true,
+          shift: true,
+        },
       }}
       onDropdownClose={() => {
         // 드롭다운이 닫힐 때 포커스 제거
@@ -53,7 +58,7 @@ export default function LanguageSelect() {
           (document.activeElement as HTMLElement)?.blur();
         }, 50);
       }}
-      maxDropdownHeight={500}
+      maxDropdownHeight={400}
       styles={{
         input: {
           backgroundColor: 'rgba(255, 255, 255, 0.1)',
@@ -77,9 +82,6 @@ export default function LanguageSelect() {
           borderRadius: '12px',
           padding: '8px',
           backdropFilter: 'blur(8px)',
-          maxHeight: 'none !important',
-          height: 'auto !important',
-          overflow: 'visible !important',
         },
       }}
     />
