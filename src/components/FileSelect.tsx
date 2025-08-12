@@ -84,7 +84,13 @@ export default function FileSelect({ onFilesLoaded }: FileSelectProps) {
       position: 'relative'
     }}>
       {/* Language selector - 우측 상단 고정 */}
-      <Box style={{ position: 'fixed', top: '20px', right: '20px', zIndex: 1000 }}>
+      <Box style={{ 
+        position: 'fixed', 
+        top: '20px', 
+        right: '20px', 
+        zIndex: 1000,
+        width: '200px'
+      }}>
         <LanguageSelect />
       </Box>
       

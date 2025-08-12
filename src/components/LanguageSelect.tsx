@@ -15,7 +15,11 @@ const languages = [
   { value: 'es', label: '🇪🇸 Español' },
 ];
 
-export default function LanguageSelect() {
+interface LanguageSelectProps {
+  dropdownPosition?: 'top' | 'bottom' | 'bottom-end' | 'top-end';
+}
+
+export default function LanguageSelect({ dropdownPosition = 'bottom-end' }: LanguageSelectProps) {
   const { i18n } = useTranslation();
 
   const handleLanguageChange = (value: string | null) => {
@@ -46,10 +50,17 @@ export default function LanguageSelect() {
         radius: 'md',
         dropdownPadding: 0,
         withinPortal: true,
-        position: 'top',
+        position: dropdownPosition,
         middlewares: {
-          flip: true,
+          flip: dropdownPosition === 'top' ? false : true,
           shift: true,
+          size: {
+            apply({ availableHeight, elements }) {
+              Object.assign(elements.floating.style, {
+                maxHeight: `${Math.min(availableHeight - 10, 400)}px`,
+              });
+            },
+          },
         },
       }}
       onDropdownClose={() => {
@@ -58,7 +69,7 @@ export default function LanguageSelect() {
           (document.activeElement as HTMLElement)?.blur();
         }, 50);
       }}
-      maxDropdownHeight={400}
+      maxDropdownHeight={380}
       styles={{
         input: {
           backgroundColor: 'rgba(255, 255, 255, 0.1)',
@@ -68,7 +79,7 @@ export default function LanguageSelect() {
         },
         option: {
           backgroundColor: 'transparent',
-          padding: '12px 16px',
+          padding: '10px 14px',
           borderRadius: '6px',
           margin: '2px 4px',
           transition: 'all 0.15s ease',
@@ -80,8 +91,9 @@ export default function LanguageSelect() {
           backgroundColor: 'var(--mantine-color-dark-7)',
           border: '1px solid var(--mantine-color-dark-4)',
           borderRadius: '12px',
-          padding: '8px',
+          padding: '6px',
           backdropFilter: 'blur(8px)',
+          overflowY: 'auto',
         },
       }}
     />

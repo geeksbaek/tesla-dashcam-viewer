@@ -1424,7 +1424,7 @@ export default function ControlPanel({
           paddingTop: '16px'
         }}>
           <Stack gap="xs">
-            <LanguageSelect />
+            <LanguageSelect dropdownPosition="top" />
             <Group gap="xs" grow>
               <Button
                 onClick={() => window.open('https://github.com/geeksbaek/tesla-dashcam-viewer', '_blank')}
