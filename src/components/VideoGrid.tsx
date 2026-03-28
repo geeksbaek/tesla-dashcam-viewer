@@ -3,6 +3,8 @@ import { Paper, Box, Text } from '@mantine/core'
 import { useTranslation } from 'react-i18next'
 import type { VideoFilters } from './VideoFilterControls'
 import type { LayoutConfig } from '@/types/layout'
+import { useSeiMetadata } from '@/hooks/useSeiMetadata'
+import SeiOverlay from './SeiOverlay'
 
 interface VideoFile {
   timestamp: string
@@ -38,6 +40,7 @@ interface VideoGridProps {
   layoutMode: '2x2' | '3x2'
   onLayoutModeChange: (mode: '2x2' | '3x2') => void
   customLayout?: LayoutConfig
+  showSeiOverlay?: boolean
 }
 
 export default function VideoGrid({ 
@@ -56,9 +59,14 @@ export default function VideoGrid({
   onVideoDurationUpdate,
   sidebarExpanded = true,
   onLayoutModeChange,
-  customLayout
+  customLayout,
+  showSeiOverlay = true
 }: VideoGridProps) {
   const { t, i18n } = useTranslation();
+
+  // SEI metadata (vehicle speed, GPS, autopilot state, etc.)
+  const { currentSei, isLoading: seiLoading, hasSeiData } = useSeiMetadata(videoFile?.front, currentTime)
+
   const frontRef = useRef<HTMLVideoElement>(null)
   const backRef = useRef<HTMLVideoElement>(null)
   const leftRef = useRef<HTMLVideoElement>(null)
@@ -760,13 +768,13 @@ export default function VideoGrid({
             />
           )}
           {/* 전체화면 타임스탬프 표시 */}
-          <Box style={{ 
-            position: 'absolute', 
-            top: '16px', 
-            right: '12px', 
+          <Box style={{
+            position: 'absolute',
+            top: '16px',
+            right: '12px',
             pointerEvents: 'none'
           }}>
-            <Text style={{ 
+            <Text style={{
               fontFamily: 'monospace',
               color: 'white',
               textShadow: '0 0 3px black, 0 0 3px black, 0 0 3px black, 0 0 3px black',
@@ -775,7 +783,24 @@ export default function VideoGrid({
               {displayTimestamp}
             </Text>
           </Box>
+          {/* 전체화면 SEI 오버레이 */}
+          <SeiOverlay
+            currentSei={currentSei}
+            isLoading={seiLoading}
+            hasSeiData={hasSeiData}
+            visible={showSeiOverlay}
+          />
         </Box>
+      )}
+
+      {/* SEI 메타데이터 HUD 오버레이 (그리드 모드) */}
+      {!fullscreenCamera && (
+        <SeiOverlay
+          currentSei={currentSei}
+          isLoading={seiLoading}
+          hasSeiData={hasSeiData}
+          visible={showSeiOverlay}
+        />
       )}
 
       {/* 비디오 그리드 - 커스텀 레이아웃 또는 기본 레이아웃 */}

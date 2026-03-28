@@ -86,6 +86,10 @@
     "leftPillar": "좌측 필러",
     "rightPillar": "우측 필러"
   },
+  "sei": {
+    "loading": "차량 데이터 로딩 중...",
+    "toggleHint": "차량 데이터 [I]"
+  },
   "common": {
     "save": "저장",
     "cancel": "취소"

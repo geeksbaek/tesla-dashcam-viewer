@@ -86,6 +86,10 @@
     "leftPillar": "Venstre søjle",
     "rightPillar": "Højre søjle"
   },
+  "sei": {
+    "loading": "Indlæser køretøjsdata...",
+    "hint": "Køretøjsdata [I]"
+  },
   "common": {
     "save": "Gem",
     "cancel": "Annuller"

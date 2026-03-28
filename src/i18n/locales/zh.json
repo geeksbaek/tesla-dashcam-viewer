@@ -45,7 +45,7 @@
     "korean": "한국어",
     "chinese": "中文",
     "german": "Deutsch",
-    "norwegian": "Norsk", 
+    "norwegian": "Norsk",
     "dutch": "Nederlands",
     "french": "Français",
     "swedish": "Svenska",
@@ -85,6 +85,10 @@
     "rightRepeater": "右转向灯",
     "leftPillar": "左柱",
     "rightPillar": "右柱"
+  },
+  "sei": {
+    "loading": "正在加载车辆数据...",
+    "hint": "车辆数据 [I]"
   },
   "common": {
     "save": "保存",

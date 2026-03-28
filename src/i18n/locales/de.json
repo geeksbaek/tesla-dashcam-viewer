@@ -86,6 +86,10 @@
     "leftPillar": "Linke Säule",
     "rightPillar": "Rechte Säule"
   },
+  "sei": {
+    "loading": "Fahrzeugdaten werden geladen...",
+    "hint": "Fahrzeugdaten [I]"
+  },
   "common": {
     "save": "Speichern",
     "cancel": "Abbrechen"

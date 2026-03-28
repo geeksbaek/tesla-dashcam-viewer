@@ -86,6 +86,10 @@
     "leftPillar": "Linker stijl",
     "rightPillar": "Rechter stijl"
   },
+  "sei": {
+    "loading": "Voertuiggegevens laden...",
+    "hint": "Voertuiggegevens [I]"
+  },
   "common": {
     "save": "Opslaan",
     "cancel": "Annuleren"

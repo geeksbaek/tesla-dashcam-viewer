@@ -86,6 +86,10 @@
     "leftPillar": "Left Pillar",
     "rightPillar": "Right Pillar"
   },
+  "sei": {
+    "loading": "Loading vehicle data...",
+    "toggleHint": "Vehicle Data [I]"
+  },
   "common": {
     "save": "Save",
     "cancel": "Cancel"

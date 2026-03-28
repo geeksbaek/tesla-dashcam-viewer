@@ -86,6 +86,10 @@
     "leftPillar": "Venstre stolpe",
     "rightPillar": "Høyre stolpe"
   },
+  "sei": {
+    "loading": "Laster kjøretøydata...",
+    "hint": "Kjøretøydata [I]"
+  },
   "common": {
     "save": "Lagre",
     "cancel": "Avbryt"

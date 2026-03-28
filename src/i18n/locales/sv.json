@@ -86,6 +86,10 @@
     "leftPillar": "Vänster stolpe",
     "rightPillar": "Höger stolpe"
   },
+  "sei": {
+    "loading": "Laddar fordonsdata...",
+    "hint": "Fordonsdata [I]"
+  },
   "common": {
     "save": "Spara",
     "cancel": "Avbryt"

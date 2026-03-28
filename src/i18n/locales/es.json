@@ -86,6 +86,10 @@
     "leftPillar": "Pilar izquierdo",
     "rightPillar": "Pilar derecho"
   },
+  "sei": {
+    "loading": "Cargando datos del vehículo...",
+    "hint": "Datos del vehículo [I]"
+  },
   "common": {
     "save": "Guardar",
     "cancel": "Cancelar"

@@ -86,6 +86,10 @@
     "leftPillar": "Montant gauche",
     "rightPillar": "Montant droit"
   },
+  "sei": {
+    "loading": "Chargement des données du véhicule...",
+    "hint": "Données du véhicule [I]"
+  },
   "common": {
     "save": "Enregistrer",
     "cancel": "Annuler"

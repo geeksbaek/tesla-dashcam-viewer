@@ -44,6 +44,7 @@ function App() {
   const [videoFitMode, setVideoFitMode] = useState<'cover' | 'contain'>('contain') // 비디오 피팅 모드
   const [layoutMode, setLayoutMode] = useState<'2x2' | '3x2'>('2x2'); // 비디오 그리드 레이아웃 모드
   const [customLayout, setCustomLayout] = useState<LayoutConfig | undefined>(undefined) // 커스텀 레이아웃 설정
+  const [showSeiOverlay, setShowSeiOverlay] = useState(true) // SEI 메타데이터 오버레이 표시
 
   const handleFilesLoaded = (files: VideoFile[]) => {
     setVideoFiles(files)
@@ -344,6 +345,10 @@ function App() {
         event.preventDefault()
         // 이동 모드 토글 (시간 <-> 프레임)
         setSeekMode(prevMode => prevMode === 'time' ? 'frame' : 'time')
+      } else if (event.code === 'KeyI') {
+        event.preventDefault()
+        // SEI 오버레이 토글
+        setShowSeiOverlay(prev => !prev)
       }
     }
 
@@ -366,7 +371,7 @@ function App() {
           <FileSelect onFilesLoaded={handleFilesLoaded} onLoadDummy={loadDummyData} />
         ) : (
           <>
-            <VideoGrid 
+            <VideoGrid
               videoFile={currentVideo}
               videoFiles={videoFiles}
               currentVideoIndex={currentVideoIndex}
@@ -390,6 +395,7 @@ function App() {
               onVideoDurationUpdate={handleVideoDurationUpdate}
               layoutMode={layoutMode}
               onLayoutModeChange={setLayoutMode}
+              showSeiOverlay={showSeiOverlay}
             />
             <ControlPanel
               videoFiles={videoFiles}
